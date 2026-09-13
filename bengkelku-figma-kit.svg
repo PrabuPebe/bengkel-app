@@ -1,0 +1,427 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" fill="none">
+  <!-- Figma Master Canvas: Bengkelku UI & Architecture Kit -->
+  <defs>
+    <linearGradient id="kitBg" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#080C14" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F97316" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95" />
+    </linearGradient>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1920" height="1080" fill="url(#kitBg)" />
+  
+  <!-- Subtle Grid Guides -->
+  <pattern id="masterGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1E293B" stroke-width="0.75" stroke-opacity="0.5" />
+  </pattern>
+  <rect width="1920" height="1080" fill="url(#masterGrid)" />
+
+  <!-- ========================================== -->
+  <!-- 1. HEADER & PROJECT BRANDING               -->
+  <!-- ========================================== -->
+  <g id="Frame - Header" transform="translate(60, 48)">
+    <rect width="48" height="48" rx="14" fill="url(#primaryGrad)" />
+    <text x="24" y="32" fill="#090D16" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="900" text-anchor="middle">BK</text>
+    <text x="64" y="28" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="800">Bengkelku (bengkel-app) — Figma UI &amp; Architecture Kit</text>
+    <text x="64" y="48" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500">Kumpulan Aset Desain Vektor Siap Edit: Mobile Mockup, Kartu Kasir/Work Order, Notifikasi WA, &amp; Diagram Sistem</text>
+    
+    <rect x="1660" y="10" width="140" height="34" rx="17" fill="#1E293B" stroke="#F97316" stroke-width="1.5" />
+    <text x="1730" y="32" fill="#FED7AA" font-family="monospace" font-size="12" font-weight="700" text-anchor="middle">100% Vector SVG</text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 2. DESIGN TOKENS (PALETTE & TYPOGRAPHY)    -->
+  <!-- ========================================== -->
+  <g id="Frame - Design Tokens" transform="translate(60, 130)">
+    <rect width="460" height="240" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+    <text x="24" y="34" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700">🎨 Design System Tokens</text>
+    <text x="24" y="52" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="12">Palet Warna Utama Bengkelku</text>
+
+    <!-- Color Swatches -->
+    <g transform="translate(24, 72)">
+      <!-- Swatch 1: Primary Orange -->
+      <rect width="68" height="60" rx="10" fill="#F97316" />
+      <text x="34" y="78" fill="#F8FAFC" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle">#F97316</text>
+      <text x="34" y="90" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="9" text-anchor="middle">Primary</text>
+      
+      <!-- Swatch 2: Amber Accent -->
+      <rect x="84" width="68" height="60" rx="10" fill="#F59E0B" />
+      <text x="118" y="78" fill="#F8FAFC" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle">#F59E0B</text>
+      <text x="118" y="90" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="9" text-anchor="middle">Warning/Prog</text>
+
+      <!-- Swatch 3: Emerald Success -->
+      <rect x="168" width="68" height="60" rx="10" fill="#10B981" />
+      <text x="202" y="78" fill="#F8FAFC" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle">#10B981</text>
+      <text x="202" y="90" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="9" text-anchor="middle">Success/WA</text>
+
+      <!-- Swatch 4: Blue Info -->
+      <rect x="252" width="68" height="60" rx="10" fill="#3B82F6" />
+      <text x="286" y="78" fill="#F8FAFC" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle">#3B82F6</text>
+      <text x="286" y="90" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="9" text-anchor="middle">Info/Queue</text>
+
+      <!-- Swatch 5: Slate Dark -->
+      <rect x="336" width="68" height="60" rx="10" fill="#0F172A" stroke="#475569" stroke-width="1" />
+      <text x="370" y="78" fill="#F8FAFC" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle">#0F172A</text>
+      <text x="370" y="90" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="9" text-anchor="middle">Background</text>
+    </g>
+
+    <!-- Typography Specs -->
+    <g transform="translate(24, 186)">
+      <text x="0" y="16" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700">Font Family:</text>
+      <text x="85" y="16" fill="#F8FAFC" font-family="system-ui, -apple-system, sans-serif" font-size="12">Plus Jakarta Sans / Inter / Geist</text>
+      <text x="0" y="34" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700">Code / Numbers:</text>
+      <text x="110" y="34" fill="#FCD34D" font-family="monospace" font-size="12">JetBrains Mono (Odometer, Plat, Rp)</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 3. UI COMPONENT: MOBILE LIVE TRACKING      -->
+  <!-- ========================================== -->
+  <g id="Frame - Mobile Live Tracking" transform="translate(60, 396)">
+    <rect width="460" height="634" rx="28" fill="#090D16" stroke="#334155" stroke-width="2" />
+    
+    <!-- Phone Top Notch -->
+    <rect x="170" y="12" width="120" height="24" rx="12" fill="#000000" />
+    <circle cx="270" cy="24" r="4" fill="#1E293B" />
+
+    <!-- Mobile Header -->
+    <g transform="translate(24, 48)">
+      <rect width="32" height="32" rx="8" fill="url(#primaryGrad)" />
+      <text x="16" y="21" fill="#090D16" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="800" text-anchor="middle">BK</text>
+      <text x="42" y="18" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Bengkelku Tracking</text>
+      <text x="42" y="30" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Tanpa Login • ID: #BK-78921</text>
+      
+      <rect x="310" y="4" width="94" height="22" rx="11" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1" />
+      <text x="357" y="19" fill="#FCD34D" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" text-anchor="middle">Dikerjakan</text>
+    </g>
+
+    <!-- Vehicle Card -->
+    <g transform="translate(24, 98)">
+      <rect width="412" height="80" rx="14" fill="#1E293B" stroke="#475569" stroke-width="1" />
+      <text x="16" y="26" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800">Honda Vario 160 (2023)</text>
+      <rect x="16" y="36" width="90" height="22" rx="6" fill="#0F172A" stroke="#64748B" stroke-width="1" />
+      <text x="61" y="51" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="700" text-anchor="middle">B 4512 KLG</text>
+      <text x="120" y="52" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11">Mekanik: <tspan fill="#F8FAFC" font-weight="600">Budi Pratama</tspan></text>
+      <text x="16" y="72" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="10">Odometer: 18.420 KM • Pit: 02</text>
+    </g>
+
+    <!-- Tracking Stepper Mockup -->
+    <g transform="translate(24, 196)">
+      <rect width="412" height="230" rx="14" fill="#1E293B" stroke="#334155" stroke-width="1" />
+      <text x="16" y="24" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Linimasa Pengerjaan</text>
+
+      <!-- Stepper line -->
+      <line x1="30" y1="52" x2="30" y2="185" stroke="#334155" stroke-width="2" />
+      <line x1="30" y1="52" x2="30" y2="110" stroke="#10B981" stroke-width="2" />
+
+      <!-- Step 1 -->
+      <circle cx="30" cy="52" r="10" fill="#10B981" />
+      <path d="M26 52 L29 55 L34 49" stroke="#090D16" stroke-width="2" stroke-linecap="round" />
+      <text x="50" y="52" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Check-in &amp; SPK Masuk</text>
+      <text x="50" y="66" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">10:15 WIB • Keluhan rem bunyi &amp; ganti oli</text>
+
+      <!-- Step 2 -->
+      <circle cx="30" cy="110" r="11" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="2" />
+      <circle cx="30" cy="110" r="5" fill="#F59E0B" />
+      <text x="50" y="110" fill="#FCD34D" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700">Sedang Dikerjakan Mekanik</text>
+      <text x="50" y="124" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">10:40 WIB • Tune Up &amp; Penggantian Kampas</text>
+
+      <!-- Step 3 -->
+      <circle cx="30" cy="165" r="9" fill="#0F172A" stroke="#64748B" stroke-width="1.5" />
+      <text x="50" y="165" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Pengecekan Akhir &amp; Cuci Rantai</text>
+      <text x="50" y="179" fill="#475569" font-family="system-ui, -apple-system, sans-serif" font-size="10">Estimasi siap: 11:30 WIB</text>
+
+      <!-- Step 4 -->
+      <circle cx="30" cy="210" r="9" fill="#0F172A" stroke="#475569" stroke-width="1" />
+      <text x="50" y="213" fill="#475569" font-family="system-ui, -apple-system, sans-serif" font-size="11">Selesai &amp; Pembayaran Kasir</text>
+    </g>
+
+    <!-- Cost Summary -->
+    <g transform="translate(24, 442)">
+      <rect width="412" height="110" rx="14" fill="#1E293B" stroke="#334155" stroke-width="1" />
+      <text x="16" y="24" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">RINCIAN ESTIMASI BIAYA</text>
+      <text x="16" y="48" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="12">Jasa Tune Up + Oli MPX2 + Kampas Rem</text>
+      <line x1="16" y1="62" x2="396" y2="62" stroke="#334155" stroke-width="1" />
+      <text x="16" y="86" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Total Sementara</text>
+      <text x="396" y="90" fill="#F97316" font-family="monospace" font-size="18" font-weight="800" text-anchor="end">Rp 165.000</text>
+    </g>
+
+    <!-- Action Button -->
+    <g transform="translate(24, 566)">
+      <rect width="412" height="46" rx="12" fill="#10B981" />
+      <text x="206" y="28" fill="#090D16" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" text-anchor="middle">Hubungi Bengkel via WhatsApp</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 4. UI COMPONENT: WORK ORDER & CASHIER CARD -->
+  <!-- ========================================== -->
+  <g id="Frame - Dashboard Work Order Card" transform="translate(560, 130)">
+    <rect width="780" height="420" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+    
+    <!-- Card Top Bar -->
+    <g transform="translate(28, 24)">
+      <text x="0" y="20" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="800">Detail Work Order #SPK-2026-0914</text>
+      <text x="0" y="38" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="12">Terdaftar: 14 Sep 2026, 10:15 WIB • Operator: Siti (Kasir)</text>
+      
+      <!-- Status Badges -->
+      <rect x="580" y="6" width="130" height="28" rx="14" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1" />
+      <text x="645" y="24" fill="#FCD34D" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" text-anchor="middle">● PENGERJAAN</text>
+    </g>
+
+    <!-- Customer & Vehicle Info Grid -->
+    <g transform="translate(28, 80)">
+      <rect width="724" height="66" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1" />
+      <g transform="translate(18, 16)">
+        <text x="0" y="14" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600">PELANGGAN</text>
+        <text x="0" y="32" fill="#F8FAFC" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Rian Pratama</text>
+        <text x="0" y="44" fill="#38BDF8" font-family="monospace" font-size="10">0812-9876-5432</text>
+      </g>
+      <g transform="translate(220, 16)">
+        <text x="0" y="14" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600">KENDARAAN</text>
+        <text x="0" y="32" fill="#F8FAFC" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Honda Vario 160</text>
+        <text x="0" y="44" fill="#94A3B8" font-family="monospace" font-size="10">B 4512 KLG (Matic)</text>
+      </g>
+      <g transform="translate(420, 16)">
+        <text x="0" y="14" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600">MEKANIK PIT</text>
+        <text x="0" y="32" fill="#F8FAFC" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Budi (Pit 02)</text>
+        <text x="0" y="44" fill="#10B981" font-family="system-ui, -apple-system, sans-serif" font-size="10">Odometer: 18.420 KM</text>
+      </g>
+      <g transform="translate(590, 16)">
+        <text x="0" y="14" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600">LIVE TOKEN</text>
+        <text x="0" y="32" fill="#FCD34D" font-family="monospace" font-size="12" font-weight="700">#BK-78921</text>
+        <text x="0" y="44" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">QR Code Active</text>
+      </g>
+    </g>
+
+    <!-- Line Items Table -->
+    <g transform="translate(28, 160)">
+      <text x="0" y="16" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700">RINCIAN JASA SERVIS &amp; SUKU CADANG</text>
+      
+      <!-- Table Header -->
+      <rect y="26" width="724" height="28" rx="6" fill="#0F172A" />
+      <text x="16" y="44" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Item Deskripsi</text>
+      <text x="360" y="44" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Tipe</text>
+      <text x="460" y="44" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Qty</text>
+      <text x="560" y="44" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Harga</text>
+      <text x="708" y="44" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" text-anchor="end">Subtotal</text>
+
+      <!-- Row 1 -->
+      <text x="16" y="76" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12">Jasa Servis Ringan &amp; Tune Up</text>
+      <text x="360" y="76" fill="#38BDF8" font-family="system-ui, -apple-system, sans-serif" font-size="11">Jasa</text>
+      <text x="460" y="76" fill="#94A3B8" font-family="monospace" font-size="12">1</text>
+      <text x="560" y="76" fill="#94A3B8" font-family="monospace" font-size="12">Rp 45.000</text>
+      <text x="708" y="76" fill="#F8FAFC" font-family="monospace" font-size="12" font-weight="600" text-anchor="end">Rp 45.000</text>
+      <line x1="16" y1="88" x2="708" y2="88" stroke="#334155" stroke-width="0.75" />
+
+      <!-- Row 2 -->
+      <text x="16" y="106" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12">Oli Mesin MPX2 0.8 Liter</text>
+      <text x="360" y="106" fill="#F59E0B" font-family="system-ui, -apple-system, sans-serif" font-size="11">Part</text>
+      <text x="460" y="106" fill="#94A3B8" font-family="monospace" font-size="12">1</text>
+      <text x="560" y="106" fill="#94A3B8" font-family="monospace" font-size="12">Rp 65.000</text>
+      <text x="708" y="106" fill="#F8FAFC" font-family="monospace" font-size="12" font-weight="600" text-anchor="end">Rp 65.000</text>
+      <line x1="16" y1="118" x2="708" y2="118" stroke="#334155" stroke-width="0.75" />
+
+      <!-- Row 3 -->
+      <text x="16" y="136" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12">Kampas Rem Cakram Depan</text>
+      <text x="360" y="136" fill="#F59E0B" font-family="system-ui, -apple-system, sans-serif" font-size="11">Part</text>
+      <text x="460" y="136" fill="#94A3B8" font-family="monospace" font-size="12">1</text>
+      <text x="560" y="136" fill="#94A3B8" font-family="monospace" font-size="12">Rp 55.000</text>
+      <text x="708" y="136" fill="#F8FAFC" font-family="monospace" font-size="12" font-weight="600" text-anchor="end">Rp 55.000</text>
+      <line x1="16" y1="148" x2="708" y2="148" stroke="#334155" stroke-width="0.75" />
+    </g>
+
+    <!-- Bottom Actions & Total -->
+    <g transform="translate(28, 340)">
+      <rect width="140" height="42" rx="10" fill="#0F172A" stroke="#475569" stroke-width="1" />
+      <text x="70" y="26" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">+ Tambah Part</text>
+      
+      <rect x="150" width="160" height="42" rx="10" fill="#3B82F6" fill-opacity="0.15" stroke="#3B82F6" stroke-width="1" />
+      <text x="230" y="26" fill="#60A5FA" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Cetak Faktur Kasir</text>
+
+      <g transform="translate(480, 0)">
+        <text x="0" y="16" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="12">Total Tagihan:</text>
+        <text x="244" y="24" fill="#F97316" font-family="monospace" font-size="24" font-weight="900" text-anchor="end">Rp 165.000</text>
+        <text x="244" y="40" fill="#10B981" font-family="system-ui, -apple-system, sans-serif" font-size="11" text-anchor="end">Lunas (Tunai / Cash)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 5. UI COMPONENT: WHATSAPP REMINDER BUBBLE  -->
+  <!-- ========================================== -->
+  <g id="Frame - WhatsApp Reminder" transform="translate(1380, 130)">
+    <rect width="480" height="420" rx="20" fill="#0B141A" stroke="#1F2C34" stroke-width="2" />
+    
+    <!-- WhatsApp Header -->
+    <g transform="translate(20, 20)">
+      <circle cx="20" cy="20" r="20" fill="#128C7E" />
+      <text x="20" y="26" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" text-anchor="middle">BK</text>
+      <text x="50" y="18" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700">Bengkelku Official</text>
+      <text x="50" y="32" fill="#25D366" font-family="system-ui, -apple-system, sans-serif" font-size="10">Online • Auto-reminder Engine</text>
+      <circle cx="430" cy="20" r="3" fill="#8696A0" />
+      <circle cx="430" cy="12" r="3" fill="#8696A0" />
+      <circle cx="430" cy="28" r="3" fill="#8696A0" />
+    </g>
+
+    <!-- Chat Timestamp -->
+    <rect x="180" y="78" width="120" height="22" rx="6" fill="#182229" />
+    <text x="240" y="93" fill="#8696A0" font-family="system-ui, -apple-system, sans-serif" font-size="10" text-anchor="middle">HARI INI (75 HARI)</text>
+
+    <!-- WhatsApp Chat Balloon -->
+    <g transform="translate(24, 114)">
+      <path d="M12 0 H390 A14 14 0 0 1 404 14 V210 A14 14 0 0 1 390 224 H14 A14 14 0 0 1 0 210 V12 A12 12 0 0 1 12 0 Z" fill="#202C33" />
+      
+      <text x="18" y="28" fill="#E9EDEF" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">Halo Bpk. Rian Pratama 👋</text>
+      
+      <text x="18" y="56" fill="#D1D7DB" font-family="system-ui, -apple-system, sans-serif" font-size="12">Kami dari <tspan fill="#F97316" font-weight="700">Bengkelku</tspan> menginformasikan bahwa</text>
+      <text x="18" y="74" fill="#D1D7DB" font-family="system-ui, -apple-system, sans-serif" font-size="12">kendaraan <tspan fill="#FFFFFF" font-weight="700">Honda Vario 160 (B 4512 KLG)</tspan></text>
+      <text x="18" y="92" fill="#D1D7DB" font-family="system-ui, -apple-system, sans-serif" font-size="12">sudah memasuki waktu servis berkala / ganti oli.</text>
+
+      <rect x="18" y="106" width="368" height="42" rx="8" fill="#111B21" stroke="#2A3942" stroke-width="1" />
+      <text x="30" y="124" fill="#8696A0" font-family="system-ui, -apple-system, sans-serif" font-size="10">Servis terakhir: <tspan fill="#FCD34D">30 Juni 2026 (75 hari lalu)</tspan></text>
+      <text x="30" y="138" fill="#8696A0" font-family="system-ui, -apple-system, sans-serif" font-size="10">Item rekomendasi: <tspan fill="#F8FAFC">Ganti Oli Matic &amp; Cek CVT</tspan></text>
+
+      <text x="18" y="172" fill="#D1D7DB" font-family="system-ui, -apple-system, sans-serif" font-size="12">Yuk rawat performa mesin tetap prima dan hemat bensin!</text>
+      <text x="18" y="190" fill="#25D366" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Balas pesan ini untuk reservasi antrean prioritas 🛵✨</text>
+      
+      <text x="388" y="214" fill="#8696A0" font-family="system-ui, -apple-system, sans-serif" font-size="10" text-anchor="end">10:45 ✓✓</text>
+    </g>
+
+    <!-- Trigger Button -->
+    <g transform="translate(24, 354)">
+      <rect width="432" height="44" rx="12" fill="#25D366" />
+      <text x="216" y="27" fill="#0B141A" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" text-anchor="middle">⚡ Trigger 1-Click: Kirim Pengingat WhatsApp</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 6. ARCHITECTURE & WORKFLOW PIPELINE        -->
+  <!-- ========================================== -->
+  <g id="Frame - Architecture Pipeline" transform="translate(560, 574)">
+    <rect width="1300" height="456" rx="20" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+    <text x="30" y="36" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700">🔄 Arsitektur Alur Sistem End-to-End Bengkelku</text>
+    <text x="30" y="54" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="12">Dari Penerimaan Kendaraan Fisik hingga Siklus Retensi Otomatis</text>
+
+    <!-- Pipeline Step 1 -->
+    <g transform="translate(30, 80)">
+      <rect width="280" height="340" rx="14" fill="#0F172A" stroke="#3B82F6" stroke-width="1.5" />
+      <rect width="280" height="42" rx="14" fill="#1E293B" />
+      <text x="140" y="26" fill="#93C5FD" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" text-anchor="middle">1. CHECK-IN (FRONT DESK)</text>
+      
+      <g transform="translate(16, 60)">
+        <circle cx="8" cy="8" r="4" fill="#3B82F6" />
+        <text x="22" y="12" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Input No. Polisi &amp; KM</text>
+        <text x="22" y="26" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Auto-fetch riwayat pemilik</text>
+
+        <circle cx="8" cy="58" r="4" fill="#3B82F6" />
+        <text x="22" y="62" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Catat Keluhan &amp; Mekanik</text>
+        <text x="22" y="76" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Status SPK: ANTRIAN</text>
+
+        <circle cx="8" cy="108" r="4" fill="#3B82F6" />
+        <text x="22" y="112" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Generate URL Token &amp; QR</text>
+        <text x="22" y="126" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Dicetak di kertas tanda terima</text>
+      </g>
+      
+      <rect x="16" y="240" width="248" height="70" rx="8" fill="#1E293B" />
+      <text x="140" y="268" fill="#60A5FA" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Output:</text>
+      <text x="140" y="286" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="10" text-anchor="middle">SPK Fisik &amp; Token Live Tracking</text>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <polygon points="325,245 340,250 325,255" fill="#F59E0B" />
+
+    <!-- Pipeline Step 2 -->
+    <g transform="translate(345, 80)">
+      <rect width="280" height="340" rx="14" fill="#0F172A" stroke="#F59E0B" stroke-width="1.5" />
+      <rect width="280" height="42" rx="14" fill="#1E293B" />
+      <text x="140" y="26" fill="#FCD34D" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" text-anchor="middle">2. SERVIS &amp; PART (MEKANIK)</text>
+
+      <g transform="translate(16, 60)">
+        <circle cx="8" cy="8" r="4" fill="#F59E0B" />
+        <text x="22" y="12" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Diagnosis &amp; Pembongkaran</text>
+        <text x="22" y="26" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Status: PENGERJAAN</text>
+
+        <circle cx="8" cy="58" r="4" fill="#F59E0B" />
+        <text x="22" y="62" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Pengurangan Stok Part</text>
+        <text x="22" y="76" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Oli, sparepart otomatis terpotong</text>
+
+        <circle cx="8" cy="108" r="4" fill="#F59E0B" />
+        <text x="22" y="112" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Pengecekan Akhir &amp; QC</text>
+        <text x="22" y="126" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Status: SELESAI_SERVIS</text>
+      </g>
+
+      <rect x="16" y="240" width="248" height="70" rx="8" fill="#1E293B" />
+      <text x="140" y="268" fill="#FCD34D" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Live Sync:</text>
+      <text x="140" y="286" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="10" text-anchor="middle">Pelanggan memantau status di HP</text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <polygon points="640,245 655,250 640,255" fill="#10B981" />
+
+    <!-- Pipeline Step 3 -->
+    <g transform="translate(660, 80)">
+      <rect width="280" height="340" rx="14" fill="#0F172A" stroke="#10B981" stroke-width="1.5" />
+      <rect width="280" height="42" rx="14" fill="#1E293B" />
+      <text x="140" y="26" fill="#A7F3D0" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" text-anchor="middle">3. KASIR &amp; BILLING</text>
+
+      <g transform="translate(16, 60)">
+        <circle cx="8" cy="8" r="4" fill="#10B981" />
+        <text x="22" y="12" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Kalkulasi Jasa &amp; Part</text>
+        <text x="22" y="26" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Potongan diskon / voucher</text>
+
+        <circle cx="8" cy="58" r="4" fill="#10B981" />
+        <text x="22" y="62" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Penerimaan Pembayaran</text>
+        <text x="22" y="76" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Cash, Transfer, Hitung Kembalian</text>
+
+        <circle cx="8" cy="108" r="4" fill="#10B981" />
+        <text x="22" y="112" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Cetak Faktur Lunas</text>
+        <text x="22" y="126" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Status: SELESAI_PEMBAYARAN</text>
+      </g>
+
+      <rect x="16" y="240" width="248" height="70" rx="8" fill="#1E293B" />
+      <text x="140" y="268" fill="#34D399" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Closing:</text>
+      <text x="140" y="286" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="10" text-anchor="middle">Riwayat terkunci per No. Polisi</text>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <polygon points="955,245 970,250 955,255" fill="#F97316" />
+
+    <!-- Pipeline Step 4 -->
+    <g transform="translate(975, 80)">
+      <rect width="295" height="340" rx="14" fill="#0F172A" stroke="#F97316" stroke-width="1.5" />
+      <rect width="295" height="42" rx="14" fill="#1E293B" />
+      <text x="147" y="26" fill="#FED7AA" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" text-anchor="middle">4. RETENSI WHATSAPP</text>
+
+      <g transform="translate(16, 60)">
+        <circle cx="8" cy="8" r="4" fill="#F97316" />
+        <text x="22" y="12" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Timer Filter 60-90 Hari</text>
+        <text x="22" y="26" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Delta waktu pasca ganti oli</text>
+
+        <circle cx="8" cy="58" r="4" fill="#F97316" />
+        <text x="22" y="62" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Kasir Tekan Kirim WA</text>
+        <text x="22" y="76" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Deep-link wa.me terisi otomatis</text>
+
+        <circle cx="8" cy="108" r="4" fill="#F97316" />
+        <text x="22" y="112" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Pelanggan Kembali Servis</text>
+        <text x="22" y="126" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="10">Looping retensi repeat order (+35%)</text>
+      </g>
+
+      <rect x="16" y="240" width="263" height="70" rx="8" fill="#1E293B" />
+      <text x="147" y="268" fill="#F97316" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Business Impact:</text>
+      <text x="147" y="286" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="10" text-anchor="middle">Mengunci loyalitas &amp; omset berulang</text>
+    </g>
+  </g>
+</svg>

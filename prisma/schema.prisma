@@ -1,0 +1,191 @@
+// Prisma schema for Bengkelku (bengkel-app)
+// Compatible with PostgreSQL (Supabase / Neon / PgBouncer)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CASHIER
+  MECHANIC
+}
+
+enum ServiceStatus {
+  ANTRIAN
+  PENGERJAAN
+  MENUNGGU_PART
+  SELESAI_PENGERJAAN
+  SELESAI_PEMBAYARAN
+  DIBATALKAN
+}
+
+enum PaymentMethod {
+  CASH
+  TRANSFER
+  QRIS
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String?
+  role      UserRole @default(ADMIN)
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignedOrders ServiceOrder[] @relation("MechanicOrders")
+  createdOrders  ServiceOrder[] @relation("CreatedByOrders")
+
+  @@map("users")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   // No WhatsApp aktif
+  address   String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vehicles      Vehicle[]
+  serviceOrders ServiceOrder[]
+
+  @@map("customers")
+}
+
+model Vehicle {
+  id          String   @id @default(cuid())
+  customerId  String
+  plateNumber String   @unique // Nomor Polisi e.g. "B 1234 XYZ"
+  brand       String   // Honda, Yamaha, Toyota, dll
+  model       String   // Vario 160, Avanza, dll
+  year        Int?
+  engineNo    String?
+  frameNo     String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customer      Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  serviceOrders ServiceOrder[]
+
+  @@map("vehicles")
+}
+
+model ServicesCatalog {
+  id          String   @id @default(cuid())
+  code        String   @unique // e.g. "SRV-001"
+  name        String   // e.g. "Ganti Oli Mesin", "Tune Up Injeksi"
+  description String?
+  duration    Int?     // estimasi menit
+  price       Decimal  @db.Decimal(12, 2)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems ServiceOrderItem[]
+
+  @@map("services_catalog")
+}
+
+model PartsInventory {
+  id        String   @id @default(cuid())
+  sku       String   @unique // e.g. "OIL-MPX2-800"
+  name      String   // e.g. "Oli AHM MPX2 0.8L"
+  category  String?  // e.g. "Oli & Pelumas", "Pengereman", "Kelistrikan"
+  stock     Int      @default(0)
+  minStock  Int      @default(5) // Batas peringatan stok menipis
+  costPrice Decimal  @db.Decimal(12, 2) // HPP / Harga beli
+  sellPrice Decimal  @db.Decimal(12, 2) // Harga jual
+  unit      String   @default("PCS") // BOTOL, PCS, SET, LITER
+  location  String?  // Rak A1, Rak B2
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderParts ServiceOrderPart[]
+
+  @@map("parts_inventory")
+}
+
+// Persiapan Transaksi Servis (Work Order) untuk Milestone 3 & Milestone 4
+model ServiceOrder {
+  id            String         @id @default(cuid())
+  orderNumber   String         @unique // e.g. "WO-202609-0001"
+  token         String         @unique @default(cuid()) // Token publik untuk Live Tracking (/track/[token])
+  customerId    String
+  vehicleId     String
+  mechanicId    String?
+  createdById   String?
+  currentKm     Int?
+  complaints    String         // Keluhan pelanggan
+  diagnosis     String?        // Catatan analisa mekanik
+  status        ServiceStatus  @default(ANTRIAN)
+  paymentStatus PaymentStatus  @default(PENDING)
+  paymentMethod PaymentMethod?
+  totalServices Decimal        @default(0) @db.Decimal(12, 2)
+  totalParts    Decimal        @default(0) @db.Decimal(12, 2)
+  discount      Decimal        @default(0) @db.Decimal(12, 2)
+  grandTotal    Decimal        @default(0) @db.Decimal(12, 2)
+  paidAmount    Decimal        @default(0) @db.Decimal(12, 2)
+  changeAmount  Decimal        @default(0) @db.Decimal(12, 2)
+  notes         String?
+  entryDate     DateTime       @default(now())
+  completedDate DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  customer  Customer           @relation(fields: [customerId], references: [id])
+  vehicle   Vehicle            @relation(fields: [vehicleId], references: [id])
+  mechanic  User?              @relation("MechanicOrders", fields: [mechanicId], references: [id])
+  createdBy User?              @relation("CreatedByOrders", fields: [createdById], references: [id])
+  items     ServiceOrderItem[]
+  parts     ServiceOrderPart[]
+
+  @@map("service_orders")
+}
+
+model ServiceOrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  serviceId   String
+  serviceName String
+  price       Decimal  @db.Decimal(12, 2)
+  qty         Int      @default(1)
+  subtotal    Decimal  @db.Decimal(12, 2)
+
+  order   ServiceOrder    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  service ServicesCatalog @relation(fields: [serviceId], references: [id])
+
+  @@map("service_order_items")
+}
+
+model ServiceOrderPart {
+  id        String   @id @default(cuid())
+  orderId   String
+  partId    String
+  partName  String
+  costPrice Decimal  @db.Decimal(12, 2)
+  sellPrice Decimal  @db.Decimal(12, 2)
+  qty       Int      @default(1)
+  subtotal  Decimal  @db.Decimal(12, 2)
+
+  order ServiceOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  part  PartsInventory @relation(fields: [partId], references: [id])
+
+  @@map("service_order_parts")
+}
