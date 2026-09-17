@@ -125,10 +125,10 @@ export default function PartsInventoryPage() {
   const lowStockCount = parts.filter((p) => p.stock <= p.minStock).length;
 
   return (
-    <div>
+    <div className="space-y-6">
       <Header
         title="Inventaris Suku Cadang (Sparepart)"
-        subtitle="Kelola stok suku cadang, harga modal (HPP), harga jual, dan kontrol peringatan stok kritis otomatis."
+        subtitle="Kelola stok suku cadang PitCare Auto, harga modal (HPP), harga jual konsumen, dan kontrol peringatan stok kritis otomatis."
         actionButton={
           <button
             type="button"
@@ -136,7 +136,7 @@ export default function PartsInventoryPage() {
               setFormError("");
               setIsAddOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#8f63ec] to-[#6f45c3] hover:brightness-110 shadow-lg shadow-[#8f63ec]/25 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -148,31 +148,31 @@ export default function PartsInventoryPage() {
 
       {/* Low stock alert badge banner */}
       {lowStockCount > 0 && (
-        <div className="mb-6 p-4 rounded-2xl bg-[#381624] border border-[#ff7b92]/30 flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff4d6d] opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ff4d6d]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500" />
             </span>
-            <p className="text-xs font-bold text-[#ffb0c0]">
-              Perhatian: {lowStockCount} item suku cadang telah mencapai atau berada di bawah batas minimum stok!
+            <p className="text-xs font-semibold text-rose-300">
+              Perhatian: {lowStockCount} item suku cadang telah mencapai atau berada di bawah batas minimum stok gudang!
             </p>
           </div>
         </div>
       )}
 
       {/* Category Pills & Search */}
-      <div className="mb-6 space-y-3">
+      <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => handleFilter(cat)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 selectedCategory === cat
-                  ? "bg-[#9b6cff] text-white shadow-md shadow-[#9b6cff]/30"
-                  : "bg-[#221939] text-[#b5abc9] hover:text-white hover:bg-[#2b1f47] border border-[#d2b8ff]/10"
+                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                  : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800"
               }`}
             >
               {cat === "all" ? "Semua Kategori" : cat}
@@ -184,13 +184,13 @@ export default function PartsInventoryPage() {
           <div className="flex-1 relative">
             <input
               type="text"
-              placeholder="Cari berdasarkan SKU, nama part (contoh: MPX2, Busi, V-Belt), atau rak..."
+              placeholder="Cari berdasarkan SKU, nama part (contoh: MPX2, Busi, V-Belt), atau lokasi rak..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 pl-11 pr-4 rounded-xl bg-[#221939]/90 border border-[#d2b8ff]/15 text-[#f6f2ff] placeholder-[#817797] text-sm focus:outline-none focus:border-[#9b6cff] transition-all"
+              className="w-full h-11 pl-11 pr-4 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder:text-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition-all"
             />
             <svg
-              className="w-5 h-5 text-[#817797] absolute left-3.5 top-3 pointer-events-none"
+              className="w-4 h-4 text-slate-500 absolute left-4 top-3.5 pointer-events-none"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -205,7 +205,7 @@ export default function PartsInventoryPage() {
                 setSearchQuery("");
                 loadParts("", selectedCategory);
               }}
-              className="px-3 h-11 rounded-xl text-xs font-semibold text-[#c49eff] bg-[#2e2150] hover:bg-[#382666] transition-colors"
+              className="px-4 h-11 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 hover:bg-slate-800 transition-colors"
             >
               Reset
             </button>
@@ -215,28 +215,28 @@ export default function PartsInventoryPage() {
 
       {/* Parts Table */}
       {isLoading ? (
-        <div className="p-12 text-center text-[#817797] text-sm">
-          <div className="w-8 h-8 border-2 border-[#9b6cff] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat stok inventaris suku cadang...
+        <div className="p-20 text-center text-slate-400 text-sm">
+          <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          Memuat stok inventaris PitCare Auto...
         </div>
       ) : parts.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-[#221939]/40 border border-[#d2b8ff]/10">
-          <p className="text-base font-bold text-[#f6f2ff] mb-1">Data suku cadang tidak ditemukan</p>
-          <p className="text-xs text-[#817797] mb-4">
+        <div className="p-16 text-center rounded-2xl bg-slate-900 border border-slate-800">
+          <p className="text-base font-bold text-white mb-1">Data suku cadang tidak ditemukan</p>
+          <p className="text-xs text-slate-400 mb-6 max-w-sm mx-auto">
             {searchQuery ? "Coba ganti filter atau kata kunci pencarian." : "Belum ada data suku cadang di gudang."}
           </p>
           <button
             type="button"
             onClick={() => setIsAddOpen(true)}
-            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#8f63ec]"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
           >
             Tambah Part Pertama
           </button>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#d2b8ff]/15 bg-[#221939]/80 shadow-xl shadow-black/30">
-          <table className="w-full text-left text-sm text-[#d9d0eb]">
-            <thead className="bg-[#1b142f] text-[11px] font-bold uppercase tracking-wider text-[#817797] border-b border-[#d2b8ff]/10">
+        <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/90 shadow-xl shadow-slate-950/40">
+          <table className="w-full text-left text-xs text-slate-300">
+            <thead className="bg-slate-950 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="py-3.5 px-4">SKU & Lokasi</th>
                 <th className="py-3.5 px-4">Nama Suku Cadang</th>
@@ -247,46 +247,46 @@ export default function PartsInventoryPage() {
                 <th className="py-3.5 px-4 text-center">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#d2b8ff]/10">
+            <tbody className="divide-y divide-slate-800/60">
               {parts.map((part) => {
                 const isLow = part.stock <= part.minStock;
                 const margin = part.sellPrice - part.costPrice;
                 const marginPercent = part.sellPrice > 0 ? Math.round((margin / part.sellPrice) * 100) : 0;
 
                 return (
-                  <tr key={part.id} className="hover:bg-[#2b1f47]/50 transition-colors">
+                  <tr key={part.id} className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
-                      <p className="font-mono font-bold text-xs text-[#c49eff]">{part.sku}</p>
+                      <p className="font-mono font-bold text-xs text-indigo-400">{part.sku}</p>
                       {part.location && (
-                        <p className="text-[11px] text-[#817797] mt-0.5">📍 {part.location}</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">📍 {part.location}</p>
                       )}
                     </td>
                     <td className="py-3.5 px-4">
-                      <p className="font-bold text-[#f6f2ff]">{part.name}</p>
-                      <p className="text-[11px] text-[#817797] mt-0.5">Satuan: {part.unit}</p>
+                      <p className="font-semibold text-white">{part.name}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">Satuan: {part.unit}</p>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="text-xs px-2.5 py-1 rounded-md bg-[#17122b] text-[#b5abc9] border border-[#d2b8ff]/10">
+                      <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-950 text-slate-300 border border-slate-800">
                         {part.category || "Umum"}
                       </span>
                     </td>
                     <td className="py-3.5 px-4 text-center">
                       {isLow ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#42162a] border border-[#ff7b92]/40 text-[#ff8da1] text-xs font-bold animate-pulse">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-bold">
                           ⚠️ Sisa {part.stock} (Min: {part.minStock})
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#163629] border border-[#34d399]/30 text-[#34d399] text-xs font-semibold">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
                           ✓ {part.stock} {part.unit} (Aman)
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-right font-mono text-xs text-[#817797]">
+                    <td className="py-3.5 px-4 text-right font-mono text-xs text-slate-400">
                       {formatIDR(part.costPrice)}
                     </td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-sm text-[#f6f2ff]">
+                    <td className="py-3.5 px-4 text-right font-mono font-bold text-sm text-white">
                       {formatIDR(part.sellPrice)}
-                      <span className="block text-[10px] text-[#34d399] font-normal">
+                      <span className="block text-[10px] text-emerald-400 font-normal">
                         +{marginPercent}% margin
                       </span>
                     </td>
@@ -298,7 +298,7 @@ export default function PartsInventoryPage() {
                             setAdjustPart(part);
                             setNewStockVal(part.stock);
                           }}
-                          className="px-2.5 py-1 rounded-lg text-xs font-bold text-[#c49eff] bg-[#2e2150] hover:bg-[#382666] transition-colors"
+                          className="px-3 py-1 rounded-lg text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors"
                           title="Ubah Jumlah Stok"
                         >
                           Atur Stok
@@ -307,7 +307,7 @@ export default function PartsInventoryPage() {
                           type="button"
                           onClick={() => handleDeletePart(part.id, part.name)}
                           disabled={isPending}
-                          className="p-1.5 rounded-lg text-[#817797] hover:text-[#ffaeae] hover:bg-[#3a1525] transition-colors"
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                           title="Hapus Part"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -329,18 +329,18 @@ export default function PartsInventoryPage() {
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         title="Daftarkan Suku Cadang Baru"
-        description="Tambahkan item sparepart baru ke inventaris gudang bengkel."
+        description="Tambahkan item sparepart baru ke inventaris gudang PitCare Auto."
       >
         <form onSubmit={handleCreatePart} className="space-y-4">
           {formError && (
-            <div className="p-3 rounded-xl bg-[#3a1525] border border-[#ffaeae]/30 text-[#ffaeae] text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-semibold">
               {formError}
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Kode SKU / Part *
               </label>
               <input
@@ -348,11 +348,11 @@ export default function PartsInventoryPage() {
                 type="text"
                 required
                 placeholder="Contoh: OIL-SHELL-1L"
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm uppercase focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs uppercase focus:outline-none focus:border-indigo-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Kategori *
               </label>
               <input
@@ -360,13 +360,13 @@ export default function PartsInventoryPage() {
                 type="text"
                 required
                 placeholder="Oli & Pelumas / Pengereman"
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Nama Suku Cadang *
             </label>
             <input
@@ -374,13 +374,13 @@ export default function PartsInventoryPage() {
               type="text"
               required
               placeholder="Contoh: Oli Shell Helix HX7 1L"
-              className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+              className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
             />
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Stok Awal *
               </label>
               <input
@@ -388,11 +388,11 @@ export default function PartsInventoryPage() {
                 type="number"
                 required
                 defaultValue={10}
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Batas Min. Stok *
               </label>
               <input
@@ -400,11 +400,11 @@ export default function PartsInventoryPage() {
                 type="number"
                 required
                 defaultValue={5}
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Satuan *
               </label>
               <input
@@ -412,25 +412,25 @@ export default function PartsInventoryPage() {
                 type="text"
                 required
                 defaultValue="PCS"
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm uppercase focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs uppercase focus:outline-none focus:border-indigo-500"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Harga Modal / Beli (HPP)
               </label>
               <input
                 name="costPrice"
                 type="number"
                 placeholder="45000"
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm font-mono focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Harga Jual Konsumen *
               </label>
               <input
@@ -438,35 +438,35 @@ export default function PartsInventoryPage() {
                 type="number"
                 required
                 placeholder="60000"
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm font-mono focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Lokasi Penyimpanan (Rak/Laci)
             </label>
             <input
               name="location"
               type="text"
               placeholder="Contoh: Rak B3 / Laci 2"
-              className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+              className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#d2b8ff]/10">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
             <button
               type="button"
               onClick={() => setIsAddOpen(false)}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-[#817797] hover:text-[#f6f2ff] transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#8f63ec] to-[#6f45c3] hover:brightness-110 shadow-md shadow-[#8f63ec]/30 transition-all cursor-pointer"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
             >
               {isPending ? "Menyimpan..." : "Simpan Suku Cadang"}
             </button>
@@ -483,14 +483,14 @@ export default function PartsInventoryPage() {
       >
         <form onSubmit={handleUpdateStock} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-[#d9d0eb] mb-2">
+            <label className="block text-xs font-semibold text-slate-300 mb-2">
               Jumlah Stok Aktual ({adjustPart?.unit})
             </label>
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setNewStockVal(Math.max(0, newStockVal - 1))}
-                className="w-11 h-11 rounded-xl bg-[#2e2150] text-[#f6f2ff] text-lg font-black hover:bg-[#3d2c69] transition-colors"
+                className="w-11 h-11 rounded-xl bg-slate-800 text-white text-lg font-bold hover:bg-slate-700 transition-colors"
               >
                 -
               </button>
@@ -499,35 +499,35 @@ export default function PartsInventoryPage() {
                 min={0}
                 value={newStockVal}
                 onChange={(e) => setNewStockVal(parseInt(e.target.value, 10) || 0)}
-                className="flex-1 h-11 text-center font-mono font-bold text-xl rounded-xl bg-[#17122b] border border-[#d2b8ff]/20 text-[#f6f2ff] focus:outline-none focus:border-[#9b6cff]"
+                className="flex-1 h-11 text-center font-mono font-bold text-xl rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-indigo-500"
               />
               <button
                 type="button"
                 onClick={() => setNewStockVal(newStockVal + 1)}
-                className="w-11 h-11 rounded-xl bg-[#2e2150] text-[#f6f2ff] text-lg font-black hover:bg-[#3d2c69] transition-colors"
+                className="w-11 h-11 rounded-xl bg-slate-800 text-white text-lg font-bold hover:bg-slate-700 transition-colors"
               >
                 +
               </button>
             </div>
             {adjustPart && newStockVal <= adjustPart.minStock && (
-              <p className="text-xs text-[#ff8da1] font-semibold mt-2">
+              <p className="text-xs text-rose-400 font-medium mt-2">
                 ⚠️ Jumlah ini sama dengan atau di bawah batas minimum ({adjustPart.minStock} {adjustPart.unit}). Status akan ditandai stok menipis.
               </p>
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#d2b8ff]/10">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
             <button
               type="button"
               onClick={() => setAdjustPart(null)}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-[#817797] hover:text-[#f6f2ff] transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#8f63ec] to-[#6f45c3] hover:brightness-110 shadow-md shadow-[#8f63ec]/30 transition-all cursor-pointer"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
             >
               {isPending ? "Memperbarui..." : "Simpan Perubahan Stok"}
             </button>

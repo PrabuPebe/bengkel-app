@@ -30,10 +30,10 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop overlay */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity duration-200"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -44,16 +44,16 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-[#221939] border border-[#d2b8ff]/20 p-6 shadow-2xl shadow-black/60 text-[#f6f2ff] max-h-[90vh] flex flex-col"
+        className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl shadow-indigo-950/30 text-slate-100 max-h-[90vh] flex flex-col transition-all duration-200"
       >
         {/* Modal Header */}
-        <div className="flex items-start justify-between pb-4 border-b border-[#d2b8ff]/10">
+        <div className="flex items-start justify-between pb-4 border-b border-slate-800">
           <div>
-            <h2 id="modal-title" className="text-xl font-bold tracking-tight text-[#f6f2ff]">
+            <h2 id="modal-title" className="text-lg font-bold tracking-tight text-white">
               {title}
             </h2>
             {description && (
-              <p className="text-xs text-[#b5abc9] mt-1">
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                 {description}
               </p>
             )}
@@ -61,7 +61,7 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-[#817797] hover:text-[#f6f2ff] hover:bg-[#2e2150] transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             aria-label="Tutup"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,7 +71,7 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
         </div>
 
         {/* Modal Body */}
-        <div className="overflow-y-auto py-4 flex-1 pr-1">
+        <div className="overflow-y-auto py-4 flex-1 pr-1 scrollbar-none">
           {children}
         </div>
       </div>

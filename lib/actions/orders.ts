@@ -12,6 +12,10 @@ export async function getServiceOrderByIdAction(id: string) {
   return await db.serviceOrder.findById(id);
 }
 
+export async function getServiceOrderByTokenAction(token: string) {
+  return await db.serviceOrder.findByToken(token);
+}
+
 export async function createServiceOrderAction(data: {
   customerId: string;
   vehicleId: string;

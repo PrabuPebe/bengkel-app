@@ -17,24 +17,37 @@ export default async function DashboardOverviewPage() {
   const stats = await db.getStats();
 
   return (
-    <div>
+    <div className="space-y-8">
       <Header
         title="Ringkasan Operasional Bengkel"
-        subtitle="Pantau kapasitas bengkel, alur kerja pit servis, antrean kasir & billing, serta ketersediaan stok inventaris."
-      />
-
-      {/* Operasional Servis & Kasir (Milestone 3 Live Metrics) */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-[#c49eff] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            Operasional Servis & Kasir Hari Ini
-          </h2>
+        subtitle="Pantau kapasitas pit servis, status pengerjaan teknisi, antrean billing kasir, dan ketersediaan stok suku cadang secara terpadu."
+        actionButton={
           <Link
             href="/services/new"
-            className="text-xs font-bold text-[#8f63ec] hover:text-[#a477f3] transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 shadow-lg shadow-indigo-600/25 transition-all"
           >
-            + Buat SPK Baru ↗
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            + Buat SPK Baru
+          </Link>
+        }
+      />
+
+      {/* 1. Operational Real-time Pit & Cashier Section */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              Operasional Servis & Kasir Real-time
+            </h2>
+          </div>
+          <Link
+            href="/services"
+            className="text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+          >
+            Lihat Semua SPK ↗
           </Link>
         </div>
 
@@ -42,201 +55,167 @@ export default async function DashboardOverviewPage() {
           {/* Antrian Pit */}
           <Link
             href="/services"
-            className="p-5 rounded-2xl bg-[#221939]/90 border border-[#d2b8ff]/15 hover:border-amber-500/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-amber-500/40 transition-all hover:-translate-y-1 shadow-sm hover:shadow-md group block"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                Antrian Servis Pit
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-black transition-colors">
+              <span className="text-xs font-bold text-slate-400">Antrian Pit</span>
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-extrabold text-amber-400">{stats.activeQueueCount}</p>
-            <p className="text-xs text-[#817797] mt-1">Kendaraan menunggu giliran</p>
+            <p className="text-3xl font-black text-white">{stats.activeQueueCount}</p>
+            <p className="text-[11px] text-amber-400/90 mt-1 font-medium">Unit menunggu giliran pit</p>
           </Link>
 
           {/* Sedang Dikerjakan */}
           <Link
             href="/services"
-            className="p-5 rounded-2xl bg-[#221939]/90 border border-[#d2b8ff]/15 hover:border-sky-500/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/40 transition-all hover:-translate-y-1 shadow-sm hover:shadow-md group block"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-sky-300">
-                Sedang Dikerjakan
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-black transition-colors">
+              <span className="text-xs font-bold text-slate-400">Sedang Dikerjakan</span>
+              <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-extrabold text-sky-400">{stats.inProgressCount}</p>
-            <p className="text-xs text-[#817797] mt-1">Aktif diperbaiki mekanik</p>
+            <p className="text-3xl font-black text-white">{stats.inProgressCount}</p>
+            <p className="text-[11px] text-blue-400/90 mt-1 font-medium">Aktif ditangani teknisi</p>
           </Link>
 
-          {/* Siap Bayar di Kasir */}
+          {/* Siap ke Kasir */}
           <Link
             href="/cashier"
-            className="p-5 rounded-2xl bg-[#221939]/90 border border-[#d2b8ff]/15 hover:border-emerald-500/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/40 transition-all hover:-translate-y-1 shadow-sm hover:shadow-md group block"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
-                Siap ke Kasir
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+              <span className="text-xs font-bold text-slate-400">Siap ke Kasir</span>
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-extrabold text-emerald-400">{stats.readyForCashierCount}</p>
-            <p className="text-xs text-[#817797] mt-1">Servis tuntas & menunggu bayar</p>
+            <p className="text-3xl font-black text-emerald-400">{stats.readyForCashierCount}</p>
+            <p className="text-[11px] text-emerald-400/90 mt-1 font-medium">Servis tuntas & siap bayar</p>
           </Link>
 
-          {/* Omzet Transaksi Kasir */}
+          {/* Omzet Transaksi */}
           <Link
             href="/cashier"
-            className="p-5 rounded-2xl bg-[#221939]/90 border border-[#d2b8ff]/15 hover:border-[#9b6cff]/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/40 transition-all hover:-translate-y-1 shadow-sm hover:shadow-md group block"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#c49eff]">
-                Omzet Terkumpul
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#a477f3] flex items-center justify-center group-hover:bg-[#9b6cff] group-hover:text-white transition-colors">
+              <span className="text-xs font-bold text-slate-400">Omzet Transaksi</span>
+              <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <p className="text-2xl font-extrabold text-[#f6f2ff]">{formatRupiah(stats.todayRevenue)}</p>
-            <p className="text-xs text-[#817797] mt-1">{stats.completedOrdersCount} transaksi faktur lunas</p>
+            <p className="text-2xl font-black text-white">{formatRupiah(stats.todayRevenue)}</p>
+            <p className="text-[11px] text-indigo-300 mt-1 font-medium">{stats.completedOrdersCount} transaksi faktur lunas</p>
           </Link>
         </div>
       </div>
 
-      {/* Master Data Metrics Grid */}
-      <div className="mb-8">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-[#817797] mb-3">
-          Master Data & Inventaris
+      {/* 2. Master Data & Inventory Metrics */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+          Master Data & Inventaris Gudang
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Total Pelanggan */}
           <Link
             href="/customers"
-            className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 hover:border-[#9b6cff]/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all block group"
           >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#c49eff]">
-                Pelanggan
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#a477f3] flex items-center justify-center group-hover:bg-[#9b6cff] group-hover:text-white transition-colors">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold text-slate-400">Total Pelanggan</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">Aktif</span>
             </div>
-            <p className="text-3xl font-extrabold text-[#f6f2ff]">{stats.totalCustomers}</p>
-            <p className="text-xs text-[#817797] mt-1">Pelanggan terdaftar aktif</p>
+            <p className="text-2xl font-extrabold text-white">{stats.totalCustomers}</p>
+            <p className="text-[11px] text-slate-400 mt-1">Pemilik terdata di sistem</p>
           </Link>
 
-          {/* Total Kendaraan */}
           <Link
             href="/customers"
-            className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 hover:border-[#9b6cff]/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all block group"
           >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#c49eff]">
-                Kendaraan
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#a477f3] flex items-center justify-center group-hover:bg-[#9b6cff] group-hover:text-white transition-colors">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                </svg>
-              </div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold text-slate-400">Unit Kendaraan</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">Terdaftar</span>
             </div>
-            <p className="text-3xl font-extrabold text-[#f6f2ff]">{stats.totalVehicles}</p>
-            <p className="text-xs text-[#817797] mt-1">Unit motor & mobil terdata</p>
+            <p className="text-2xl font-extrabold text-white">{stats.totalVehicles}</p>
+            <p className="text-[11px] text-slate-400 mt-1">Motor & mobil pelanggan</p>
           </Link>
 
-          {/* Katalog Jasa */}
           <Link
             href="/inventory/services"
-            className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 hover:border-[#9b6cff]/50 transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block"
+            className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all block group"
           >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#c49eff]">
-                Katalog Jasa
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#a477f3] flex items-center justify-center group-hover:bg-[#9b6cff] group-hover:text-white transition-colors">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                </svg>
-              </div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold text-slate-400">Katalog Jasa</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">Paket</span>
             </div>
-            <p className="text-3xl font-extrabold text-[#f6f2ff]">{stats.totalServices}</p>
-            <p className="text-xs text-[#817797] mt-1">Paket servis siap dipilih</p>
+            <p className="text-2xl font-extrabold text-white">{stats.totalServices}</p>
+            <p className="text-[11px] text-slate-400 mt-1">Paket tindakan & tarif</p>
           </Link>
 
-          {/* Peringatan Stok Menipis */}
           <Link
             href="/inventory/parts"
-            className={`p-5 rounded-2xl border transition-all hover:-translate-y-1 shadow-lg shadow-black/30 group block ${
+            className={`p-5 rounded-2xl border transition-all block group ${
               stats.lowStockCount > 0
-                ? "bg-[#381624]/80 border-[#ff7b92]/40 hover:border-[#ff4d6d]"
-                : "bg-[#221939]/80 border-[#d2b8ff]/15 hover:border-[#9b6cff]/50"
+                ? "bg-rose-950/20 border-rose-800/40 hover:border-rose-700"
+                : "bg-slate-900/90 border-slate-800 hover:border-slate-700"
             }`}
           >
-            <div className="flex items-center justify-between mb-3">
-              <span className={`text-xs font-bold uppercase tracking-wider ${stats.lowStockCount > 0 ? "text-[#ff8da1]" : "text-[#c49eff]"}`}>
-                Stok Menipis
+            <div className="flex items-center justify-between mb-2">
+              <span className={`text-xs font-semibold ${stats.lowStockCount > 0 ? "text-rose-300" : "text-slate-400"}`}>
+                Stok Suku Cadang
               </span>
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
-                stats.lowStockCount > 0
-                  ? "bg-[#5e1d34] text-[#ff8da1] group-hover:bg-[#ff4d6d] group-hover:text-white"
-                  : "bg-[#2e2150] text-[#a477f3]"
-              }`}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
+              {stats.lowStockCount > 0 && (
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-950 border border-rose-700 text-rose-300 font-bold">
+                  {stats.lowStockCount} Kritis
+                </span>
+              )}
             </div>
-            <p className={`text-3xl font-extrabold ${stats.lowStockCount > 0 ? "text-[#ff8da1]" : "text-[#f6f2ff]"}`}>
-              {stats.lowStockCount}
+            <p className={`text-2xl font-extrabold ${stats.lowStockCount > 0 ? "text-rose-300" : "text-white"}`}>
+              {stats.totalParts} <span className="text-sm font-normal text-slate-400">SKU</span>
             </p>
-            <p className="text-xs text-[#817797] mt-1">
-              {stats.lowStockCount > 0 ? "Suku cadang butuh restock" : "Semua stok di atas batas minimum"}
+            <p className="text-[11px] text-slate-400 mt-1">
+              {stats.lowStockCount > 0 ? "Perlu segera restock gudang" : "Semua stok aman"}
             </p>
           </Link>
         </div>
       </div>
 
-      {/* Low Stock Alert Banner */}
+      {/* 3. Low Stock Alert Banner */}
       {stats.lowStockCount > 0 && (
-        <div className="mb-8 p-5 rounded-2xl bg-[#2a1322] border border-[#ff7b92]/30 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="p-5 rounded-2xl bg-rose-950/30 border border-rose-800/40 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-start gap-3.5">
-            <div className="w-9 h-9 rounded-xl bg-[#5e1d34] text-[#ff8da1] flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-10 h-10 rounded-xl bg-rose-900/50 border border-rose-700/50 text-rose-300 flex items-center justify-center shrink-0 mt-0.5">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#f6f2ff]">
-                Peringatan Inventaris: Ada {stats.lowStockCount} suku cadang yang stoknya berada di bawah batas minimum!
+              <h3 className="text-sm font-bold text-white">
+                Peringatan Gudang: Ada {stats.lowStockCount} suku cadang yang stoknya berada di bawah batas aman!
               </h3>
-              <p className="text-xs text-[#d8c2ce] mt-0.5">
-                Segera lakukan pemesanan ulang (restock) agar proses pengerjaan servis tidak terhambat.
+              <p className="text-xs text-slate-400 mt-0.5">
+                Segera lakukan pengadaan kembali (restock) agar tidak menghambat pengerjaan servis pit pelanggan.
               </p>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-2.5">
                 {stats.lowStockItems.map((item) => (
                   <span
                     key={item.id}
-                    className="text-[11px] px-2.5 py-1 rounded-md bg-[#42162a] text-[#ffb0c0] border border-[#ff7b92]/30 font-medium"
+                    className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-900 text-rose-300 border border-rose-800/40 font-medium"
                   >
-                    {item.name}: Sisa {item.stock} {item.unit} (Min: {item.minStock})
+                    {item.name}: sisa <strong className="text-white">{item.stock}</strong> {item.unit} (Min: {item.minStock})
                   </span>
                 ))}
               </div>
@@ -244,92 +223,92 @@ export default async function DashboardOverviewPage() {
           </div>
           <Link
             href="/inventory/parts"
-            className="px-4 py-2 rounded-xl text-xs font-bold text-[#fff] bg-[#9b2c4d] hover:bg-[#b8355c] transition-colors shrink-0 text-center"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 shadow-md shadow-rose-600/30 transition-all shrink-0 text-center"
           >
             Kelola Stok Suku Cadang →
           </Link>
         </div>
       )}
 
-      {/* Quick Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 flex flex-col justify-between">
+      {/* 4. Quick Access Module Shortcuts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col justify-between hover:border-slate-700 transition-all">
           <div>
-            <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#c49eff] flex items-center justify-center font-bold text-xs mb-3">
+            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs mb-3">
               01
             </div>
-            <h3 className="text-base font-bold text-[#f6f2ff] mb-1">
+            <h3 className="text-sm font-bold text-white mb-1">
               Work Order Servis
             </h3>
-            <p className="text-xs text-[#b5abc9] mb-4 leading-relaxed">
-              Pantau antrian pit, perbarui status pengerjaan mekanik, dan catat pemakaian sparepart otomatis.
+            <p className="text-xs text-slate-400 leading-relaxed mb-4">
+              Terbitkan SPK baru, perbarui status pengerjaan mekanik, dan kurangi stok suku cadang otomatis.
             </p>
           </div>
           <Link
             href="/services"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#c49eff] hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
           >
-            Buka Work Order <span>→</span>
+            Buka Modul Servis <span>→</span>
           </Link>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 flex flex-col justify-between">
+        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col justify-between hover:border-slate-700 transition-all">
           <div>
-            <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#c49eff] flex items-center justify-center font-bold text-xs mb-3">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs mb-3">
               02
             </div>
-            <h3 className="text-base font-bold text-[#f6f2ff] mb-1">
+            <h3 className="text-sm font-bold text-white mb-1">
               Kasir & Billing
             </h3>
-            <p className="text-xs text-[#b5abc9] mb-4 leading-relaxed">
-              Proses pembayaran tunai, transfer, dan QRIS, hitung kembalian, serta cetak struk nota resmi.
+            <p className="text-xs text-slate-400 leading-relaxed mb-4">
+              Penerimaan pembayaran tunai, transfer, dan QRIS, hitung diskon & kembalian, serta cetak nota struk resmi.
             </p>
           </div>
           <Link
             href="/cashier"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#c49eff] hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
           >
-            Buka Kasir & Billing <span>→</span>
+            Buka Modul Kasir <span>→</span>
           </Link>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 flex flex-col justify-between">
+        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col justify-between hover:border-slate-700 transition-all">
           <div>
-            <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#c49eff] flex items-center justify-center font-bold text-xs mb-3">
+            <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs mb-3">
               03
             </div>
-            <h3 className="text-base font-bold text-[#f6f2ff] mb-1">
-              Pelanggan & Kendaraan
+            <h3 className="text-sm font-bold text-white mb-1">
+              Pelanggan & Unit
             </h3>
-            <p className="text-xs text-[#b5abc9] mb-4 leading-relaxed">
+            <p className="text-xs text-slate-400 leading-relaxed mb-4">
               Database nomor kontak WhatsApp pelanggan dan relasi kepemilikan banyak armada kendaraan.
             </p>
           </div>
           <Link
             href="/customers"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#c49eff] hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
           >
             Buka Data Pelanggan <span>→</span>
           </Link>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 flex flex-col justify-between">
+        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col justify-between hover:border-slate-700 transition-all">
           <div>
-            <div className="w-8 h-8 rounded-xl bg-[#2e2150] text-[#c49eff] flex items-center justify-center font-bold text-xs mb-3">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs mb-3">
               04
             </div>
-            <h3 className="text-base font-bold text-[#f6f2ff] mb-1">
-              Katalog & Suku Cadang
+            <h3 className="text-sm font-bold text-white mb-1">
+              Live Service Tracking
             </h3>
-            <p className="text-xs text-[#b5abc9] mb-4 leading-relaxed">
-              Daftar tarif jasa bengkel, stok barang gudang, dan sistem peringatan stok kritis otomatis.
+            <p className="text-xs text-slate-400 leading-relaxed mb-4">
+              Halaman publik mobile tanpa login bagi pelanggan untuk melacak transparansi servis kendaraannya secara live.
             </p>
           </div>
           <Link
-            href="/inventory/parts"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#c49eff] hover:text-white transition-colors"
+            href="/track/trk-vario160-budi"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-purple-400 hover:text-purple-300 transition-colors"
           >
-            Buka Inventaris <span>→</span>
+            Buka Tracking Publik <span>→</span>
           </Link>
         </div>
       </div>

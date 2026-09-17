@@ -19,8 +19,8 @@ function formatRupiah(amount: number): string {
 }
 
 const AVAILABLE_MECHANICS = [
-  { id: "usr-3", name: "Budi Santoso", role: "Kepala Mekanik" },
-  { id: "usr-4", name: "Agus Pratama", role: "Teknisi Mesin & CVT" },
+  { id: "usr-3", name: "Budi Santoso", role: "Kepala Mekanik Pit 1" },
+  { id: "usr-4", name: "Agus Pratama", role: "Teknisi Mesin & Transmisi" },
   { id: "usr-5", name: "Rian Hidayat", role: "Teknisi Kelistrikan & Injeksi" },
 ];
 
@@ -68,7 +68,6 @@ export default function NewServiceOrderPage() {
     };
   }, []);
 
-  // Update vehicle options when customer changes
   const selectedCustomer = customers.find((c) => c.id === selectedCustomerId);
   const customerVehicles: Vehicle[] = selectedCustomer?.vehicles || [];
 
@@ -133,7 +132,7 @@ export default function NewServiceOrderPage() {
     );
   }
 
-  // Cost estimates calculation
+  // Cost estimates
   const totalServiceEst = selectedServiceIds.reduce((sum, sId) => {
     const s = availableServices.find((x) => x.id === sId);
     return sum + (s?.price || 0);
@@ -155,7 +154,7 @@ export default function NewServiceOrderPage() {
       return;
     }
     if (!selectedVehicleId) {
-      setErrorMessage("Silakan pilih kendaraan yang akan diservis.");
+      setErrorMessage("Silakan pilih unit kendaraan yang akan diservis.");
       return;
     }
     if (!complaints.trim()) {
@@ -188,41 +187,40 @@ export default function NewServiceOrderPage() {
 
   if (isLoading) {
     return (
-      <div className="p-16 text-center text-[#817797] text-sm">
-        <div className="w-8 h-8 border-2 border-[#9b6cff] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        Memuat form penerimaan unit...
+      <div className="p-16 text-center text-slate-400 text-xs">
+        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        Memuat data formulir penerimaan unit...
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/services"
-            className="p-2 rounded-xl bg-[#221939] border border-[#d2b8ff]/15 text-[#b5abc9] hover:text-[#f6f2ff] hover:bg-[#2e2150] transition-colors"
-            title="Kembali ke Daftar Work Order"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-          </Link>
-          <div>
-            <h1 className="text-xl font-bold text-[#f6f2ff] tracking-tight">
-              Penerimaan Unit & Penerbitan SPK Baru
-            </h1>
-            <p className="text-xs text-[#b5abc9]">
-              Formulir Surat Perintah Kerja (SPK) untuk memasukkan kendaraan pelanggan ke antrian servis pit.
-            </p>
-          </div>
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Top Header */}
+      <div className="flex items-center gap-3">
+        <Link
+          href="/services"
+          className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          title="Kembali ke Daftar SPK"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </Link>
+        <div>
+          <h1 className="text-xl font-extrabold text-white tracking-tight">
+            Penerimaan Unit & Penerbitan SPK Baru
+          </h1>
+          <p className="text-xs text-slate-400">
+            Catat data masuk unit kendaraan, keluhan pelanggan, dan tugaskan teknisi pit.
+          </p>
         </div>
       </div>
 
       {errorMessage && (
-        <div className="mb-6 p-4 rounded-xl bg-[#3a1525] border border-[#ffaeae]/30 text-[#ffaeae] text-xs font-semibold flex items-center gap-2">
+        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-2">
           <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span>{errorMessage}</span>
         </div>
@@ -230,18 +228,18 @@ export default function NewServiceOrderPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Pelanggan & Kendaraan */}
-        <div className="p-6 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 shadow-xl shadow-black/20">
-          <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#d2b8ff]/10">
-            <h2 className="text-sm font-bold text-[#c49eff] uppercase tracking-wider flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-[#8f63ec] text-white flex items-center justify-center text-xs">
+        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
                 1
               </span>
-              Pilih Pelanggan & Unit Kendaraan
+              Identitas Pemilik & Unit Kendaraan
             </h2>
             <Link
               href="/customers"
               target="_blank"
-              className="text-xs text-[#9b6cff] hover:underline font-semibold"
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
             >
               + Daftar Pelanggan Baru ↗
             </Link>
@@ -249,14 +247,14 @@ export default function NewServiceOrderPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
                 Nama Pelanggan (Pemilik) *
               </label>
               <select
                 value={selectedCustomerId}
                 onChange={(e) => handleCustomerChange(e.target.value)}
                 required
-                className="w-full h-11 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               >
                 <option value="">-- Pilih Pelanggan Terdaftar --</option>
                 {customers.map((c) => (
@@ -268,7 +266,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
                 Kendaraan yang Diservis *
               </label>
               <select
@@ -276,7 +274,7 @@ export default function NewServiceOrderPage() {
                 onChange={(e) => setSelectedVehicleId(e.target.value)}
                 required
                 disabled={!selectedCustomerId || customerVehicles.length === 0}
-                className="w-full h-11 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff] disabled:opacity-50"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500 disabled:opacity-50"
               >
                 {customerVehicles.length === 0 ? (
                   <option value="">-- Pilih pelanggan terlebih dahulu --</option>
@@ -291,27 +289,26 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1.5">
-                Kilometer Odometer Masuk (KM)
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                Kilometer Spidometer Masuk (KM)
               </label>
               <input
                 type="number"
                 value={currentKm}
                 onChange={(e) => setCurrentKm(e.target.value)}
                 placeholder="Contoh: 14200"
-                className="w-full h-11 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
-              >
-              </input>
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
+              />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1.5">
-                Tugaskan Teknisi / Mekanik
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                Teknisi / Mekanik Ditugaskan
               </label>
               <select
                 value={selectedMechanicId}
                 onChange={(e) => setSelectedMechanicId(e.target.value)}
-                className="w-full h-11 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               >
                 {AVAILABLE_MECHANICS.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -323,61 +320,59 @@ export default function NewServiceOrderPage() {
           </div>
         </div>
 
-        {/* Section 2: Keluhan & Catatan Servis */}
-        <div className="p-6 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 shadow-xl shadow-black/20">
-          <h2 className="text-sm font-bold text-[#c49eff] uppercase tracking-wider mb-4 pb-3 border-b border-[#d2b8ff]/10 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-[#8f63ec] text-white flex items-center justify-center text-xs">
+        {/* Section 2: Keluhan & Catatan Khusus */}
+        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
+          <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4 pb-3 border-b border-slate-800 flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
               2
             </span>
-            Keluhan Pelanggan & Catatan Khusus
+            Keluhan Masuk & Catatan Kondisi Fisik
           </h2>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1.5">
-                Keluhan Utama Kendaraan (Ditanyakan ke Pelanggan) *
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                Keluhan Utama Kendaraan (Ditanyakan ke Pemilik) *
               </label>
               <textarea
                 value={complaints}
                 onChange={(e) => setComplaints(e.target.value)}
                 required
                 rows={3}
-                placeholder="Contoh: Mesin brebet saat gas dibuka mendadak, rem depan bunyi mendecit, minta ganti oli mesin."
-                className="w-full p-3 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                placeholder="Contoh: Mesin brebet saat akselerasi awal, rem depan bunyi mendecit, ganti oli mesin rutin..."
+                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1.5">
-                Catatan Tambahan / Status Fisik Unit (Opsional)
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                Catatan Kondisi Fisik / Permintaan Tambahan (Opsional)
               </label>
               <input
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Contoh: Bodi lecet halus samping kiri, spion kiri agak kendor, pelanggan menunggu di lounge."
-                className="w-full h-11 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                placeholder="Contoh: Bodi kiri ada goresan halus, helm ditinggal di bagasi, pelanggan menunggu di lounge."
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               />
             </div>
           </div>
         </div>
 
-        {/* Section 3: Estimasi Tindakan & Sparepart Awal */}
-        <div className="p-6 rounded-2xl bg-[#221939]/80 border border-[#d2b8ff]/15 shadow-xl shadow-black/20">
-          <h2 className="text-sm font-bold text-[#c49eff] uppercase tracking-wider mb-4 pb-3 border-b border-[#d2b8ff]/10 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-[#8f63ec] text-white flex items-center justify-center text-xs">
+        {/* Section 3: Estimasi Tindakan Awal */}
+        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
+          <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4 pb-3 border-b border-slate-800 flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
               3
             </span>
             Tindakan Jasa & Estimasi Suku Cadang Awal
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Daftar Jasa Servis */}
+            {/* Jasa Servis */}
             <div>
-              <p className="text-xs font-bold text-[#d9d0eb] mb-2.5">
-                Pilih Tindakan Jasa Servis:
-              </p>
-              <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              <p className="text-xs font-bold text-slate-300 mb-2">Pilih Paket Tindakan Jasa:</p>
+              <div className="space-y-2 max-h-60 overflow-y-auto pr-1 scrollbar-none">
                 {availableServices.map((srv) => {
                   const isChecked = selectedServiceIds.includes(srv.id);
                   return (
@@ -386,25 +381,23 @@ export default function NewServiceOrderPage() {
                       onClick={() => toggleService(srv.id)}
                       className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
                         isChecked
-                          ? "bg-[#2e2150] border-[#9b6cff] text-[#f6f2ff]"
-                          : "bg-[#17122b] border-[#d2b8ff]/10 text-[#b5abc9] hover:border-[#d2b8ff]/30"
+                          ? "bg-indigo-950/40 border-indigo-500 text-white"
+                          : "bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700"
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5">
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => {}}
-                          className="rounded border-[#d2b8ff]/30 text-[#8f63ec] focus:ring-0"
+                          className="rounded border-slate-700 text-indigo-600"
                         />
                         <div>
-                          <p className="text-xs font-bold text-[#f6f2ff]">{srv.name}</p>
-                          <p className="text-[10px] text-[#817797]">
-                            {srv.code} • ~{srv.duration || 30} mnt
-                          </p>
+                          <p className="text-xs font-semibold text-white">{srv.name}</p>
+                          <p className="text-[10px] text-slate-400">{srv.code} • ~{srv.duration || 30} mnt</p>
                         </div>
                       </div>
-                      <span className="text-xs font-bold text-[#34d399]">
+                      <span className="text-xs font-bold text-emerald-400 font-mono">
                         {formatRupiah(srv.price)}
                       </span>
                     </div>
@@ -413,57 +406,45 @@ export default function NewServiceOrderPage() {
               </div>
             </div>
 
-            {/* Suku Cadang Awal */}
+            {/* Suku Cadang */}
             <div>
-              <p className="text-xs font-bold text-[#d9d0eb] mb-2.5">
-                Pilih Sparepart yang Akan Digunakan:
-              </p>
-              <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              <p className="text-xs font-bold text-slate-300 mb-2">Pilih Suku Cadang yang Digunakan:</p>
+              <div className="space-y-2 max-h-60 overflow-y-auto pr-1 scrollbar-none">
                 {availableParts.map((part) => {
-                  const currentInOrder = selectedParts.find((p) => p.partId === part.id);
-                  const isOutOfStock = part.stock <= 0;
-
+                  const inOrder = selectedParts.find((p) => p.partId === part.id);
                   return (
                     <div
                       key={part.id}
-                      className="p-3 rounded-xl bg-[#17122b] border border-[#d2b8ff]/10 flex items-center justify-between"
+                      className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between"
                     >
                       <div className="min-w-0 flex-1 mr-2">
-                        <p className="text-xs font-bold text-[#f6f2ff] truncate">
-                          {part.name}
+                        <p className="text-xs font-semibold text-white truncate">{part.name}</p>
+                        <p className="text-[10px] text-slate-400">
+                          Stok: <span className={part.stock <= part.minStock ? "text-amber-400 font-bold" : "text-slate-300"}>{part.stock} {part.unit}</span>
                         </p>
-                        <div className="flex items-center gap-2 text-[10px] text-[#817797]">
-                          <span>{part.sku}</span>
-                          <span>•</span>
-                          <span
-                            className={part.stock <= part.minStock ? "text-amber-400 font-bold" : "text-[#b5abc9]"}
-                          >
-                            Stok: {part.stock} {part.unit}
-                          </span>
-                        </div>
                       </div>
 
-                      <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs font-bold text-[#34d399]">
+                      <div className="flex items-center gap-2.5 shrink-0">
+                        <span className="text-xs font-bold text-emerald-400 font-mono">
                           {formatRupiah(part.sellPrice)}
                         </span>
 
-                        {currentInOrder ? (
-                          <div className="flex items-center gap-1.5 bg-[#2e2150] rounded-lg px-2 py-1">
+                        {inOrder ? (
+                          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-0.5">
                             <button
                               type="button"
                               onClick={() => updatePartQty(part.id, -1)}
-                              className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold text-[#ffaeae] hover:bg-[#3a1525]"
+                              className="text-xs font-bold text-rose-400 hover:text-white px-1"
                             >
                               -
                             </button>
-                            <span className="text-xs font-bold text-[#f6f2ff] min-w-4 text-center">
-                              {currentInOrder.qty}
+                            <span className="text-xs font-bold text-white min-w-3 text-center">
+                              {inOrder.qty}
                             </span>
                             <button
                               type="button"
                               onClick={() => updatePartQty(part.id, 1)}
-                              className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold text-[#34d399] hover:bg-[#1c3a28]"
+                              className="text-xs font-bold text-emerald-400 hover:text-white px-1"
                             >
                               +
                             </button>
@@ -471,9 +452,9 @@ export default function NewServiceOrderPage() {
                         ) : (
                           <button
                             type="button"
-                            disabled={isOutOfStock}
+                            disabled={part.stock <= 0}
                             onClick={() => addPartToOrder(part.id)}
-                            className="px-2.5 py-1 rounded-lg text-xs font-bold text-[#c49eff] bg-[#2e2150] hover:bg-[#382666] disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="px-2.5 py-1 rounded-lg text-xs font-bold text-indigo-300 bg-slate-900 border border-slate-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all disabled:opacity-40"
                           >
                             + Tambah
                           </button>
@@ -486,56 +467,36 @@ export default function NewServiceOrderPage() {
             </div>
           </div>
 
-          {/* Estimasi Ringkasan Biaya */}
-          <div className="mt-6 pt-4 border-t border-[#d2b8ff]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#17122b]/60 p-4 rounded-xl">
-            <div className="flex flex-wrap items-center gap-6 text-xs text-[#b5abc9]">
-              <div>
-                <span>Jasa ({selectedServiceIds.length}): </span>
-                <span className="font-bold text-[#f6f2ff]">{formatRupiah(totalServiceEst)}</span>
-              </div>
-              <div>
-                <span>Part ({selectedParts.reduce((acc, p) => acc + p.qty, 0)} pcs): </span>
-                <span className="font-bold text-[#f6f2ff]">{formatRupiah(totalPartsEst)}</span>
-              </div>
+          {/* Running total estimate banner */}
+          <div className="mt-5 p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="text-xs text-slate-400 flex items-center gap-4">
+              <span>Jasa ({selectedServiceIds.length}): <strong className="text-white font-mono">{formatRupiah(totalServiceEst)}</strong></span>
+              <span>•</span>
+              <span>Sparepart ({selectedParts.reduce((acc, p) => acc + p.qty, 0)} pcs): <strong className="text-white font-mono">{formatRupiah(totalPartsEst)}</strong></span>
             </div>
-
             <div className="flex items-baseline gap-2">
-              <span className="text-xs text-[#817797] uppercase tracking-wider font-bold">
-                Estimasi Awal:
-              </span>
-              <span className="text-xl font-black text-emerald-400">
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Estimasi Awal:</span>
+              <span className="text-xl font-black text-emerald-400 font-mono">
                 {formatRupiah(grandTotalEst)}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Submit Actions */}
-        <div className="flex items-center justify-end gap-4 pb-8">
+        {/* Action submit */}
+        <div className="flex items-center justify-end gap-3 pt-2">
           <Link
             href="/services"
-            className="px-5 py-2.5 rounded-xl text-xs font-bold text-[#817797] hover:text-[#f6f2ff] transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors"
           >
-            Batalkan
+            Batal
           </Link>
           <button
             type="submit"
             disabled={isPending}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#8f63ec] to-[#6f45c3] hover:brightness-110 shadow-lg shadow-[#8f63ec]/30 transition-all cursor-pointer disabled:opacity-50"
+            className="px-6 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 shadow-md shadow-indigo-600/30 transition-all cursor-pointer disabled:opacity-50"
           >
-            {isPending ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Menerbitkan SPK...
-              </>
-            ) : (
-              <>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Terbitkan SPK & Masukkan Antrian
-              </>
-            )}
+            {isPending ? "Menerbitkan SPK..." : "✓ Terbitkan SPK & Masukkan Antrian Pit"}
           </button>
         </div>
       </form>

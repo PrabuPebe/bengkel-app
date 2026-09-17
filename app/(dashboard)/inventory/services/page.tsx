@@ -87,10 +87,10 @@ export default function ServicesCatalogPage() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <Header
         title="Katalog Jasa & Tarif Servis"
-        subtitle="Daftar tindakan perbaikan, tune up, penggantian pelumas, dan tarif jasa pengerjaan teknisi bengkel."
+        subtitle="Daftar tindakan perbaikan, tune up, penggantian pelumas, dan tarif jasa pengerjaan teknisi PitCare Auto."
         actionButton={
           <button
             type="button"
@@ -98,7 +98,7 @@ export default function ServicesCatalogPage() {
               setFormError("");
               setIsAddOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#8f63ec] to-[#6f45c3] hover:brightness-110 shadow-lg shadow-[#8f63ec]/25 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -109,17 +109,17 @@ export default function ServicesCatalogPage() {
       />
 
       {/* Search Input */}
-      <div className="mb-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <form onSubmit={handleSearch} className="flex-1 relative">
           <input
             type="text"
             placeholder="Cari berdasarkan kode (contoh: SRV-001) atau nama jasa servis..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 pl-11 pr-4 rounded-xl bg-[#221939]/90 border border-[#d2b8ff]/15 text-[#f6f2ff] placeholder-[#817797] text-sm focus:outline-none focus:border-[#9b6cff] transition-all"
+            className="w-full h-11 pl-11 pr-4 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder:text-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition-all"
           />
           <svg
-            className="w-5 h-5 text-[#817797] absolute left-3.5 top-3 pointer-events-none"
+            className="w-4 h-4 text-slate-500 absolute left-4 top-3.5 pointer-events-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -134,7 +134,7 @@ export default function ServicesCatalogPage() {
               setSearchQuery("");
               loadServices("");
             }}
-            className="px-3 h-11 rounded-xl text-xs font-semibold text-[#c49eff] bg-[#2e2150] hover:bg-[#382666] transition-colors"
+            className="px-4 h-11 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 hover:bg-slate-800 transition-colors"
           >
             Reset
           </button>
@@ -143,28 +143,28 @@ export default function ServicesCatalogPage() {
 
       {/* Services Table Card */}
       {isLoading ? (
-        <div className="p-12 text-center text-[#817797] text-sm">
-          <div className="w-8 h-8 border-2 border-[#9b6cff] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat katalog jasa servis...
+        <div className="p-20 text-center text-slate-400 text-sm">
+          <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          Memuat katalog jasa servis PitCare Auto...
         </div>
       ) : services.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-[#221939]/40 border border-[#d2b8ff]/10">
-          <p className="text-base font-bold text-[#f6f2ff] mb-1">Katalog jasa masih kosong</p>
-          <p className="text-xs text-[#817797] mb-4">
+        <div className="p-16 text-center rounded-2xl bg-slate-900 border border-slate-800">
+          <p className="text-base font-bold text-white mb-1">Katalog jasa masih kosong</p>
+          <p className="text-xs text-slate-400 mb-6 max-w-sm mx-auto">
             {searchQuery ? "Tidak ada jasa yang sesuai kata kunci." : "Tambahkan paket servis pertama untuk bengkel Anda."}
           </p>
           <button
             type="button"
             onClick={() => setIsAddOpen(true)}
-            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#8f63ec]"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
           >
             Tambah Jasa Baru
           </button>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#d2b8ff]/15 bg-[#221939]/80 shadow-xl shadow-black/30">
-          <table className="w-full text-left text-sm text-[#d9d0eb]">
-            <thead className="bg-[#1b142f] text-[11px] font-bold uppercase tracking-wider text-[#817797] border-b border-[#d2b8ff]/10">
+        <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/90 shadow-xl shadow-slate-950/40">
+          <table className="w-full text-left text-xs text-slate-300">
+            <thead className="bg-slate-950 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="py-3.5 px-4">Kode Jasa</th>
                 <th className="py-3.5 px-4">Nama Tindakan & Rincian</th>
@@ -173,26 +173,26 @@ export default function ServicesCatalogPage() {
                 <th className="py-3.5 px-4 text-center">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#d2b8ff]/10">
+            <tbody className="divide-y divide-slate-800/60">
               {services.map((srv) => (
-                <tr key={srv.id} className="hover:bg-[#2b1f47]/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-xs text-[#c49eff]">
+                <tr key={srv.id} className="hover:bg-slate-800/30 transition-colors">
+                  <td className="py-3.5 px-4 font-mono font-bold text-xs text-indigo-400">
                     {srv.code}
                   </td>
                   <td className="py-3.5 px-4">
-                    <p className="font-bold text-[#f6f2ff]">{srv.name}</p>
+                    <p className="font-semibold text-white">{srv.name}</p>
                     {srv.description && (
-                      <p className="text-xs text-[#817797] mt-0.5 line-clamp-1 max-w-md">
+                      <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1 max-w-md">
                         {srv.description}
                       </p>
                     )}
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#17122b] text-xs font-semibold text-[#b5abc9] border border-[#d2b8ff]/10">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 text-xs font-medium text-slate-300 border border-slate-800">
                       ⏱ {srv.duration || 30} menit
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 text-right font-mono font-bold text-[#34d399] text-sm">
+                  <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-400 text-xs">
                     {formatIDR(srv.price)}
                   </td>
                   <td className="py-3.5 px-4 text-center">
@@ -200,7 +200,7 @@ export default function ServicesCatalogPage() {
                       type="button"
                       onClick={() => handleDeleteService(srv.id, srv.name)}
                       disabled={isPending}
-                      className="p-1.5 rounded-lg text-[#817797] hover:text-[#ffaeae] hover:bg-[#3a1525] transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                       title="Hapus Jasa"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -220,18 +220,18 @@ export default function ServicesCatalogPage() {
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         title="Tambah Paket Jasa Servis"
-        description="Daftarkan paket pekerjaan teknisi beserta standar tarif pengerjaannya."
+        description="Daftarkan paket pekerjaan teknisi beserta standar tarif pengerjaannya di PitCare Auto."
       >
         <form onSubmit={handleCreateService} className="space-y-4">
           {formError && (
-            <div className="p-3 rounded-xl bg-[#3a1525] border border-[#ffaeae]/30 text-[#ffaeae] text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-semibold">
               {formError}
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Kode Jasa (Unik) *
               </label>
               <input
@@ -239,11 +239,11 @@ export default function ServicesCatalogPage() {
                 type="text"
                 required
                 placeholder="Contoh: SRV-009"
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm uppercase focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs uppercase focus:outline-none focus:border-indigo-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Estimasi Durasi (Menit) *
               </label>
               <input
@@ -251,13 +251,13 @@ export default function ServicesCatalogPage() {
                 type="number"
                 required
                 defaultValue={30}
-                className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+                className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Nama Tindakan Jasa *
             </label>
             <input
@@ -265,12 +265,12 @@ export default function ServicesCatalogPage() {
               type="text"
               required
               placeholder="Contoh: Overhaul Transmisi CVT"
-              className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+              className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Tarif Jasa (Rp) *
             </label>
             <input
@@ -278,34 +278,34 @@ export default function ServicesCatalogPage() {
               type="number"
               required
               placeholder="Contoh: 75000"
-              className="w-full h-10 px-3.5 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm font-mono focus:outline-none focus:border-[#9b6cff]"
+              className="w-full h-10 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#d9d0eb] mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Deskripsi Pekerjaan (Opsional)
             </label>
             <textarea
               name="description"
               rows={2}
-              placeholder="Langkah-langkah yang dikerjakan mekanik..."
-              className="w-full p-3 rounded-xl bg-[#17122b] border border-[#d2b8ff]/15 text-[#f6f2ff] text-sm focus:outline-none focus:border-[#9b6cff]"
+              placeholder="Rincian prosedur teknis yang dikerjakan mekanik..."
+              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#d2b8ff]/10">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
             <button
               type="button"
               onClick={() => setIsAddOpen(false)}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-[#817797] hover:text-[#f6f2ff] transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#8f63ec] to-[#6f45c3] hover:brightness-110 shadow-md shadow-[#8f63ec]/30 transition-all cursor-pointer"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
             >
               {isPending ? "Menyimpan..." : "Simpan Jasa Servis"}
             </button>

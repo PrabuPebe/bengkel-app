@@ -856,7 +856,19 @@ export const db = {
     },
 
     async findById(id: string): Promise<ServiceOrder | null> {
-      const order = memoryServiceOrders.find((o) => o.id === id || o.orderNumber === id);
+      const order = memoryServiceOrders.find((o) => o.id === id || o.orderNumber === id || o.token === id);
+      if (!order) return null;
+      const customer = memoryCustomers.find((c) => c.id === order.customerId);
+      const vehicle = customer?.vehicles.find((v) => v.id === order.vehicleId);
+      return {
+        ...order,
+        customer,
+        vehicle,
+      };
+    },
+
+    async findByToken(token: string): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.token === token || o.id === token || o.orderNumber === token);
       if (!order) return null;
       const customer = memoryCustomers.find((c) => c.id === order.customerId);
       const vehicle = customer?.vehicles.find((v) => v.id === order.vehicleId);
