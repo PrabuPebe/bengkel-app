@@ -24,10 +24,10 @@ export function Sidebar({ user }: SidebarProps) {
 
   const navLinks = [
     {
-      group: "Ringkasan",
+      group: "Ringkasan Operasional",
       items: [
         {
-          name: "Dashboard Operasional",
+          name: "Dashboard Pitstop",
           href: "/dashboard",
           badge: null,
           icon: (
@@ -52,7 +52,7 @@ export function Sidebar({ user }: SidebarProps) {
           ),
         },
         {
-          name: "Kasir & Billing",
+          name: "Kasir & Billing POS",
           href: "/cashier",
           badge: null,
           icon: (
@@ -67,7 +67,7 @@ export function Sidebar({ user }: SidebarProps) {
       group: "Master & Inventaris",
       items: [
         {
-          name: "Pelanggan & Kendaraan",
+          name: "Pelanggan & Armada",
           href: "/customers",
           badge: null,
           icon: (
@@ -99,21 +99,6 @@ export function Sidebar({ user }: SidebarProps) {
         },
       ],
     },
-    {
-      group: "Layanan Pelanggan",
-      items: [
-        {
-          name: "Live Tracking Servis",
-          href: "/track/trk-vario160-budi",
-          badge: "Publik",
-          icon: (
-            <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-            </svg>
-          ),
-        },
-      ],
-    },
   ];
 
   return (
@@ -123,7 +108,7 @@ export function Sidebar({ user }: SidebarProps) {
         <button
           type="button"
           onClick={() => setIsOpenMobile(!isOpenMobile)}
-          className="p-2.5 rounded-xl bg-[#1F150C] text-white border border-[#412D15] shadow-md focus:outline-none hover:bg-[#000000] transition-all cursor-pointer"
+          className="p-2.5 rounded-xl bg-[#0F172A] text-[#00D2FF] border border-slate-800 shadow-lg shadow-black/40 focus:outline-none hover:border-[#00D2FF]/50 transition-all cursor-pointer"
           aria-label="Buka Navigasi"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -139,47 +124,50 @@ export function Sidebar({ user }: SidebarProps) {
       {/* Backdrop for mobile */}
       {isOpenMobile && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-[#000000]/60 backdrop-blur-xs"
+          className="lg:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
           onClick={() => setIsOpenMobile(false)}
         />
       )}
 
-      {/* Espresso #1F150C Sidebar */}
+      {/* Dark Pitstop #0F172A Sidebar */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-40 w-72 bg-[#1F150C] border-r border-[#412D15]/40 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-xl ${
+        className={`fixed top-0 bottom-0 left-0 z-40 w-72 bg-[#0F172A]/95 backdrop-blur-xl border-r border-slate-800/80 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-2xl ${
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand Header */}
-        <div className="p-5 border-b border-[#412D15]/40 flex items-center justify-between">
+        <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#412D15] text-white shadow-md shadow-[#000000]/30 border border-[#412D15]/60 flex items-center justify-center font-black text-sm tracking-wider">
-              PA
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] text-slate-950 shadow-lg shadow-[#00D2FF]/25 border border-cyan-400/40 flex items-center justify-center font-black text-sm tracking-wider">
+              BK
             </div>
             <div>
-              <h1 className="text-sm font-extrabold text-white tracking-tight leading-none">
-                PitCare Auto
+              <h1 className="text-base font-extrabold text-white tracking-tight leading-none flex items-center gap-1.5">
+                <span>Bengkelku</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/10 text-[#00D2FF] border border-cyan-500/30">
+                  PRO
+                </span>
               </h1>
-              <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest mt-1">
-                Enterprise Suite
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">
+                High-Tech Pitstop
               </p>
             </div>
           </div>
 
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#412D15]/60 border border-[#412D15] text-[10px] font-bold text-white">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[10px] font-bold text-[#00D2FF]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse" />
             Live
           </span>
         </div>
 
         {/* Nav links */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-5">
+        <nav className="flex-1 overflow-y-auto p-4 space-y-6">
           {navLinks.map((group) => (
             <div key={group.group}>
-              <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">
+              <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
                 {group.group}
               </p>
-              <ul className="space-y-1">
+              <ul className="space-y-1.5">
                 {group.items.map((item) => {
                   const isActive = pathname === item.href;
 
@@ -190,12 +178,12 @@ export function Sidebar({ user }: SidebarProps) {
                         onClick={() => setIsOpenMobile(false)}
                         className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                           isActive
-                            ? "bg-[#412D15] text-white shadow-md shadow-[#000000]/30 font-bold"
-                            : "text-zinc-300 hover:text-white hover:bg-[#412D15]/40"
+                            ? "bg-gradient-to-r from-cyan-500/15 to-blue-600/10 text-[#00D2FF] border border-[#00D2FF]/35 shadow-[0_0_15px_rgba(0,210,255,0.12)] font-bold"
+                            : "text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent"
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className={isActive ? "text-white" : "text-zinc-400"}>
+                          <span className={isActive ? "text-[#00D2FF]" : "text-slate-400"}>
                             {item.icon}
                           </span>
                           <span>{item.name}</span>
@@ -204,8 +192,8 @@ export function Sidebar({ user }: SidebarProps) {
                           <span
                             className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
                               isActive
-                                ? "bg-[#1F150C] text-white"
-                                : "bg-[#000000] text-white border border-[#412D15]/60"
+                                ? "bg-cyan-500/20 text-[#00D2FF]"
+                                : "bg-slate-800 text-slate-300 border border-slate-700"
                             }`}
                           >
                             {item.badge}
@@ -221,20 +209,20 @@ export function Sidebar({ user }: SidebarProps) {
         </nav>
 
         {/* User profile footer */}
-        <div className="p-4 border-t border-[#412D15]/40 bg-[#000000]/50">
+        <div className="p-4 border-t border-slate-800/80 bg-[#0B0F17]/90">
           <div className="flex items-center gap-3 mb-3 px-1">
-            <div className="w-8 h-8 rounded-full bg-[#412D15] text-white flex items-center justify-center font-bold text-xs shadow-sm">
-              {(user?.name || "PA").substring(0, 2).toUpperCase()}
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 flex items-center justify-center font-bold text-xs shadow-md">
+              {(user?.name || "BK").substring(0, 2).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-white truncate">
-                {user?.name || "Pak Joko (Admin)"}
+                {user?.name || "Mekanik Kepala"}
               </p>
-              <p className="text-[10px] text-zinc-400 truncate">
-                {user?.email || "admin22@gmail.com"}
+              <p className="text-[10px] text-slate-400 truncate font-mono">
+                {user?.email || "admin@bengkelku.app"}
               </p>
             </div>
-            <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-[#412D15] text-white border border-[#412D15]/80">
+            <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-amber-500/15 text-[#F59E0B] border border-amber-500/40">
               {user?.role || "ADMIN"}
             </span>
           </div>
@@ -242,7 +230,7 @@ export function Sidebar({ user }: SidebarProps) {
           <button
             type="button"
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-300 bg-[#412D15]/40 hover:bg-rose-900/40 border border-rose-500/25 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 transition-all cursor-pointer"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

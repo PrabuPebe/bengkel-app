@@ -13,19 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://pitcare.auto"),
-  title: "PitCare Auto — Sistem Manajemen Bengkel Modern",
+  metadataBase: new URL("https://bengkelku.app"),
+  title: "Bengkelku — Sistem Manajemen Bengkel Modern",
   description:
-    "Sistem operasional otomotif modern berstandar enterprise: Work Order Servis, Billing Kasir, Manajemen Suku Cadang, dan Live Service Tracking PitCare Auto.",
+    "Sistem operasional otomotif modern berstandar High-Tech Pitstop: Work Order Servis, Billing Kasir POS, Manajemen Suku Cadang, dan Live Service Tracking Bengkelku.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "PitCare Auto — Sistem Manajemen Bengkel Modern",
+    title: "Bengkelku — Sistem Manajemen Bengkel Modern",
     description:
-      "Platform terintegrasi operasional otomotif PitCare Auto: Work Order Servis, Kasir POS, Manajemen Inventaris Suku Cadang, dan Live Tracking Publik.",
-    url: "https://pitcare.auto",
-    siteName: "PitCare Auto",
+      "Platform terintegrasi operasional otomotif Bengkelku: Work Order Servis, Kasir POS, Manajemen Inventaris Suku Cadang, dan Live Tracking Publik.",
+    url: "https://bengkelku.app",
+    siteName: "Bengkelku",
     locale: "id_ID",
     type: "website",
   },
@@ -41,7 +41,7 @@ export default function RootLayout({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#000000] text-[#1F150C] selection:bg-[#412D15] selection:text-white font-sans">
+      <body className="min-h-full flex flex-col bg-[#0B0F17] text-slate-100 selection:bg-[#00D2FF] selection:text-black font-sans">
         {children}
       </body>
     </html>

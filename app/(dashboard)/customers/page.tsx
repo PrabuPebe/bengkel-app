@@ -105,7 +105,7 @@ export default function CustomersPage() {
     <div className="space-y-6">
       <Header
         title="Master Pelanggan & Armada Kendaraan"
-        subtitle="Kelola database pelanggan PitCare Auto dan riwayat armada kendaraan roda dua maupun roda empat."
+        subtitle="Kelola database pelanggan Bengkelku dan riwayat armada kendaraan roda dua maupun roda empat berstandar Pitstop."
         actionButton={
           <button
             type="button"
@@ -113,12 +113,12 @@ export default function CustomersPage() {
               setFormError("");
               setIsAddCustomerOpen(true);
             }}
-            className="btn-sage flex items-center gap-2 px-4 py-2.5 text-xs cursor-pointer"
+            className="btn-cyan flex items-center gap-2 px-4 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            Tambah Pelanggan
+            + Tambah Pelanggan
           </button>
         }
       />
@@ -134,7 +134,7 @@ export default function CustomersPage() {
             className="input-custom w-full h-11 pl-11 pr-4 text-xs"
           />
           <svg
-            className="w-4 h-4 text-[#412D15] absolute left-4 top-3.5 pointer-events-none"
+            className="w-4 h-4 text-slate-400 absolute left-4 top-3.5 pointer-events-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -158,23 +158,23 @@ export default function CustomersPage() {
 
       {/* Customers List / Table */}
       {isLoading ? (
-        <div className="p-20 text-center text-[#412D15] text-sm card-floating">
-          <div className="w-8 h-8 border-2 border-[#412D15] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat master pelanggan PitCare Auto...
+        <div className="p-20 text-center text-slate-400 text-sm card-pitstop">
+          <div className="w-8 h-8 border-2 border-[#00D2FF] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          Memuat master pelanggan Bengkelku...
         </div>
       ) : customers.length === 0 ? (
-        <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#000000] border border-[#412D15]/40 flex items-center justify-center text-2xl mx-auto mb-4 text-white">
+        <div className="p-16 text-center card-pitstop">
+          <div className="w-14 h-14 rounded-2xl bg-[#0F172A] border border-slate-800 flex items-center justify-center text-2xl mx-auto mb-4 text-[#00D2FF]">
             👥
           </div>
-          <p className="text-base font-bold text-[#1F150C] mb-1">Tidak ditemukan data pelanggan</p>
-          <p className="text-xs text-[#412D15] mb-6 max-w-sm mx-auto">
+          <p className="text-base font-bold text-white mb-1">Tidak ditemukan data pelanggan</p>
+          <p className="text-xs text-slate-400 mb-6 max-w-sm mx-auto">
             {searchQuery ? "Coba gunakan kata kunci pencarian lain." : "Belum ada data pelanggan yang terdaftar."}
           </p>
           <button
             type="button"
             onClick={() => setIsAddCustomerOpen(true)}
-            className="btn-sage px-5 py-2.5 text-xs cursor-pointer"
+            className="btn-cyan px-5 py-2.5 text-xs cursor-pointer"
           >
             Daftarkan Pelanggan Pertama
           </button>
@@ -184,31 +184,31 @@ export default function CustomersPage() {
           {customers.map((cust) => (
             <div
               key={cust.id}
-              className="card-floating p-6"
+              className="card-pitstop p-6"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#412D15]/15">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#1F150C] text-[#412D15] border border-[#412D15]/40 flex items-center justify-center font-black text-sm shrink-0 shadow-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-[#0F172A] text-[#00D2FF] border border-cyan-500/30 flex items-center justify-center font-black text-sm shrink-0 shadow-lg shadow-black/40">
                     {cust.name.substring(0, 2).toUpperCase()}
                   </div>
                   <div>
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <h2 className="text-base font-bold text-[#1F150C] tracking-tight">{cust.name}</h2>
+                      <h2 className="text-base font-bold text-white tracking-tight">{cust.name}</h2>
                       <span className="badge-custom badge-steel">
                         {cust.vehicles.length} Kendaraan
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#412D15] mt-1.5 font-medium">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400 mt-1.5 font-medium">
                       <a
                         href={`https://wa.me/${cust.phone.replace(/^0/, "62")}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[#1F150C] font-bold hover:underline transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[#00D2FF] font-bold hover:underline transition-colors font-mono"
                       >
                         <span>📱 {cust.phone}</span>
                       </a>
                       {cust.address && (
-                        <span className="text-[#412D15] truncate max-w-md">
+                        <span className="text-slate-400 truncate max-w-md">
                           📍 {cust.address}
                         </span>
                       )}
@@ -224,7 +224,7 @@ export default function CustomersPage() {
                       setSelectedCustomerName(cust.name);
                       setFormError("");
                     }}
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-[#000000] border border-[#412D15]/50 hover:bg-[#412D15] transition-colors cursor-pointer"
+                    className="btn-outline-steel px-3.5 py-1.5 text-xs font-bold cursor-pointer"
                   >
                     + Tambah Kendaraan
                   </button>
@@ -232,7 +232,7 @@ export default function CustomersPage() {
                     type="button"
                     onClick={() => handleDeleteCustomer(cust.id, cust.name)}
                     disabled={isPending}
-                    className="p-2 rounded-xl text-[#412D15] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                    className="p-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 border border-transparent hover:border-rose-500/30 transition-colors cursor-pointer"
                     title="Hapus Pelanggan"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -244,32 +244,33 @@ export default function CustomersPage() {
 
               {/* Daftar Kendaraan Pelanggan */}
               <div className="mt-4">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[#412D15] mb-2.5">
-                  Unit Kendaraan Terdaftar
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2.5 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF]" />
+                  <span>Unit Kendaraan Terdaftar</span>
                 </p>
                 {cust.vehicles.length === 0 ? (
-                  <p className="text-xs text-[#412D15] italic">Belum ada armada kendaraan yang ditautkan.</p>
+                  <p className="text-xs text-slate-500 italic">Belum ada armada kendaraan yang ditautkan.</p>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {cust.vehicles.map((veh) => (
                       <div
                         key={veh.id}
-                        className="p-3.5 rounded-xl bg-zinc-50 border border-[#412D15]/15 flex items-center justify-between"
+                        className="p-3.5 rounded-xl bg-[#0F172A] border border-slate-800/90 hover:border-cyan-500/30 transition-all flex items-center justify-between"
                       >
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#1F150C] text-white tracking-wider">
+                            <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-black text-[#00D2FF] border border-cyan-500/40 tracking-wider shadow-[0_0_8px_rgba(0,210,255,0.12)]">
                               {veh.plateNumber}
                             </span>
                             {veh.year && (
-                              <span className="text-[11px] text-[#412D15]">({veh.year})</span>
+                              <span className="text-[11px] font-mono text-slate-400">({veh.year})</span>
                             )}
                           </div>
-                          <p className="text-xs font-bold text-[#1F150C] mt-1.5">
+                          <p className="text-xs font-bold text-white mt-2">
                             {veh.brand} {veh.model}
                           </p>
                           {veh.notes && (
-                            <p className="text-[10px] text-[#412D15] mt-0.5 truncate max-w-[200px]">
+                            <p className="text-[10px] text-slate-400 mt-0.5 truncate max-w-[200px]">
                               {veh.notes}
                             </p>
                           )}
@@ -289,22 +290,22 @@ export default function CustomersPage() {
         isOpen={isAddCustomerOpen}
         onClose={() => setIsAddCustomerOpen(false)}
         title="Daftarkan Pelanggan & Kendaraan Baru"
-        description="Masukkan data pemilik dan armada kendaraan pertamanya untuk dicatat ke database PitCare Auto."
+        description="Masukkan data pemilik dan armada kendaraan pertamanya untuk dicatat ke database Bengkelku."
       >
         <form onSubmit={handleCreateCustomer} className="space-y-4">
           {formError && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2">
               <span>⚠️</span>
               <span>{formError}</span>
             </div>
           )}
 
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-[#1F150C] uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-[#00D2FF] uppercase tracking-wider">
               1. Informasi Pelanggan
             </h3>
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Nama Pelanggan *
               </label>
               <input
@@ -316,7 +317,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Nomor WhatsApp (Aktif) *
               </label>
               <input
@@ -328,7 +329,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Alamat (Opsional)
               </label>
               <input
@@ -340,37 +341,37 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          <div className="space-y-3 pt-3 border-t border-[#412D15]/15">
-            <h3 className="text-xs font-bold text-[#1F150C] uppercase tracking-wider">
+          <div className="space-y-3 pt-3 border-t border-slate-800">
+            <h3 className="text-xs font-bold text-[#00D2FF] uppercase tracking-wider">
               2. Kendaraan Pertama (Opsional)
             </h3>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Nomor Polisi (Plat No)
                 </label>
                 <input
                   name="plateNumber"
                   type="text"
                   placeholder="B 1234 XYZ"
-                  className="input-custom w-full h-10 px-3.5 text-xs uppercase"
+                  className="input-custom w-full h-10 px-3.5 text-xs uppercase font-mono font-bold"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Tahun Pembuatan
                 </label>
                 <input
                   name="year"
                   type="number"
                   placeholder="2022"
-                  className="input-custom w-full h-10 px-3.5 text-xs"
+                  className="input-custom w-full h-10 px-3.5 text-xs font-mono"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Merk Kendaraan
                 </label>
                 <input
@@ -381,7 +382,7 @@ export default function CustomersPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Tipe / Model
                 </label>
                 <input
@@ -394,7 +395,7 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#412D15]/15">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
             <button
               type="button"
               onClick={() => setIsAddCustomerOpen(false)}
@@ -405,7 +406,7 @@ export default function CustomersPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="btn-sage px-5 py-2.5 text-xs cursor-pointer disabled:opacity-50"
+              className="btn-cyan px-5 py-2.5 text-xs cursor-pointer disabled:opacity-50"
             >
               {isPending ? "Menyimpan..." : "Simpan Pelanggan"}
             </button>
@@ -422,7 +423,7 @@ export default function CustomersPage() {
       >
         <form onSubmit={handleAddVehicle} className="space-y-4">
           {formError && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2">
               <span>⚠️</span>
               <span>{formError}</span>
             </div>
@@ -430,7 +431,7 @@ export default function CustomersPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Nomor Polisi (Plat No) *
               </label>
               <input
@@ -438,25 +439,25 @@ export default function CustomersPage() {
                 type="text"
                 required
                 placeholder="B 5678 ABC"
-                className="input-custom w-full h-10 px-3.5 text-xs uppercase"
+                className="input-custom w-full h-10 px-3.5 text-xs uppercase font-mono font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Tahun Pembuatan
               </label>
               <input
                 name="year"
                 type="number"
                 placeholder="2021"
-                className="input-custom w-full h-10 px-3.5 text-xs"
+                className="input-custom w-full h-10 px-3.5 text-xs font-mono"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Merk Kendaraan *
               </label>
               <input
@@ -468,7 +469,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Tipe / Model *
               </label>
               <input
@@ -482,7 +483,7 @@ export default function CustomersPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#1F150C] mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Catatan Khusus Kendaraan (Opsional)
             </label>
             <input
@@ -493,7 +494,7 @@ export default function CustomersPage() {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#412D15]/15">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
             <button
               type="button"
               onClick={() => setSelectedCustomerId(null)}
@@ -504,7 +505,7 @@ export default function CustomersPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="btn-sage px-5 py-2.5 text-xs cursor-pointer disabled:opacity-50"
+              className="btn-cyan px-5 py-2.5 text-xs cursor-pointer disabled:opacity-50"
             >
               {isPending ? "Menambahkan..." : "Tambah Unit Kendaraan"}
             </button>

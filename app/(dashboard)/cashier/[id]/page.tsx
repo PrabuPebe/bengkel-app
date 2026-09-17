@@ -66,26 +66,26 @@ export default function CashierBillingDetailPage({
 
   if (isLoading) {
     return (
-      <div className="p-24 text-center text-[#412D15] text-sm print:hidden card-floating">
-        <div className="w-8 h-8 border-2 border-[#412D15] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        Memuat terminal kasir PitCare Auto...
+      <div className="p-24 text-center text-slate-400 text-sm print:hidden card-pitstop">
+        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        Memuat terminal kasir Bengkelku...
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="p-12 text-center rounded-2xl card-floating max-w-lg mx-auto print:hidden">
-        <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3 text-xl font-bold border border-rose-200">
+      <div className="p-12 text-center rounded-2xl card-pitstop max-w-lg mx-auto print:hidden">
+        <div className="w-12 h-12 rounded-xl bg-rose-950/40 text-rose-400 flex items-center justify-center mx-auto mb-3 text-xl font-bold border border-rose-500/40">
           !
         </div>
-        <h2 className="text-base font-bold text-[#1F150C] mb-2">Faktur Tidak Ditemukan</h2>
-        <p className="text-xs text-[#412D15] mb-6">
-          Nomor SPK atau ID penagihan yang Anda cari tidak tersedia dalam database PitCare Auto.
+        <h2 className="text-base font-bold text-slate-100 mb-2">Faktur Tidak Ditemukan</h2>
+        <p className="text-xs text-slate-400 mb-6">
+          Nomor SPK atau ID penagihan yang Anda cari tidak tersedia dalam database Bengkelku.
         </p>
         <Link
           href="/cashier"
-          className="btn-sage inline-flex items-center px-4 py-2 text-xs cursor-pointer"
+          className="btn-cyan inline-flex items-center px-4 py-2 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
         >
           ← Kembali ke Antrean Kasir
         </Link>
@@ -148,7 +148,7 @@ export default function CashierBillingDetailPage({
         <div className="flex items-center gap-3.5">
           <Link
             href="/cashier"
-            className="btn-outline-steel p-2.5 cursor-pointer"
+            className="p-2.5 rounded-xl bg-[#0F172A] border border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500 transition-all cursor-pointer"
             title="Kembali ke Antrean Kasir"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -157,25 +157,25 @@ export default function CashierBillingDetailPage({
           </Link>
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-xl font-bold text-[#1F150C] tracking-tight flex items-center gap-2">
+              <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
                 <span>Billing Faktur:</span>
-                <span className="font-mono text-[#1F150C] font-black">{order.orderNumber}</span>
+                <span className="font-mono text-cyan-400 font-black">{order.orderNumber}</span>
               </h1>
               {isAlreadyPaid ? (
-                <span className="badge-custom badge-sage">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#1F150C]" />
+                <span className="badge-selesai-pembayaran">
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
                   LUNAS
                 </span>
               ) : (
-                <span className="badge-custom badge-cream">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#412D15] animate-pulse" />
+                <span className="badge-antrian">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                   Menunggu Pembayaran
                 </span>
               )}
             </div>
-            <p className="text-xs text-[#412D15] mt-1 font-medium">
-              Pelanggan: <strong className="text-[#1F150C]">{order.customer?.name}</strong> • Unit:{" "}
-              <strong className="font-mono text-[#1F150C]">{order.vehicle?.plateNumber}</strong> ({order.vehicle?.brand}{" "}
+            <p className="text-xs text-slate-400 mt-1 font-medium">
+              Pelanggan: <strong className="text-slate-200">{order.customer?.name}</strong> • Unit:{" "}
+              <strong className="font-mono text-cyan-400">{order.vehicle?.plateNumber}</strong> ({order.vehicle?.brand}{" "}
               {order.vehicle?.model})
             </p>
           </div>
@@ -184,7 +184,7 @@ export default function CashierBillingDetailPage({
         <div className="flex items-center gap-2.5 flex-wrap">
           <Link
             href={`/services/${order.id}`}
-            className="btn-outline-steel px-4 py-2.5 text-xs cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 bg-[#0F172A] border border-slate-700 hover:border-slate-600 transition-all cursor-pointer"
           >
             Lihat SPK Mekanik ↗
           </Link>
@@ -192,7 +192,7 @@ export default function CashierBillingDetailPage({
           <button
             type="button"
             onClick={handlePrintReceipt}
-            className="btn-charcoal flex items-center gap-2 px-4 py-2.5 text-xs cursor-pointer"
+            className="btn-electric flex items-center gap-2 px-4 py-2.5 text-xs cursor-pointer shadow-lg shadow-blue-500/20"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -203,7 +203,7 @@ export default function CashierBillingDetailPage({
       </div>
 
       {checkoutError && (
-        <div className="print:hidden mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+        <div className="print:hidden mb-6 p-4 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2">
           <span>⚠️</span>
           <span>{checkoutError}</span>
         </div>
@@ -214,55 +214,58 @@ export default function CashierBillingDetailPage({
         {/* Left Column: Order Breakdown & Customer Info (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Identity Card */}
-          <div className="card-floating p-6">
-            <h2 className="text-xs font-bold text-[#412D15] uppercase tracking-wider pb-3 border-b border-[#412D15]/15 mb-4">
+          <div className="card-pitstop p-6">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-800 mb-4">
               Informasi Faktur & Unit Pelanggan
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <p className="text-[#412D15] text-[11px]">Pemilik Kendaraan:</p>
-                <p className="font-bold text-[#1F150C] text-base mt-1">{order.customer?.name}</p>
+                <p className="text-slate-400 text-[11px]">Pemilik Kendaraan:</p>
+                <p className="font-bold text-slate-100 text-base mt-1">{order.customer?.name}</p>
                 <a
                   href={`https://wa.me/${order.customer?.phone.replace(/^0/, "62")}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[#1F150C] font-semibold hover:underline inline-flex items-center gap-1 mt-1 transition-colors"
+                  className="text-cyan-400 font-semibold hover:text-cyan-300 hover:underline inline-flex items-center gap-1.5 mt-1 transition-colors"
                 >
-                  📱 WA: {order.customer?.phone}
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  WA: {order.customer?.phone}
                 </a>
                 {order.customer?.address && (
-                  <p className="text-[#412D15] mt-1.5 leading-relaxed">{order.customer?.address}</p>
+                  <p className="text-slate-400 mt-1.5 leading-relaxed">{order.customer?.address}</p>
                 )}
               </div>
 
               <div>
-                <p className="text-[#412D15] text-[11px]">Unit Kendaraan:</p>
-                <p className="font-bold text-[#1F150C] text-base mt-1">
+                <p className="text-slate-400 text-[11px]">Unit Kendaraan:</p>
+                <p className="font-bold text-slate-100 text-base mt-1">
                   {order.vehicle?.brand} {order.vehicle?.model}
                 </p>
-                <p className="font-mono font-bold text-[#1F150C] text-sm mt-1">{order.vehicle?.plateNumber}</p>
+                <p className="font-mono font-bold text-cyan-400 text-sm mt-1">{order.vehicle?.plateNumber}</p>
                 {order.currentKm && (
-                  <p className="text-[#412D15] mt-1.5">KM Aktual: {order.currentKm.toLocaleString("id-ID")} KM</p>
+                  <p className="text-slate-400 mt-1.5">KM Aktual: <span className="font-mono font-bold text-slate-200">{order.currentKm.toLocaleString("id-ID")} KM</span></p>
                 )}
               </div>
             </div>
 
-            <div className="mt-4 pt-3.5 border-t border-[#412D15]/15 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-[#412D15]">
+            <div className="mt-4 pt-3.5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-slate-400">
               <div>
                 <span>Tanggal Masuk: </span>
-                <strong className="text-[#1F150C]">{formatDate(order.entryDate)}</strong>
+                <strong className="text-slate-200">{formatDate(order.entryDate)}</strong>
               </div>
               <div>
                 <span>Teknisi Penanggungjawab: </span>
-                <strong className="text-[#1F150C]">{order.mechanicName || "Teknisi PitCare Auto"}</strong>
+                <strong className="text-slate-200">{order.mechanicName || "Teknisi Bengkelku"}</strong>
               </div>
             </div>
           </div>
 
           {/* Itemized Table: Jasa & Sparepart */}
-          <div className="card-floating p-6">
-            <h2 className="text-xs font-bold text-[#412D15] uppercase tracking-wider pb-3 border-b border-[#412D15]/15 mb-4">
+          <div className="card-pitstop p-6">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-800 mb-4">
               Rincian Pekerjaan Jasa & Suku Cadang
             </h2>
 
@@ -270,25 +273,25 @@ export default function CashierBillingDetailPage({
               {/* Jasa Section */}
               <div>
                 <div className="flex items-center justify-between mb-2.5">
-                  <p className="text-xs font-bold text-[#1F150C] flex items-center gap-1.5">
+                  <p className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
                     <span>🔧 Tindakan Jasa Servis</span>
-                    <span className="text-[#412D15] text-[11px]">({order.items.length})</span>
+                    <span className="text-slate-400 text-[11px]">({order.items.length})</span>
                   </p>
-                  <span className="font-mono font-black text-[#1F150C] text-xs">
+                  <span className="font-mono font-black text-cyan-400 text-xs">
                     {formatRupiah(order.totalServices)}
                   </span>
                 </div>
                 {order.items.length === 0 ? (
-                  <p className="text-xs text-[#412D15] italic py-2">Tidak ada biaya jasa servis.</p>
+                  <p className="text-xs text-slate-500 italic py-2">Tidak ada biaya jasa servis.</p>
                 ) : (
                   <div className="space-y-2">
                     {order.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-zinc-50 border border-[#412D15]/15"
+                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#0F172A] border border-slate-800"
                       >
-                        <span className="text-[#1F150C] font-semibold">{item.serviceName}</span>
-                        <span className="font-mono font-black text-[#1F150C]">{formatRupiah(item.subtotal)}</span>
+                        <span className="text-slate-200 font-semibold">{item.serviceName}</span>
+                        <span className="font-mono font-black text-cyan-400">{formatRupiah(item.subtotal)}</span>
                       </div>
                     ))}
                   </div>
@@ -296,32 +299,32 @@ export default function CashierBillingDetailPage({
               </div>
 
               {/* Parts Section */}
-              <div className="pt-4 border-t border-[#412D15]/15">
+              <div className="pt-4 border-t border-slate-800">
                 <div className="flex items-center justify-between mb-2.5">
-                  <p className="text-xs font-bold text-[#1F150C] flex items-center gap-1.5">
+                  <p className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
                     <span>📦 Suku Cadang (Sparepart)</span>
-                    <span className="text-[#412D15] text-[11px]">({order.parts.length})</span>
+                    <span className="text-slate-400 text-[11px]">({order.parts.length})</span>
                   </p>
-                  <span className="font-mono font-black text-[#1F150C] text-xs">
+                  <span className="font-mono font-black text-cyan-400 text-xs">
                     {formatRupiah(order.totalParts)}
                   </span>
                 </div>
                 {order.parts.length === 0 ? (
-                  <p className="text-xs text-[#412D15] italic py-2">Tidak ada suku cadang terpakai.</p>
+                  <p className="text-xs text-slate-500 italic py-2">Tidak ada suku cadang terpakai.</p>
                 ) : (
                   <div className="space-y-2">
                     {order.parts.map((part) => (
                       <div
                         key={part.id}
-                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-zinc-50 border border-[#412D15]/15"
+                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#0F172A] border border-slate-800"
                       >
-                        <span className="text-[#1F150C]">
+                        <span className="text-slate-200">
                           <strong className="font-bold">{part.partName}</strong>{" "}
-                          <span className="text-[#412D15] font-mono text-[11px]">
+                          <span className="text-slate-400 font-mono text-[11px]">
                             ({part.qty}x @ {formatRupiah(part.sellPrice)})
                           </span>
                         </span>
-                        <span className="font-mono font-black text-[#1F150C]">{formatRupiah(part.subtotal)}</span>
+                        <span className="font-mono font-black text-cyan-400">{formatRupiah(part.subtotal)}</span>
                       </div>
                     ))}
                   </div>
@@ -333,42 +336,42 @@ export default function CashierBillingDetailPage({
 
         {/* Right Column: Payment Terminal & Cashier Calculations (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="card-floating p-6 relative overflow-hidden">
-            <h2 className="text-sm font-bold text-[#1F150C] pb-3 border-b border-[#412D15]/15 flex items-center justify-between">
+          <div className="card-pitstop p-6 relative overflow-hidden">
+            <h2 className="text-sm font-bold text-slate-100 pb-3 border-b border-slate-800 flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <span>💳</span>
                 <span>Terminal Kasir</span>
               </span>
               {isAlreadyPaid && (
-                <span className="badge-custom badge-sage">
+                <span className="badge-selesai-pembayaran">
                   LUNAS
                 </span>
               )}
             </h2>
 
             {/* Total Calculation breakdown */}
-            <div className="space-y-3 py-4 text-xs border-b border-[#412D15]/15">
-              <div className="flex items-center justify-between text-[#412D15]">
+            <div className="space-y-3 py-4 text-xs border-b border-slate-800">
+              <div className="flex items-center justify-between text-slate-400">
                 <span>Total Biaya Jasa</span>
-                <span className="font-mono font-bold text-[#1F150C]">{formatRupiah(order.totalServices)}</span>
+                <span className="font-mono font-bold text-slate-200">{formatRupiah(order.totalServices)}</span>
               </div>
-              <div className="flex items-center justify-between text-[#412D15]">
+              <div className="flex items-center justify-between text-slate-400">
                 <span>Total Suku Cadang</span>
-                <span className="font-mono font-bold text-[#1F150C]">{formatRupiah(order.totalParts)}</span>
+                <span className="font-mono font-bold text-slate-200">{formatRupiah(order.totalParts)}</span>
               </div>
-              <div className="flex items-center justify-between text-[#412D15]">
+              <div className="flex items-center justify-between text-slate-400">
                 <span>Subtotal Bruto</span>
-                <span className="font-mono font-bold text-[#1F150C]">{formatRupiah(subtotalCombined)}</span>
+                <span className="font-mono font-bold text-slate-200">{formatRupiah(subtotalCombined)}</span>
               </div>
 
               {/* Diskon Input */}
-              <div className="pt-2 border-t border-[#412D15]/15">
+              <div className="pt-2 border-t border-slate-800">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-[#1F150C]">
+                  <label className="text-xs font-semibold text-slate-300">
                     Potongan Diskon (Rp):
                   </label>
                   {isAlreadyPaid ? (
-                    <span className="font-mono font-bold text-rose-600">-{formatRupiah(order.discount)}</span>
+                    <span className="font-mono font-bold text-rose-400">-{formatRupiah(order.discount)}</span>
                   ) : (
                     <input
                       type="number"
@@ -384,44 +387,44 @@ export default function CashierBillingDetailPage({
             </div>
 
             {/* Grand Total Display */}
-            <div className="py-4 px-4 rounded-xl bg-[#000000] text-white border border-[#412D15]/50 my-4 flex items-baseline justify-between">
+            <div className="py-4 px-4 rounded-xl bg-[#0B0F17] border border-cyan-500/30 shadow-inner my-4 flex items-baseline justify-between">
               <div>
-                <p className="text-[10px] font-bold text-[#412D15] uppercase tracking-wider">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Total Tagihan Bersih
                 </p>
-                <p className="text-3xl font-black font-mono text-[#1F150C] mt-1">
+                <p className="text-3xl font-black font-mono text-cyan-400 mt-1 drop-shadow-[0_0_12px_rgba(0,210,255,0.3)]">
                   {formatRupiah(currentGrandTotal)}
                 </p>
               </div>
-              <span className="text-[11px] font-bold text-[#412D15] font-mono">PitCare Auto</span>
+              <span className="text-[11px] font-bold text-cyan-400 font-mono">Bengkelku</span>
             </div>
 
             {isAlreadyPaid ? (
               /* Already Paid Details */
               <div className="space-y-4 pt-1">
-                <div className="p-4 rounded-xl bg-zinc-50 border border-[#412D15]/20 text-xs space-y-2.5">
+                <div className="p-4 rounded-xl bg-[#0F172A] border border-slate-800 text-xs space-y-2.5">
                   <div className="flex justify-between">
-                    <span className="text-[#412D15]">Metode Bayar:</span>
-                    <strong className="text-[#1F150C] font-bold">{order.paymentMethod}</strong>
+                    <span className="text-slate-400">Metode Bayar:</span>
+                    <strong className="text-cyan-400 font-bold">{order.paymentMethod}</strong>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#412D15]">Uang Diterima:</span>
-                    <strong className="font-mono text-[#1F150C] font-bold">{formatRupiah(order.paidAmount)}</strong>
+                    <span className="text-slate-400">Uang Diterima:</span>
+                    <strong className="font-mono text-slate-200 font-bold">{formatRupiah(order.paidAmount)}</strong>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#412D15]">Kembalian:</span>
-                    <strong className="font-mono text-[#1F150C] font-bold">{formatRupiah(order.changeAmount)}</strong>
+                    <span className="text-slate-400">Kembalian:</span>
+                    <strong className="font-mono text-slate-200 font-bold">{formatRupiah(order.changeAmount)}</strong>
                   </div>
-                  <div className="flex justify-between pt-2 border-t border-[#412D15]/15">
-                    <span className="text-[#412D15]">Waktu Lunas:</span>
-                    <span className="text-[#1F150C]">{formatDate(order.paidDate)}</span>
+                  <div className="flex justify-between pt-2 border-t border-slate-800">
+                    <span className="text-slate-400">Waktu Lunas:</span>
+                    <span className="text-slate-200 font-mono">{formatDate(order.paidDate)}</span>
                   </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={handlePrintReceipt}
-                  className="btn-charcoal w-full flex items-center justify-center gap-2 py-3 text-xs cursor-pointer"
+                  className="btn-electric w-full flex items-center justify-center gap-2 py-3 text-xs cursor-pointer shadow-lg shadow-blue-500/20"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -434,7 +437,7 @@ export default function CashierBillingDetailPage({
               <form onSubmit={handleConfirmPayment} className="space-y-4 pt-1">
                 {/* Method selector */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#1F150C] mb-2">
+                  <label className="block text-xs font-semibold text-slate-300 mb-2">
                     Metode Pembayaran *
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -445,8 +448,8 @@ export default function CashierBillingDetailPage({
                         onClick={() => handleMethodChange(m)}
                         className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                           paymentMethod === m
-                            ? "bg-[#1F150C] text-white border-[#1F150C] shadow-xs"
-                            : "bg-white text-[#412D15] border-[#412D15]/20 hover:bg-zinc-50"
+                            ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-cyan-400 shadow-md shadow-cyan-500/20"
+                            : "bg-[#0F172A] text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700"
                         }`}
                       >
                         {m === "CASH" ? "💵 Tunai" : m === "TRANSFER" ? "🏦 Transfer" : "📱 QRIS"}
@@ -458,13 +461,13 @@ export default function CashierBillingDetailPage({
                 {/* Amount Paid Input */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-semibold text-[#1F150C]">
+                    <label className="text-xs font-semibold text-slate-300">
                       Uang Diterima Pelanggan (Rp) *
                     </label>
                     <button
                       type="button"
                       onClick={() => handleQuickCash(currentGrandTotal)}
-                      className="text-[11px] font-bold text-[#1F150C] hover:underline transition-colors cursor-pointer"
+                      className="text-[11px] font-bold text-cyan-400 hover:underline transition-colors cursor-pointer"
                     >
                       Uang Pas ({formatRupiah(currentGrandTotal)})
                     </button>
@@ -490,7 +493,7 @@ export default function CashierBillingDetailPage({
                             key={amount}
                             type="button"
                             onClick={() => handleQuickCash(amount)}
-                            className="px-2.5 py-1 rounded-lg bg-[#000000] hover:bg-[#412D15] text-white text-[10px] font-mono font-bold transition-all border border-[#412D15]/40 cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg bg-[#0F172A] hover:bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold transition-all border border-cyan-500/30 cursor-pointer"
                           >
                             {formatRupiah(amount)}
                           </button>
@@ -500,11 +503,11 @@ export default function CashierBillingDetailPage({
                 </div>
 
                 {/* Change Calculation Display */}
-                <div className="p-3.5 rounded-xl bg-[#000000] text-white border border-[#412D15]/40 flex items-center justify-between">
-                  <span className="text-xs text-[#412D15] font-semibold">Kembalian:</span>
+                <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-cyan-500/30 flex items-center justify-between shadow-inner">
+                  <span className="text-xs text-slate-400 font-semibold">Kembalian:</span>
                   <span
                     className={`font-mono text-base font-black ${
-                      numericPaidAmount >= currentGrandTotal ? "text-[#1F150C]" : "text-[#412D15]"
+                      numericPaidAmount >= currentGrandTotal ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(0,210,255,0.3)]" : "text-slate-500"
                     }`}
                   >
                     {formatRupiah(changeAmount)}
@@ -515,11 +518,11 @@ export default function CashierBillingDetailPage({
                 <button
                   type="submit"
                   disabled={isPending || numericPaidAmount < currentGrandTotal}
-                  className="btn-sage w-full py-3 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-98"
+                  className="btn-cyan w-full py-3 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-98 shadow-lg shadow-cyan-500/20"
                 >
                   {isPending ? (
                     <span className="flex items-center justify-center gap-2">
-                      <span className="w-4 h-4 border-2 border-[#1F150C] border-t-transparent rounded-full animate-spin" />
+                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
                       Memproses Pembayaran...
                     </span>
                   ) : (
@@ -534,14 +537,14 @@ export default function CashierBillingDetailPage({
 
       {/* =========================================================
           PRINTABLE OFFICIAL RECEIPT / THERMAL STRUK (Clean Output)
-          Official PitCare Auto Workshop Receipt
+          Official Bengkelku Workshop Receipt
           ========================================================= */}
       <div className="hidden print:block print:max-w-xs print:mx-auto print:font-mono print:text-black print:text-[11px] print:leading-tight">
         {/* Workshop Header */}
         <div className="text-center pb-2 border-b border-dashed border-gray-400">
-          <h2 className="text-base font-black tracking-wider uppercase">PITCARE AUTO</h2>
+          <h2 className="text-base font-black tracking-wider uppercase">BENGKELKU</h2>
           <p className="text-[10px] font-semibold">Automotive Service & Genuine Spareparts</p>
-          <p className="text-[9px]">PitCare Auto — Layanan Otomotif Modern, Cepat & Terpercaya</p>
+          <p className="text-[9px]">Bengkelku — Layanan Otomotif Modern, Cepat & Terpercaya</p>
           <p className="text-[9px]">Hotline / WhatsApp: 0812-3456-7890</p>
         </div>
 
@@ -629,7 +632,7 @@ export default function CashierBillingDetailPage({
         {/* Footer Notes */}
         <div className="pt-3 text-center text-[9px] space-y-1">
           <p className="font-bold">*** TERIMA KASIH ATAS KEPERCAYAAN ANDA ***</p>
-          <p>Garansi Servis Resmi PitCare Auto: 7 Hari / 500 KM.</p>
+          <p>Garansi Servis Resmi Bengkelku: 7 Hari / 500 KM.</p>
           <p>Simpan nota ini sebagai bukti garansi & riwayat servis resmi.</p>
         </div>
       </div>
