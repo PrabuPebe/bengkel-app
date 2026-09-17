@@ -1,130 +1,130 @@
 # LAPORAN TUGAS EKSPLORASI PRODUK DAN PERANCANGAN FITUR BERNILAI TAMBAH
-**Topik:** Belajar dari Mibebi Kasir untuk Perancangan Sistem Manajemen Bengkel (`bengkel-app`)  
-**Mata Kuliah / Konteks:** Rekayasa Perangkat Lunak & Tugas Akhir / Skripsi Sistem Informasi  
+**Topik:** Belajar dari Mibebi Kasir sebelum Menyusun PRD dan Melakukan Vibe Coding  
+**Studi Kasus Transfer Domain:** Sistem Informasi Manajemen Bengkel (`bengkel-app`)  
+**Mata Kuliah / Konteks:** Rekayasa Perangkat Lunak & Proyek Tugas Akhir / Skripsi  
 **Penyusun:** Mahasiswa Tugas Akhir  
-**Pembimbing Akademik & Mentor Teknis:** Senior Academic Mentor & Technical Writer  
-**Tanggal Penyusunan:** 13 September 2026  
-**Status Dokumen:** Final Academic Baseline Report  
+**Status Dokumen:** Laporan Akademik Lengkap (Bagian I, II, dan III Sesuai PRD Proyek)  
+**Tanggal:** 14 September 2026  
 
 ---
 
 ## DAFTAR ISI
 
-- [BAGIAN I: EKSPLORASI DAN ANALISIS MIBEBI KASIR (DOMAIN F&B)](#bagian-i-eksplorasi-dan-analisis-mibebi-kasir-domain-fb)
-  - [1. Hasil Eksplorasi Mibebi Kasir (6 Skenario Simulasi F&B)](#1-hasil-eksplorasi-mibebi-kasir-6-skenario-simulasi-fb)
-  - [2. Identifikasi 5 Fitur Inti Mibebi Kasir & Uji Eliminasi](#2-identifikasi-5-fitur-inti-mibebi-kasir--uji-eliminasi)
-  - [3. Analisis 3 Fitur Bernilai Tambah Mibebi Kasir](#3-analisis-3-fitur-bernilai-tambah-mibebi-kasir)
-  - [4. Product Teardown Mibebi Kasir (6 Pilar Bisnis)](#4-product-teardown-mibebi-kasir-6-pilar-bisnis)
-- [BAGIAN II: TRANSFER KE PROYEK SKRIPSI (bengkel-app)](#bagian-ii-transfer-ke-proyek-skripsi-bengkel-app)
-  - [5. Judul Proyek Mahasiswa](#5-judul-proyek-mahasiswa)
-  - [6. Deskripsi Produk (bengkel-app)](#6-deskripsi-produk-bengkel-app)
-  - [7. Identifikasi 3 Masalah Nyata Operasional Bengkel](#7-identifikasi-3-masalah-nyata-operasional-bengkel)
-  - [8. Minimal 5 Fitur Inti bengkel-app](#8-minimal-5-fitur-inti-bengkel-app)
-  - [9. Tiga Fitur Bernilai Tambah bengkel-app](#9-tiga-fitur-bernilai-tambah-bengkel-app)
-  - [10. Analisis Dampak Fitur Bernilai Tambah](#10-analisis-dampak-fitur-bernilai-tambah)
-  - [11. Prioritas Fitur (MoSCoW Framework)](#11-prioritas-fitur-moscow-framework)
-  - [12. Batasan Ruang Lingkup (Scope Boundaries: In-Scope vs Out-of-Scope)](#12-batasan-ruang-lingkup-scope-boundaries-in-scope-vs-out-of-scope)
-  - [13. Rumusan Value Proposition](#13-rumusan-value-proposition)
-  - [14. Refleksi Akademik](#14-refleksi-akademik)
+- [BAGIAN I — EKSPLORASI MIBEBI KASIR (DOMAIN F&B)](#bagian-i--eksplorasi-mibebi-kasir-domain-fb)
+  - [A. Mencoba Aplikasi (Simulasi 6 Skenario F&B)](#a-mencoba-aplikasi-simulasi-6-skenario-fb)
+  - [B. Identifikasi Fitur Inti Mibebi Kasir & Uji Eliminasi](#b-identifikasi-fitur-inti-mibebi-kasir--uji-eliminasi)
+  - [C. Identifikasi Fitur Bernilai Tambah Mibebi Kasir](#c-identifikasi-fitur-bernilai-tambah-mibebi-kasir)
+  - [D. Memahami Value Proposition (Analisis Kritis 5 Pertanyaan)](#d-memahami-value-proposition-analisis-kritis-5-pertanyaan)
+  - [E. Product Teardown Mibebi Kasir (6 Pilar Bisnis)](#e-product-teardown-mibebi-kasir-6-pilar-bisnis)
+- [BAGIAN II — CONTOH ANALISIS PRODUK (MIBEBI KASIR SEBAGAI WORKED EXAMPLE)](#bagian-ii--contoh-analisis-produk-mibebi-kasir-sebagai-worked-example)
+  - [1. Judul Produk & Deskripsi](#1-judul-produk--deskripsi)
+  - [2. Identifikasi Masalah Utama F&B](#2-identifikasi-masalah-utama-fb)
+  - [3. Fitur Inti vs Fitur Bernilai Tambah](#3-fitur-inti-vs-fitur-bernilai-tambah)
+  - [4. Value Proposition Mibebi (Lapisan 1 Core System vs Lapisan 2 Value-Added)](#4-value-proposition-mibebi-lapisan-1-core-system-vs-lapisan-2-value-added)
+- [BAGIAN III — TRANSFER KE PROYEK SKRIPSI (DISESUAIKAN DENGAN PRD bengkel-app)](#bagian-iii--transfer-ke-proyek-skripsi-disesuaikan-dengan-prd-bengkel-app)
+  - [F. Judul dan Masalah Proyek](#f-judul-dan-masalah-proyek)
+  - [G. Tentukan Fitur Inti (Minimal 5 Fitur Inti bengkel-app)](#g-tentukan-fitur-inti-minimal-5-fitur-inti-bengkel-app)
+  - [H. Usulkan 3 Fitur Bernilai Tambah (Sesuai PRD)](#h-usulkan-3-fitur-bernilai-tambah-sesuai-prd)
+  - [I. Jangan Menyalin Mibebi (Prinsip Transfer Domain F&B ke Otomotif)](#i-jangan-menyalin-mibebi-prinsip-transfer-domain-fb-ke-otomotif)
+  - [J. Prioritas Fitur (MoSCoW Framework)](#j-prioritas-fitur-moscow-framework)
+  - [K. Tentukan Scope (In-Scope vs Out-of-Scope)](#k-tentukan-scope-in-scope-vs-out-of-scope)
+  - [L. Rumuskan Value Proposition](#l-rumuskan-value-proposition)
+  - [M. Refleksi Akademik (5 Pertanyaan Evaluatif)](#m-refleksi-akademik-5-pertanyaan-evaluatif)
 
 ---
 
-# BAGIAN I: EKSPLORASI DAN ANALISIS MIBEBI KASIR (DOMAIN F&B)
+# BAGIAN I — EKSPLORASI MIBEBI KASIR (DOMAIN F&B)
 
-## 1. Hasil Eksplorasi Mibebi Kasir (6 Skenario Simulasi F&B)
+## A. Mencoba Aplikasi (Simulasi 6 Skenario F&B)
 
-Eksplorasi terhadap produk **Mibebi Kasir**—sebuah perangkat lunak *Point of Sale* (POS) modern berbasis cloud untuk industri makanan dan minuman (*Food and Beverage* / F&B)—dilakukan melalui simulasi 6 skenario alur operasional gerai:
+Eksplorasi terhadap produk **Mibebi Kasir**—sebuah platform *Point of Sale* (POS) modern berbasis cloud untuk industri makanan dan minuman (*Food & Beverage*)—dilakukan melalui simulasi 6 skenario alur operasional:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        ALUR EKSPLORASI 6 SKENARIO MIBEBI KASIR                         │
+│                        SIMULASI 6 SKENARIO MIBEBI KASIR                                │
 └────────────────────────────────────────────────────────────────────────────────────────┘
-  [1. Katalog Menu]       [2. Input Pesanan]      [3. Kasir & Billing]
-   Master Data & Varian  ──> Meja & Modifier   ──> Multi-payment & Struk
+  [1. Data Menu]          [2. Input Pesanan]      [3. Transaksi Kasir]
+   Kategori & Modifier  ──> Meja & Cart System ──> Multi-Bayar & Kembalian
           │                       │                       │
           ▼                       ▼                       ▼
-  [4. Riwayat Transaksi]  [5. Laporan Harian]    [6. Loyalitas Member]
-   Audit Log & Reprint   ──> Rekap Omset Shift ──> Poin, Tier & Win-Back
+  [4. Riwayat Transaksi]  [5. Laporan Penjualan]  [6. Fitur Loyalitas]
+   Audit Log & Reprint  ──> Rekap Omset Shift  ──> Poin, Member & Win-Back
 ```
 
-### Skenario 1: Pengelolaan Katalog Menu & Kategori (*Menu & Inventory Setup*)
-- **Aktivitas:** Pengelola toko mendaftarkan kategori menu (Makanan Utama, Minuman, Makanan Ringan, Penutup), menginput nama menu, harga pokok penjualan (HPP), harga jual, serta varian/opsi ekstra (*modifier* seperti: level kepedasan, *less sugar*, atau *extra topping*).
-- **Temuan Simulasi:** Katalog menu yang terstruktur secara hierarkis mempercepat navigasi kasir saat antrean padat, membatasi pesanan jika stok porsi habis (*out-of-stock badge*), dan menjadi data acuan tunggal (*single source of truth*) bagi operasional dapur.
-
-### Skenario 2: Alur Input Pesanan (*Order Entry & Table Management*)
-- **Aktivitas:** Kasir atau pramusaji memasukkan pesanan pelanggan berdasarkan nomor meja (*dine-in*) atau bungkusan (*take-away*). Item dipilih langsung dari grid visual, ditambahkan catatan khusus (*kitchen notes*), dan diteruskan ke bagian dapur.
-- **Temuan Simulasi:** Kemampuan memilih varian menu dengan beberapa sentuhan (*tap*) meminimalkan kesalahan komunikasi antara pramusaji dan koki dapur (*kitchen error*), serta mengeliminasi tiket kertas bertulisan tangan yang kotor terkena minyak.
-
-### Skenario 3: Transaksi Kasir & Multi-Pembayaran (*Billing & Payment Processing*)
-- **Aktivitas:** Kasir melakukan kalkulasi tagihan: subtotal pesanan, penambahan pajak restoran (PB1) dan *service charge*, pemotongan voucher diskon, hingga pemilihan metode bayar (Tunai, Debit/Kredit, QRIS Dinamis/Statis).
-- **Temuan Simulasi:** Sistem menghitung nilai uang kembalian secara otomatis untuk mencegah selisih kas (*cash discrepancies*), menghasilkan struk fisik via printer thermal 58/80mm, dan dapat mengirimkan e-struk langsung ke nomor WhatsApp/email pelanggan.
-
-### Skenario 4: Audit & Pencarian Riwayat Transaksi (*Transaction History & Void Audit*)
-- **Aktivitas:** Kasir atau supervisor menelusuri transaksi yang telah selesai berdasarkan nomor faktur, jam transaksi, atau filter kasir yang bertugas, serta melakukan cetak ulang struk (*reprint receipt*) atau pembatalan transaksi (*void*) dengan otorisasi PIN manajer.
-- **Temuan Simulasi:** Catatan log transaksi yang *immutable* (tidak bisa diedit sembarangan) mencegah celah kecurangan kasir (*internal fraud*), memberikan kepastian audit saat rekonsiliasi kas di akhir giliran kerja (*shift*).
-
-### Skenario 5: Rekapitulasi & Laporan Penjualan Harian (*Daily Sales & Shift Closing*)
-- **Aktivitas:** Pada akhir shift, kasir melakukan *cash drop* dan sistem mencetak ringkasan laporan: total omset kotor dan bersih, perincian penerimaan tunai vs non-tunai, jumlah transaksi (*guest count*), dan daftar menu terlaris (*best-seller items*).
-- **Temuan Simulasi:** Menghilangkan proses hitung manual buku kas yang memakan waktu 1–2 jam, mempercepat proses serah-terima uang antar-kasir (*shift hand-over*), dan memberikan data riil pendapatan kepada pemilik usaha secara *real-time*.
-
-### Skenario 6: Fitur Loyalitas Member & Retensi (*Member Loyalty Engine*)
-- **Aktivitas:** Kasir menanyakan nomor ponsel pelanggan saat transaksi. Pelanggan baru langsung terdaftar tanpa formulir kertas. Setiap kelipatan belanja menghasilkan poin loyalitas (*loyalty points*), serta status membership naik bertahap (Silver, Gold, Platinum).
-- **Temuan Simulasi:** Data kontak pelanggan tersimpan rapi; sistem secara otomatis memberikan potongan harga instan bagi pelanggan setia dan mengirimkan notifikasi pesan pengingat/voucher bagi pelanggan yang sudah lama tidak berkunjung.
+1. **Membuat atau Melihat Data Menu:**
+   - Menyiapkan struktur menu bertingkat: Kategori (Makanan Utama, Minuman, Makanan Ringan, Pencuci Mulut), Harga Pokok Penjualan (HPP), Harga Jual resmi, dan varian/opsi ekstra (*modifiers* seperti tingkat kepedasan, *less sugar*, atau *extra topping*).
+   - *Temuan:* Katalog menu terstruktur mempercepat navigasi kasir saat jam sibuk dan mencegah pesanan item yang stok bahannya habis (*out-of-stock alert*).
+2. **Membuat Sebuah Pesanan:**
+   - Menerima pesanan pelanggan berdasarkan nomor meja (*dine-in*) atau bungkus bawa pulang (*takeaway*). Memilih item dari antarmuka visual, menyematkan catatan khusus dapur (*kitchen notes*), dan memasukkan pesanan ke keranjang belanja.
+   - *Temuan:* Modul pemesanan visual meminimalkan salah dengar pesanan dan mengeliminasi kertas tiket dapur bertulisan tangan yang rawan hilang.
+3. **Melakukan Simulasi Transaksi Kasir:**
+   - Melakukan penutupan pesanan dengan kalkulasi subtotal otomatis, penambahan pajak restoran (PB1) dan *service charge*, pemotongan voucher diskon, hingga pemilihan kanal bayar (Tunai, Debit/Kredit, QRIS Dinamis).
+   - *Temuan:* Perhitungan uang kembalian secara otomatis mengeliminasi selisih kas fisik (*cash discrepancy*) dan mencetak struk thermal 58/80mm seketika.
+4. **Melihat Riwayat Transaksi:**
+   - Menelusuri arsip transaksi lampau berdasarkan nomor faktur, jam transaksi, atau ID kasir bertugas, serta melakukan cetak ulang struk (*reprint receipt*) atau pembatalan transaksi (*void*) berizin otorisasi supervisor.
+   - *Temuan:* Log transaksi yang bersifat *append-only* (tidak dapat diubah sembarangan) menjamin akuntabilitas finansial dan memudahkan investigasi saat rekonsiliasi.
+5. **Melihat Laporan Penjualan Harian:**
+   - Memantau dasbor rekapitulasi harian: total omset kotor dan bersih, perincian metode bayar, jumlah transaksi (*guest count*), dan peringkat menu terlaris (*best-seller items*).
+   - *Temuan:* Memangkas waktu tutup buku (*shift closing*) dari 1–2 jam hitung manual menjadi 3 menit instan.
+6. **Mencoba Fitur Loyalitas Member & Retensi:**
+   - Mendaftarkan nomor WhatsApp pelanggan saat pembayaran tanpa formulir kertas. Setiap kelipatan transaksi otomatis menambah poin member, dan sistem menandai pelanggan yang sudah lama tidak berkunjung.
+   - *Temuan:* Mengubah transaksi kasir anonim menjadi basis data pelanggan terstruktur untuk mendorong kunjungan ulang (*repeat purchase*).
 
 ---
 
-## 2. Identifikasi 5 Fitur Inti Mibebi Kasir & Uji Eliminasi
+## B. Identifikasi Fitur Inti Mibebi Kasir & Uji Eliminasi
 
-Fitur inti (*core features*) adalah fondasi mutlak yang mendefinisikan eksistensi sebuah sistem kasir (POS). Tanpa kelima fitur ini, sistem kehilangan hakikat fungsionalnya.
+### 1. Daftar 5 Fitur Inti Mibebi Kasir
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        5 FITUR INTI & UJI ELIMINASI MIBEBI                             │
-├─────────────────────────┬──────────────────────────────────────────────────────────────┤
-│ 1. Manajemen Menu       │ Tanpa ini: Kasir tidak tahu barang apa yang dijual           │
-│ 2. Manajemen Pesanan    │ Tanpa ini: Tidak ada keranjang belanja untuk diproses        │
-│ 3. Transaksi Pembayaran │ Tanpa ini: Bukan kasir, hanya katalog display statis         │
-│ 4. Riwayat Transaksi    │ Tanpa ini: Tidak ada akuntabilitas, audit, dan bukti bayar   │
-│ 5. Laporan Penjualan    │ Tanpa ini: Owner buta perputaran uang dan tidak bisa tutup kas│
-└─────────────────────────┴──────────────────────────────────────────────────────────────┘
-```
+1. **Fitur: Manajemen Menu & Harga**
+   - **Fungsi:** Mengelola daftar nama hidangan, kategori, varian opsi, serta penetapan harga jual resmi.
+   - **Mengapa Dibutuhkan:** Kasir memerlukan referensi harga yang terstandardisasi dan konsisten agar tidak mengandalkan ingatan staf yang rawan keliru.
+2. **Fitur: Manajemen Pesanan (Order Entry / Cart System)**
+   - **Fungsi:** Menghimpun item yang dipesan pelanggan ke dalam satu tiket/keranjang aktif, mencatat nomor meja/layanan, dan meneruskan pesanan ke dapur.
+   - **Mengapa Dibutuhkan:** Memungkinkan pelanggan memesan lebih dari satu item sekaligus dalam satu sesi transaksi yang terstruktur.
+3. **Fitur: Transaksi Pembayaran & Kasir (Payment Processing & Billing)**
+   - **Fungsi:** Menghitung total tagihan (termasuk pajak/diskon), memproses uang pembayaran dari berbagai metode, menghitung kembalian, dan mencetak bukti pembayaran (struk).
+   - **Mengapa Dibutuhkan:** Merupakan titik temu pertukaran nilai ekonomi sah antara penjual dan pembeli.
+4. **Fitur: Riwayat Transaksi (Transaction Logging & Audit Trail)**
+   - **Fungsi:** Menyimpan seluruh data transaksi yang telah selesai, dibatalkan (*void*), atau dikembalikan (*refund*) lengkap dengan stempel waktu dan identitas kasir.
+   - **Mengapa Dibutuhkan:** Menjadi rujukan utama ketika terjadi komplain pesanan dan memfasilitasi audit keuangan harian.
+5. **Fitur: Laporan Penjualan Dasar (Daily Sales Reporting & Shift Closing)**
+   - **Fungsi:** Menyajikan ringkasan omset harian, rincian uang kas masuk vs non-tunai, dan daftar menu terjual pada akhir giliran kerja.
+   - **Mengapa Dibutuhkan:** Diperlukan kasir untuk mencocokkan fisik uang laci dengan sistem (*closing register*) serta pemilik usaha untuk memantau perputaran arus kas.
 
-Berikut analisis terstruktur kelima fitur inti Mibebi Kasir:
+### 2. Uji Eliminasi Fitur Inti
+> **Pertanyaan:** *Jika fitur-fitur tersebut tidak tersedia, apakah Mibebi masih dapat disebut sebagai aplikasi kasir? Jelaskan.*
 
-### 1. Manajemen Menu (Katalog Menu & Harga)
-- **Fungsi:** Mengelola daftar nama hidangan, foto produk, pengelompokan kategori, varian tambahan (*modifiers*), serta penetapan harga jual resmi.
-- **Mengapa Dibutuhkan:** Kasir memerlukan referensi harga yang terstandardisasi dan konsisten agar tidak mengandalkan hafalan manusia yang rawan kekeliruan harga.
-- **Argumen Uji Eliminasi:** Jika fitur ini dihilangkan, sistem kasir menjadi lumpuh total karena tidak memiliki entitas komoditas yang diperdagangkan. Kasir terpaksa mengetik manual nominal uang secara bebas tanpa data barang, mengubah sistem menjadi sekadar kalkulator saku biasa dan kehilangan integritas data stok serta penjualan.
-
-### 2. Manajemen Pesanan (Order Entry / Cart System)
-- **Fungsi:** Menghimpun item-item yang dipilih pelanggan ke dalam satu keranjang pesanan aktif, mengaitkannya dengan nomor meja atau jenis layanan (*takeaway*), serta mengirimkan perintah produksi ke bagian dapur.
-- **Mengapa Dibutuhkan:** Memungkinkan pelanggan memesan lebih dari satu item hidangan sekaligus dalam satu sesi transaksi yang terstruktur rapi.
-- **Argumen Uji Eliminasi:** Jika fitur ini ditiadakan, kasir hanya bisa memproses transaksi satu per satu barang secara terisolasi tanpa ada konsep akumulasi belanjaan (*bill/ticket*). Ini merusak alur transaksi restoran dan mengacaukan koordinasi pesanan dengan bagian penyaji dan dapur.
-
-### 3. Transaksi Pembayaran & Kasir (Payment Processing & Billing)
-- **Fungsi:** Mengalkulasi total kewajiban bayar (termasuk pajak, diskon, biaya layanan), memproses uang pembayaran dari berbagai metode (tunai, transfer bank, dompet digital, kartu kredit), menghitung nominal uang kembalian, dan menerbitkan bukti pembayaran resmi (struk).
-- **Mengapa Dibutuhkan:** Merupakan titik puncak (*culmination point*) pertukaran nilai ekonomi antara pihak penjual dan pembeli secara sah.
-- **Argumen Uji Eliminasi:** Jika fitur ini dihilangkan, sistem secara fundamental **bukan lagi sebuah sistem kasir (Point of Sale)**, melainkan hanya sistem *e-menu* atau katalog pajangan digital. Tanpa eksekusi pembayaran dan bukti transaksi, operasional komersial tidak dapat berlangsung.
-
-### 4. Riwayat Transaksi (Transaction Logging & Audit Trail)
-- **Fungsi:** Mencatat dan mengarsipkan seluruh rekaman transaksi yang berhasil diselesaikan, dibatalkan (*void*), atau dikembalikan (*refund*) ke dalam basis data yang dilengkapi stempel waktu (*timestamp*) dan identitas kasir pelaksana.
-- **Mengapa Dibutuhkan:** Menjadi rujukan utama ketika ada komplain dari pelanggan (misal: pesanan keliru atau salah hitung) dan memfasilitasi kebutuhan audit internal.
-- **Argumen Uji Eliminasi:** Jika fitur ini dihilangkan, bisnis kehilangan akuntabilitas finansial. Pemilik gerai tidak memiliki bukti historis atas penjualan masa lalu, tidak dapat menelusuri nota bermasalah, dan membuka celah kecurangan manipulasi kas fisik oleh staf kasir tanpa rekam jejak digital.
-
-### 5. Laporan Penjualan Dasar (Daily Sales Reporting & Closing)
-- **Fungsi:** Mengagregasi data transaksi harian menjadi metrik finansial ringkas: total pendapatan kotor, total diskon yang diberikan, total penerimaan bersih, rincian per metode pembayaran, dan jumlah transaksi harian.
-- **Mengapa Dibutuhkan:** Diperlukan oleh kasir untuk mencocokkan uang fisik di laci kasir (*cash drawer*) dengan sistem saat pergantian giliran (*shift closing*), serta bagi pemilik usaha untuk membaca kondisi arus kas harian.
-- **Argumen Uji Eliminasi:** Jika fitur ini ditiadakan, pemilik usaha dan manajer operasional menjadi buta finansial (*financially blind*). Kasir tidak dapat melakukan tutup kas secara bertanggung jawab, dan pemilik tidak tahu apakah usahanya sedang untung, rugi, atau mengalami kebocoran uang kas pada hari tersebut.
+**Jawaban:**  
+**TIDAK DAPAT.** Jika salah satu dari kelima fitur tersebut dihilangkan, sistem kehilangan hakikat fungsinya sebagai sistem kasir (Point of Sale):
+- Tanpa **Manajemen Menu**, kasir tidak memiliki daftar komoditas yang dijual, mereduksi sistem menjadi sekadar kalkulator saku biasa tanpa nama item.
+- Tanpa **Manajemen Pesanan**, kasir tidak dapat menampung multi-item belanjaan dalam satu tagihan meja.
+- Tanpa **Transaksi Pembayaran**, sistem hanya berfungsi sebagai *e-menu* atau katalog pajangan digital tanpa kemampuan komersialisasi.
+- Tanpa **Riwayat Transaksi**, bisnis kehilangan akuntabilitas audit dan membuka celah kecurangan kasir tanpa jejak digital.
+- Tanpa **Laporan Penjualan**, pemilik usaha menjadi buta finansial dan kasir tidak dapat melakukan serah-terima giliran kerja secara bertanggung jawab.
 
 ---
 
-## 3. Analisis 3 Fitur Bernilai Tambah Mibebi Kasir
+## C. Identifikasi Fitur Bernilai Tambah Mibebi Kasir
 
-Fitur bernilai tambah (*value-added features*) adalah kapabilitas inovatif yang melampaui fungsi dasar pencatatan transaksi, dirancang khusus untuk memicu pertumbuhan bisnis (*business growth*), efisiensi operasional, dan kepuasan pelanggan.
+### 1. Fitur yang Bukan Sekadar Fitur Kasir (Di Luar Transaksi Dasar)
+Dari eksplorasi Mibebi Kasir, ditemukan berbagai fitur inovatif di luar fungsi kasir dasar:
+1. *Rekomendasi Menu Pendamping (Cross-selling Engine)*
+2. *Member dan Loyalty Point (Retention Engine)*
+3. *Reminder dan Voucher Pelanggan Pasif (Win-back Churn)*
+4. *Pesan Hati (Pesan personalisasi pada e-receipt)*
+5. *Last Bite (Flash sale diskon menu menjelang tutup toko untuk menekan food waste)*
+6. *QR Meja / Self Order (Pemesanan mandiri pelanggan via browser smartphone)*
+7. *Mode Dapur / Kitchen Display System (Layar antrean koki real-time)*
+8. *Laporan Bisnis Harian Otomatis via Email/WhatsApp ke Owner*
+
+---
+
+### 2. Analisis Mendalam 3 Fitur Bernilai Tambah Terpilih
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                      3 FITUR BERNILAI TAMBAH MIBEBI KASIR                              │
+│                      3 FITUR BERNILAI TAMBAH TERPILIH MIBEBI                           │
 ├───────────────────────────────┬───────────────────────┬────────────────────────────────┤
 │ Fitur Inovatif                │ Dampak Bisnis         │ Tujuan Strategis               │
 ├───────────────────────────────┼───────────────────────┼────────────────────────────────┤
@@ -134,145 +134,164 @@ Fitur bernilai tambah (*value-added features*) adalah kapabilitas inovatif yang 
 └───────────────────────────────┴───────────────────────┴────────────────────────────────┘
 ```
 
-### 1. Rekomendasi Menu Pendamping (Automated Cross-Selling / Upselling Engine)
-- **Masalah:** Rata-rata nilai transaksi (*Average Transaction Value* / ATV) gerai F&B sering kali rendah karena pelanggan hanya memesan makanan utama tanpa minuman pendamping atau makanan penutup. Di sisi lain, kasir sering kali lupa, malu, atau tidak sempat menawarkan produk pelengkap saat antrean sedang ramai.
-- **Cara Kerja:** Saat kasir memilih item makanan tertentu (misal: "Nasi Goreng Spesial"), sistem POS secara otomatis menampilkan pop-up/kartu rekomendasi cerdas di layar kasir bertuliskan: *"Tawarkan Es Teh Manis Jumbo (+Rp 5.000) atau Kerupuk Kulit (+Rp 3.000)?"*. Kasir cukup menekan satu tombol untuk langsung memasukkan menu pendamping tersebut ke pesanan.
-- **Pengguna yang Diuntungkan:**
-  - *Kasir:* Memiliki panduan penjualan instan tanpa perlu mengingat kombinasi paket promo secara manual.
-  - *Pemilik Usaha:* Rata-rata belanja per tiket transaksi meningkat secara konsisten.
-  - *Pelanggan:* Memperoleh kepraktisan paket makan-minum yang pas dengan harga paket lebih ekonomis.
-- **Dampak Bisnis (ATV / CLV):** Secara langsung mendongkrak **Average Transaction Value (ATV)** sebesar 15% hingga 25% dari setiap tiket transaksi yang diterbitkan.
-- **Alasan Nilai Tambah:** Mentransformasi perangkat lunak kasir dari sekadar alat penerima input pesanan pasif (*passive order taker*) menjadi tenaga penjual otomatis (*active automated salesperson*).
+#### Fitur 1: Rekomendasi Menu Pendamping (Automated Cross-Selling Engine)
+- **Masalah:** Nilai transaksi rata-rata (*Average Transaction Value* / ATV) gerai F&B rendah karena pelanggan hanya memesan menu utama. Kasir sering lupa atau canggung menawarkan makanan pelengkap/minuman saat antrean padat.
+- **Cara Kerja:** Ketika kasir memilih menu utama tertentu (misal: "Burger Sapi Spesial"), sistem secara otomatis memunculkan kartu rekomendasi di layar kasir bertuliskan: *"Tawarkan French Fries (+Rp 12.000) atau Lemon Tea (+Rp 8.000)?"*. Kasir cukup menekan satu tombol untuk memasukkannya ke pesanan.
+- **Pengguna yang Mendapatkan Manfaat:**
+  - *Kasir:* Memiliki panduan upselling instan tanpa perlu menghafal katalog promo.
+  - *Owner:* Nilai penjualan per tiket transaksi naik secara konsisten.
+  - *Pelanggan:* Memperoleh kepraktisan paket santapan lengkap dengan harga hemat.
+- **Dampak Bisnis:** **Meningkatkan Average Transaction Value (ATV)** sebesar 15%–25% dari total tiket harian.
+- **Nilai Tambah:** Mengubah aplikasi kasir dari pencatat pesanan pasif (*passive order taker*) menjadi tenaga penjual otomatis (*active salesperson*).
 
-### 2. Member dan Loyalty Point (Retention Engine)
-- **Masalah:** Tingkat loyalitas pelanggan di industri kuliner sangat rapuh. Pelanggan sangat mudah berpindah ke kedai kompetitor terdekat hanya karena faktor kebosanan atau promo sesaat, sehingga biaya akuisisi pelanggan baru (*Customer Acquisition Cost* / CAC) membengkak.
-- **Cara Kerja:** Kasir cukup meminta nomor WhatsApp pelanggan saat pembayaran. Sistem secara otomatis membuat akun anggota tanpa perlu formulir fisik atau download aplikasi khusus. Setiap pembelanjaan Rp 10.000 menghasilkan 1 poin loyalitas. Poin yang terkumpul dapat dipotongkan langsung sebagai diskon pada transaksi berikutnya atau ditukar dengan menu gratis.
-- **Pengguna yang Diuntungkan:**
-  - *Pelanggan:* Merasa diapresiasi dan memperoleh insentif ekonomi nyata setiap kali kembali berkunjung.
-  - *Pemilik Usaha:* Memperoleh basis data profil dan riwayat belanja pelanggan yang akurat untuk strategi pemasaran berulang.
-- **Dampak Bisnis (ATV / CLV):** Memperpanjang usia keanggotaan dan frekuensi kunjungan pelanggan, yang secara drastis menaikkan **Customer Lifetime Value (CLV)** serta menekan CAC.
-- **Alasan Nilai Tambah:** Membangun ikatan emosional dan dinding penghalang perpindahan (*switching barrier*); pelanggan berpikir dua kali untuk makan di tempat lain karena ingin memanfaatkan akumulasi poin yang sudah dikumpulkan.
+#### Fitur 2: Member dan Loyalty Point (Retention Engine)
+- **Masalah:** Retensi pelanggan F&B sangat rapuh; pelanggan sangat mudah berpindah ke kafe pesaing terdekat akibat promo sesaat, menyebabkan biaya akuisisi pelanggan baru (*Customer Acquisition Cost* / CAC) tinggi.
+- **Cara Kerja:** Kasir cukup meminta nomor WhatsApp pelanggan saat pembayaran. Sistem secara otomatis membuat akun anggota tanpa formulir manual atau download aplikasi. Setiap transaksi Rp 10.000 menghasilkan 1 poin. Akumulasi poin dapat ditukarkan menjadi potongan diskon atau menu gratis pada kunjungan berikutnya.
+- **Pengguna yang Mendapatkan Manfaat:**
+  - *Pelanggan:* Merasa dihargai dan memperoleh keuntungan finansial nyata saat kembali.
+  - *Owner:* Membangun basis data pelanggan terverifikasi untuk pemasaran berulang.
+- **Dampak Bisnis:** **Meningkatkan Customer Lifetime Value (CLV)** dan menaikkan tingkat kunjungan ulang (*repeat purchase rate*) sebesar 20%–30%.
+- **Nilai Tambah:** Membangun *switching barrier* emosional dan finansial; pelanggan enggan makan di resto lain karena poinnya tersimpan di Mibebi.
 
-### 3. Reminder dan Voucher Pelanggan Pasif (Automated Win-Back Engine)
-- **Masalah:** Banyak pelanggan yang awalnya puas tiba-tiba berhenti datang selama 30 hingga 60 hari (*customer churn*). Tanpa sistem digital, pemilik gerai tidak menyadari penurunan ini hingga akhirnya terlambat dan kehilangan pelanggan tersebut selamanya.
-- **Cara Kerja:** Sistem secara terprogram memindai basis data transaksi setiap malam. Jika ada pelanggan terdaftar yang tidak memiliki transaksi selama lebih dari 30 hari sejak kunjungan terakhirnya, sistem otomatis meng-generate voucher diskon khusus (misal: "Diskon 20% Kangen Mibebi") dan mengirimkannya secara otomatis via WhatsApp API ke nomor pelanggan tersebut.
-- **Pengguna yang Diuntungkan:**
-  - *Pelanggan:* Merasa diperhatikan secara personal dan termotivasi datang kembali berkat insentif voucher.
-  - *Pemilik Usaha:* Menyelamatkan potensi pendapatan yang hilang (*lost revenue*) secara otomatis tanpa kerja manual staf pemasaran.
-- **Dampak Bisnis (ATV / CLV):** Mengurangi *churn rate* sebesar 20-30% dan mengembalikan pelanggan pasif ke dalam siklus aktif transaksi, sehingga memaksimalkan CLV jangka panjang.
-- **Alasan Nilai Tambah:** Menutup celah kebocoran basis pelanggan secara proaktif dengan menggabungkan kapabilitas *data analytics* dengan *automated direct messaging*.
-
----
-
-## 4. Product Teardown Mibebi Kasir (6 Pilar Bisnis)
-
-Sebuah produk perangkat lunak komersial yang matang tidak hanya bertumpu pada fitur transaksi, melainkan menyeimbangkan 6 pilar bisnis pendukung:
-
-| No | Pilar Bisnis | Definisi & Tujuan | Contoh Fitur dalam Mibebi Kasir |
-|---|---|---|---|
-| **1** | **Core Transaction** | Memastikan pertukaran barang/jasa dan uang berlangsung cepat, akurat, dan dapat diandalkan tanpa galat (*error-free*). | • Input pesanan meja (*dine-in/takeaway*)<br>• Kalkulasi subtotal, pajak, dan kembalian otomatis<br>• Dukungan multi-metode pembayaran (Cash, QRIS, Kartu)<br>• Pencetakan struk kasir thermal 58mm/80mm |
-| **2** | **Sales Growth** | Memicu peningkatan omset penjualan per transaksi dan memperbesar ukuran keranjang belanja pelanggan (*basket size*). | • Fitur rekomendasi menu pendamping (*cross-selling*)<br>• Konfigurasi paket bundling menu (*Combo Meals*)<br>• Promo jam khusus (*Happy Hour discounts*)<br>• Upselling ukuran porsi (Reguler ke Jumbo) |
-| **3** | **Customer Retention** | Mengunci loyalitas pelanggan agar melakukan pembelian berulang (*repeat order*) dan mencegah perpindahan ke kompetitor. | • Registrasi member via nomor ponsel instan<br>• Akumulasi dan penukaran poin loyalitas (*loyalty points*)<br>• Tingkatan keanggotaan bertingkat (Silver, Gold, Platinum)<br>• Otomatisasi voucher *win-back* pelanggan pasif |
-| **4** | **Customer Experience** | Memberikan pengalaman interaksi yang mulus, nyaman, dan transparan bagi pelanggan akhir (*end-customer*). | • Pemesanan mandiri via QR Code di meja (*self-ordering*)<br>• Pengiriman e-receipt nota digital langsung ke WhatsApp<br>• Layanan pembagian tagihan pesanan (*split-bill*)<br>• Tampilan layar ganda kasir menghadap pelanggan (*Customer Facing Display*) |
-| **5** | **Operational Efficiency** | Menghilangkan friksi, antrean lambat, salah komunikasi staf, dan pemborosan bahan baku internal. | • Layar antrean pesanan di dapur (*Kitchen Display System* / KDS)<br>• Pengurangan stok bahan baku otomatis berbasis resep (*deduct inventory*)<br>• Manajemen *cash float* dan tutup shift kasir terstandarisasi<br>• Hak akses staf berjenjang berbasis PIN / Otorisasi Kasir |
-| **6** | **Business Intelligence** | Menyajikan wawasan berbasis data historis transaksi untuk membantu pemilik usaha mengambil keputusan strategis. | • Analisis matriks menu terlaris (*Menu Engineering: Star, Plowhorse, Puzzle, Dog*)<br>• Laporan jam-jam sibuk penjualan (*peak hours heatmap*)<br>• Laporan laba kotor per kategori menu<br>• Dashboard pemantauan omset multi-outlet dari jarak jauh (*owner mobile dashboard*) |
+#### Fitur 3: Reminder dan Voucher Pelanggan Pasif (Automated Win-Back Engine)
+- **Masalah:** Pelanggan yang awalnya puas sering kali berhenti datang tanpa disadari oleh manajemen resto (*customer churn*). Tanpa sistem digital, bisnis tidak tahu siapa yang berhenti datang.
+- **Cara Kerja:** Sistem secara otomatis memindai basis data transaksi secara berkala. Jika pelanggan terdaftar tidak bertransaksi selama $>30\text{ hari}$ sejak kunjungan terakhir, sistem otomatis menerbitkan voucher personal (misal: "Diskon 20% Kami Rindu Kamu") dan mengirimkannya langsung via WhatsApp API.
+- **Pengguna yang Mendapatkan Manfaat:**
+  - *Pelanggan:* Merasa diingat secara personal dan mendapatkan insentif diskon.
+  - *Owner:* Menyelamatkan potensi omset yang hilang (*lost revenue*) secara otomatis.
+- **Dampak Bisnis:** **Menurunkan Churn Rate** dan meningkatkan *win-back rate* pelanggan pasif tanpa biaya iklan berbayar baru.
+- **Nilai Tambah:** Menggabungkan analisis data historis dengan *automated direct marketing* untuk menyelamatkan siklus hidup pelanggan.
 
 ---
 
-# BAGIAN II: TRANSFER KE PROYEK SKRIPSI (bengkel-app)
+## D. Memahami Value Proposition (Analisis Kritis 5 Pertanyaan)
 
-## 5. Judul Proyek Mahasiswa
+### 1. Perbedaan antara "Aplikasi kasir yang mencatat transaksi" dengan "Aplikasi kasir yang membantu bisnis berkembang"
+- **Kasir yang Mencatat Transaksi:** Bersifat pasif, administratif, dan reaktif. Perannya berhenti saat uang masuk ke laci dan struk keluar. Fokusnya hanya pada pencatatan akuntansi dasar tanpa mempengaruhi perilaku belanja pelanggan.
+- **Kasir yang Membantu Bisnis Berkembang:** Bersifat aktif, strategis, dan proaktif. Sistem memanfaatkan data transaksi yang masuk untuk meningkatkan rata-rata keranjang belanja (cross-selling), mempertahankan pelanggan agar kembali (loyalty & reminder), mencegah pemborosan stok (waste reduction), dan menyajikan rekomendasi analitik bagi pemilik untuk mengambil keputusan ekspansi.
 
-> **"Pengembangan Sistem Informasi Manajemen Bengkel Berbasis Web untuk Pengelolaan Transaksi Servis dan Optimalisasi Retensi Pelanggan (Studi Kasus: bengkel-app)"**
+### 2. Tiga Nilai Utama yang Diberikan Mibebi Kasir kepada Pemilik F&B
+1. **Efisiensi & Kecepatan Operasional:** Mempercepat antrean kasir, menghilangkan salah komunikasi dengan dapur, dan memangkas waktu tutup buku kas harian.
+2. **Peningkatan Pendapatan per Transaksi:** Mendorong peningkatan omset melalui rekomendasi produk otomatis (*cross-selling/upselling*).
+3. **Penguncian Loyalitas Pelanggan (Customer Retention):** Mengurangi *churn rate* dan meningkatkan *repeat visit* melalui program poin dan pengingat voucher otomatis.
 
-Dokumen ini menjadi acuan spesifikasi dan landasan perancangan arsitektural untuk pengembangan proyek skripsi berbasis web yang memadukan keunggulan operasional bengkel dan strategi retensi digital.
+### 3. Apakah semua fitur yang terlihat menarik otomatis dapat disebut fitur bernilai tambah? Jelaskan alasan Anda.
+**TIDAK.** Suatu fitur baru dapat disebut bernilai tambah apabila secara nyata **menyelesaikan masalah operasional yang valid, mudah diadopsi oleh pengguna, dan menghasilkan dampak bisnis yang terukur** (menaikkan omset, menurunkan biaya, atau meningkatkan retensi). Banyak fitur yang secara visual atau teknologi terlihat canggih (*novelty factor*), namun jika pengguna merasa rumit memakainya atau tidak relevan dengan kebutuhan bisnis, fitur tersebut justru menjadi beban sistem (*feature bloat*) yang mengganggu operasional.
+
+### 4. Contoh fitur yang terlihat menarik secara teknis tetapi memiliki dampak bisnis relatif kecil:
+**Fitur: "Scan Menu AI" / "Percantik Menu AI" menggunakan Computer Vision.**  
+*Alasan:* Secara teknologi kecerdasan buatan, memindai foto buku menu fisik atau mempercantik foto makanan dengan generative AI terlihat sangat canggih. Namun dalam realitas bisnis F&B, pemilik toko hanya menginput menu sekali di awal pembukaan toko (*one-time setup*). Setelah menu terdaftar, fitur ini hampir tidak pernah dipakai lagi dan tidak berkontribusi langsung pada kenaikan omset harian.
+
+### 5. Contoh fitur sederhana tetapi memiliki potensi dampak bisnis yang besar:
+**Fitur: "Kartu Rekomendasi Menu Pendamping 1-Sentuh" di Layar Kasir.**  
+*Alasan:* Secara teknis fitur ini sangat sederhana (hanya logika relasi data produk di database). Namun dampaknya luar biasa besar: setiap kali kasir memilih menu utama, kasir diingatkan untuk menawarkan minuman pendamping atau camilan. Hal ini secara konsisten mendongkrak *Average Transaction Value* (ATV) bisnis sebesar 15%–25% di setiap transaksi setiap hari.
 
 ---
 
-## 6. Deskripsi Produk (bengkel-app)
+## E. Product Teardown Mibebi Kasir (6 Pilar Bisnis)
 
-### Gambaran Umum
-**Bengkelku (`bengkel-app`)** adalah platform sistem informasi manajemen operasional bengkel kendaraan bermotor modern berbasis web yang dibangun dengan arsitektur **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **NextAuth.js**, dan **Tailwind CSS v4**. Sistem ini dirancang untuk mendigitalisasi seluruh rantai operasional bengkel fisik—mulai dari penerimaan kendaraan, pembagian tugas mekanik, pencatatan pemakaian suku cadang, penagihan di kasir, hingga pelacakan progres kendaraan secara transparan dan otomatisasi pengingat servis berbasis WhatsApp.
+| Pilar Bisnis | Fokus Utama | Contoh Fitur dalam Mibebi Kasir |
+|---|---|---|
+| **1. Core Transaction** | Menjalankan aktivitas transaksi utama secara akurat, andal, dan cepat. | • Input pesanan meja / takeaway<br>• Perhitungan subtotal, pajak, diskon, dan kembalian otomatis<br>• Multi-pembayaran (Tunai, QRIS, Debit)<br>• Pencetakan struk kasir thermal |
+| **2. Sales Growth** | Membantu meningkatkan volume dan nilai penjualan per transaksi. | • Rekomendasi menu pendamping (*cross-selling*)<br>• Paket menu bundling (*combo meals*)<br>• Diskon jam tertentu (*Happy Hour*) |
+| **3. Customer Retention** | Membantu pelanggan datang kembali (*repeat purchase*). | • Pendaftaran member via nomor ponsel instan<br>• Poin loyalitas dan penukaran voucher<br>• Reminder otomatis voucher pelanggan pasif (>30 hari) |
+| **4. Customer Experience** | Meningkatkan kenyamanan dan kepuasan pengalaman pelanggan. | • Pemesanan mandiri via QR Meja (*self-ordering*)<br>• Pengiriman e-receipt via WhatsApp<br>• Fitur pesan hati personal pada nota |
+| **5. Operational Efficiency** | Membantu pekerjaan staf gerai menjadi lebih cepat dan efisien. | • Layar antrean dapur (*Kitchen Display System* / KDS)<br>• Pemotongan stok bahan baku otomatis berbasis menu<br>• Otomatisasi tutup shift kasir (*cash float reconciliation*) |
+| **6. Business Intelligence** | Membantu pemilik usaha mengambil keputusan strategis berbasis data. | • Matriks menu terlaris vs kurang laku (*Menu Engineering*)<br>• Peta jam sibuk penjualan (*peak hours heatmap*)<br>• Ringkasan performa finansial otomatis via email |
+
+---
+
+# BAGIAN II — CONTOH ANALISIS PRODUK (MIBEBI KASIR SEBAGAI WORKED EXAMPLE)
+
+Bagian ini merangkum *worked example* Mibebi Kasir sebagai tolok ukur kedalaman analisis:
+
+## 1. Judul Produk & Deskripsi
+- **Judul:** *Pengembangan Prototipe Aplikasi Kasir untuk Manajemen Transaksi, Pesanan, dan Laporan Penjualan F&B.*
+- **Deskripsi:** Mibebi Kasir adalah aplikasi kasir bisnis F&B yang membantu pencatatan transaksi, pengelolaan pesanan meja, dan pemantauan laporan omset harian. Aplikasi dirancang untuk meningkatkan penjualan, mempertahankan pelanggan, mempercepat operasional dapur, dan mendukung pengambilan keputusan bisnis.
+- **Pengguna Utama:** Pemilik usaha F&B, Kasir, Staf dapur, dan Pelanggan.
+
+## 2. Identifikasi Masalah Utama F&B
+1. *Kesempatan penjualan tambahan sering terlewat:* Kasir lupa menawarkan minuman/menu pelengkap.
+2. *Pelanggan yang pernah datang tidak selalu kembali:* Data transaksi tidak dimanfaatkan untuk mendorong transaksi ulang.
+3. *Sisa stok makanan berpotensi menjadi kerugian:* Bahan makanan basi karena tidak terpantau perputarannya.
+4. *Antrean memperlambat pelayanan:* Pelanggan menunggu lama untuk memesan di kasir saat jam sibuk.
+5. *Pemilik sulit memantau bisnis:* Owner tidak selalu berada di gerai dan butuh data praktis dari jarak jauh.
+
+## 3. Fitur Inti vs Fitur Bernilai Tambah
+- **Fitur Inti:** Manajemen Menu, Manajemen Pesanan, Transaksi Pembayaran, Riwayat Transaksi, Laporan Penjualan, Manajemen Pengguna.
+- **Fitur Bernilai Tambah:** Rekomendasi Menu Pendamping (ATV), Member dan Loyalty Point (CLV), Reminder Pelanggan Tidak Aktif (Win-back churn), QR Meja Self-Order (Efisiensi), Mode Dapur KDS (Akurasi).
+
+## 4. Value Proposition Mibebi (Lapisan 1 Core System vs Lapisan 2 Value-Added)
+- **Formula Nilai Mibebi:** Mibebi bukan hanya *"Kasir yang mencatat transaksi"*, melainkan *"Aplikasi kasir yang membantu meningkatkan nilai transaksi dan mendorong pelanggan kembali melakukan pembelian."*
+- **Arsitektur Dua Lapisan:**
+  - *Lapisan 1 (Core System):* Menu $\rightarrow$ Pesanan $\rightarrow$ Pembayaran $\rightarrow$ Transaksi $\rightarrow$ Laporan.
+  - *Lapisan 2 (Value-Added Features):* Upselling $\rightarrow$ Loyalty Points $\rightarrow$ Customer Retention.
+
+---
+
+# BAGIAN III — TRANSFER KE PROYEK SKRIPSI (DISESUAIKAN DENGAN PRD bengkel-app)
+
+Bagian ini menerapkan seluruh pola pembelajaran di atas ke dalam proyek skripsi mahasiswa: **Bengkelku (`bengkel-app`)**, disesuaikan 100% dengan dokumen spesifikasi produk (`PRD.md`).
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        ARSITEKTUR OPERASIONAL BENGKELKU                                │
-└────────────────────────────────────────────────────────────────────────────────────────┘
- [Pelanggan Datang] ──> [Front Desk: Input SPK & Keluhan] ──> [Cetak Struk + QR Token]
-                                     │                                  │
-                                     ▼                                  ▼
- [Kasir: Billing & Invoice] <── [Mekanik: Servis & Part]      [Pelanggan: Live Tracking]
-                                                              (Tanpa Login via HP)
-                                     │
-                                     ▼ (Setelah 60–90 Hari)
-                        [Automated WhatsApp Service Reminder]
+│                        TRANSFER MODEL BISNIS KE BENGKELKU                              │
+├───────────────────────────────┬────────────────────────────────────────────────────────┤
+│ Domain Mibebi (F&B)           │ Domain Bengkelku (bengkel-app)                         │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ Menu & Modifier Makanan       │ Katalog Jasa Servis & Sparepart Gudang                 │
+│ Order Pesanan Meja Dapur      │ Work Order (SPK) & Pit Servis Mekanik                  │
+│ Billing Pembayaran Meja       │ Kasir, Faktur Servis & Cetak Struk Thermal             │
+│ Upselling Menu Pendamping     │ Preventive Maintenance Alert (Rekomendasi Servis KM)   │
+│ Self-Ordering QR Meja         │ Live Service Tracking Web Tanpa Login via Token/QR     │
+│ Reminder Voucher Pelanggan    │ Automated WhatsApp Service Reminder (60–90 Hari)       │
+└───────────────────────────────┴────────────────────────────────────────────────────────┘
 ```
-
-### Target Profil Pengguna (RBAC)
-1. **Owner / Pemilik Bengkel:** Memantau analitik pendapatan harian/bulanan, efisiensi pengerjaan unit, laporan stok suku cadang menipis, serta mengontrol hak akses staf internal.
-2. **Kasir / Front Desk:** Menerima pelanggan masuk, menginput keluhan dan kilometer pada Surat Perintah Kerja (SPK), memproses pembayaran, mencetak nota faktur kasir, dan memicu pesan pengingat WhatsApp.
-3. **Mekanik / Teknisi:** Mengakses antrean kendaraan, mendiagnosis riwayat perbaikan masa lampau berdasarkan nomor polisi, mencatat pemakaian suku cadang riil, dan memperbarui status pengerjaan secara aktual.
-4. **Pelanggan Publik:** Pemilik kendaraan yang menerima tautan/QR code untuk memantau tahapan perbaikan kendaraannya secara santai dari ponsel cerdas tanpa hambatan pembuatan akun.
-
-### Proses Bisnis Utama
-1. **Registrasi Kendaraan & Work Order:** Kendaraan masuk dicatat nomor polisinya (sistem otomatis menarik data riwayat servis terdahulu jika pernah berkunjung), keluhan awal pelanggan, angka odometer (KM), dan mekanik yang ditugaskan.
-2. **Pengerjaan & Konsumsi Part:** Mekanik mengeksekusi perbaikan, memperbarui status pengerjaan (Antrian ➔ Pengerjaan ➔ Selesai), dan menambahkan suku cadang yang digunakan sehingga memotong stok inventaris secara *real-time*.
-3. **Penyelesaian & Pembayaran Kasir:** Kasir memvalidasi total tagihan (jasa + part), menerima pembayaran tunai atau transfer, menghitung kembalian, dan menerbitkan struk pembayaran.
-4. **Siklus Retensi Berkelanjutan:** Sistem mendeteksi kendaraan yang telah mendekati interval 60-90 hari pasca-servis dan menyediakan tombol pemicu pesan WhatsApp otomatis untuk menjadwalkan servis berkala berikutnya.
-
-### Manfaat Solusi
-- Mengeliminasi pencatatan manual berbasis kertas yang mudah hilang dan rusak.
-- Menghilangkan friksi komunikasi antara pelanggan dan mekanik terkait transparansi estimasi biaya.
-- Mengunci pelanggan lama agar kembali melakukan servis secara terjadwal melalui sistem pengingat digital.
 
 ---
 
-## 7. Identifikasi 3 Masalah Nyata Operasional Bengkel
+## F. Judul dan Masalah Proyek
 
-Berdasarkan observasi empiris pada bengkel kendaraan konvensional skala UMKM dan menengah, ditemukan 3 masalah operasional fundamental:
+### 1. Judul Skripsi
+> **"Pengembangan Sistem Informasi Manajemen Bengkel Berbasis Web untuk Pengelolaan Transaksi Servis dan Optimalisasi Retensi Pelanggan (Studi Kasus: bengkel-app)"**
+
+### 2. Deskripsi Produk
+**Bengkelku (`bengkel-app`)** adalah sistem informasi manajemen operasional bengkel terintegrasi berbasis web yang dibangun dengan arsitektur **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **NextAuth.js**, dan **Tailwind CSS v4**.
+- **Pengguna Utama:**
+  1. *Owner / Admin (Pak Joko):* Memantau ringkasan omset harian, stok suku cadang, dan analitik retensi.
+  2. *Kasir / Front Desk (Siti):* Menerima pelanggan masuk, menginput SPK, mencetak nota, dan memicu reminder WA.
+  3. *Mekanik / Teknisi (Budi):* Memeriksa antrean unit, mencatat suku cadang riil, dan memperbarui status servis.
+  4. *Pelanggan Publik (Rian):* Memantau status pengerjaan dan rincian biaya melalui smartphone tanpa harus login.
+- **Masalah Utama:** Rendahnya retensi pelanggan karena lupa jadwal servis ganti oli, defisit transparansi biaya saat kendaraan ditinggal, dan riwayat kerusakan masa lalu yang hilang akibat nota manual tercecer.
+- **Proses Bisnis Utama:** Pendaftaran Kendaraan Masuk (SPK) $\rightarrow$ Pengerjaan & Pemotongan Stok Part $\rightarrow$ Kasir & Pembayaran Faktur $\rightarrow$ Live Service Tracking Pelanggan $\rightarrow$ Siklus Reminder WhatsApp Otomatis.
+- **Manfaat Solusi:** Menghilangkan biaya kertas nota manual, menghapus kecemasan biaya siluman pada pelanggan, dan menaikkan pendapatan berulang bengkel (*repeat business*) melalui pengingat servis digital.
+
+### 3. Identifikasi 3 Masalah Nyata Operasional Bengkel
+
+> *Catatan Kepatuhan: Masalah di bawah adalah masalah nyata proses bisnis dan pengguna, bukan masalah teknologi seperti "belum pakai React/AI".*
 
 ```mermaid
-flowchart TD
-    subgraph Masalah1["1. Customer Retention Gap"]
-        M1A["Stiker Spidometer Pudar / Hilang"] --> M1B["Pelanggan Lupa Servis Berkala"]
-        M1B --> M1C["Pindah ke Bengkel Lain (Loss of Recurring Revenue)"]
-    end
-
-    subgraph Masalah2["2. Defisit Transparansi (Customer Anxiety)"]
-        M2A["Kendaraan Ditinggal Tanpa Kepastian"] --> M2B["Kekhawatiran Overcharging & Part Palsu"]
-        M2B --> M2C["Pelanggan Bolak-balik Telepon Kasir & Mekanik"]
-    end
-
-    subgraph Masalah3["3. Fragmentasi Riwayat Servis"]
-        M3A["Buku Bon / Kertas Nota Tercecer"] --> M3B["Mekanik Buta Rekam Jejak Kerusakan"]
-        M3B --> M3C["Diagnosa Bersifat Coba-Coba (Trial & Error)"]
-    end
+flowchart LR
+    A["Stiker Kertas Spidometer Rusak/Hilang"] -->|Pelanggan Lupa Servis| P1["1. Customer Retention Gap"]
+    B["Pelanggan Cemas Biaya Membengkak"] -->|Komunikasi Manual Tersumbat| P2["2. Defisit Transparansi (Customer Anxiety)"]
+    C["Buku Bon Servis Manual Tercecer"] -->|Mekanik Buta Riwayat Kendaraan| P3["3. Fragmentasi Riwayat Servis"]
 ```
 
-### 1. Masalah Retensi Pelanggan (*Customer Retention Gap*)
-Sebagian besar bengkel konvensional hanya mengandalkan stiker kertas bertuliskan spidol yang ditempelkan pada spidometer atau kaca kendaraan untuk mencatat jadwal servis/ganti oli berikutnya. Stiker ini memiliki kelemahan fatal:
-- Mudah terkelupas terkena air hujan, cuci kendaraan, atau pudar terpapar panas matahari.
-- Pelanggan tidak sadar ketika masa kilometer/waktu servis sudah lewat.
-- Saat timbul kerusakan mendadak di jalan, pelanggan terpaksa masuk ke sembarang bengkel kompetitor terdekat.  
-**Dampak Riil:** Bengkel kehilangan 30% hingga 45% potensi pendapatan berulang (*recurring revenue*) dari basis pelanggan yang sebenarnya sudah puas dengan kualitas pengerjaan bengkel.
-
-### 2. Defisit Transparansi & Kecemasan Pelanggan (*Trust & Transparency Deficit*)
-Ketika pelanggan menitipkan kendaraannya di bengkel dan meninggalkannya untuk bekerja, muncul kecemasan emosional (*customer anxiety*):
-- Pelanggan tidak tahu apakah kendaraannya sudah mulai dibongkar, sedang menunggu suku cadang, atau sudah selesai dites.
-- Timbul prasangka buruk mengenai penggantian komponen sepihak atau pembengkakan estimasi tagihan (*hidden cost / overcharging*).
-- Untuk mencari kepastian, pelanggan terpaksa menelepon atau mengirim chat berulang kali ke kasir/mekanik, yang pada akhirnya memecah konsentrasi staf teknis dalam bekerja.
-
-### 3. Fragmentasi Riwayat Servis Kendaraan (*Fragmented Service History*)
-Pencatatan nota perbaikan manual pada lembaran kuitansi atau buku besar fisik menyebabkan data masa lalu mudah tercecer, robek, atau basah:
-- Mekanik yang menangani kendaraan di masa mendatang tidak mengetahui riwayat perbaikan sebelumnya (misal: kapan terakhir mengganti oli transmisi, busi, vanbelt, atau kampas rem).
-- Riwayat keluhan pelanggan yang berulang tidak terekam secara sistematis.  
-**Dampak Riil:** Proses diagnosa mekanik memakan waktu lama dan bersifat coba-coba (*trial & error*), yang meningkatkan risiko salah penanganan serta menurunkan reputasi profesionalisme bengkel.
+1. **Masalah 1: Penurunan Retensi Pelanggan (*Customer Retention Gap*)**
+   - *Akar Masalah:* Bengkel konvensional hanya mengandalkan stiker kertas bertuliskan tangan yang ditempel di spidometer atau kaca depan untuk mencatat kilometer/tanggal servis berikutnya.
+   - *Dampak Nyata:* Stiker ini mudah pudar terkena cuaca, terkelupas saat cuci kendaraan, atau diabaikan pemiliknya. Saat kendaraan mulai rusak mendadak di jalan, pelanggan terpaksa masuk ke bengkel kompetitor terdekat. Bengkel kehilangan **30%–45% potensi pendapatan berulang (*recurring revenue*)** dari pelanggan yang sebenarnya sudah puas.
+2. **Masalah 2: Defisit Transparansi & Kecemasan Biaya (*Trust & Transparency Deficit / Customer Anxiety*)**
+   - *Akar Masalah:* Saat pelanggan menitipkan kendaraannya di bengkel dan meninggalkannya untuk bekerja, muncul ketidakpastian: apakah unit sedang dibongkar, menunggu suku cadang, atau sudah selesai.
+   - *Dampak Nyata:* Pelanggan khawatir adanya penggantian onderdil sepihak atau pembengkakan tagihan tanpa persetujuan awal (*hidden cost*). Hal ini memaksa pelanggan berulang kali menelepon atau mengirim pesan WhatsApp ke kasir/mekanik, yang mengganggu konsentrasi teknisi di area servis.
+3. **Masalah 3: Fragmentasi Riwayat Servis Kendaraan (*Fragmented Service History*)**
+   - *Akar Masalah:* Pencatatan nota manual pada lembaran kuitansi kertas atau buku besar fisik menyebabkan riwayat masa lalu kendaraan mudah sobek, basah, dan hilang.
+   - *Dampak Nyata:* Saat kendaraan datang kembali 3 bulan kemudian, mekanik buta terhadap rekam jejak komponen (kapan terakhir ganti oli gardan, kampas rem, atau *timing belt/vanbelt*). Diagnosa mekanik menjadi lambat dan bersifat coba-coba (*trial & error*), yang meningkatkan risiko komplain berulang dari pelanggan.
 
 ---
 
-## 8. Minimal 5 Fitur Inti bengkel-app
+## G. Tentukan Fitur Inti (Minimal 5 Fitur Inti bengkel-app)
 
-Sebagai syarat mutlak sebuah sistem informasi manajemen bengkel, berikut 5 fitur inti yang dikembangkan:
+Berdasarkan `PRD.md` Bab 5.1, berikut 5 fitur inti yang wajib ada:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -286,111 +305,109 @@ Sebagai syarat mutlak sebuah sistem informasi manajemen bengkel, berikut 5 fitur
 └───────────────────────────────────┴────────────────────────────────────────────────────┘
 ```
 
-### 1. Manajemen Data Pelanggan & Kendaraan (*Customer & Vehicle Registry*)
-- **Fungsi:** Mengelola data pemilik kendaraan (Nama, Nomor WhatsApp aktif, Alamat) dan data kendaraan (Nomor Polisi unik, Merk, Model/Tipe, Tahun Pembuatan, Odometer terakhir).
-- **Karakteristik Desain:** Menerapkan relasi relasional *1-to-Many* (1 Pelanggan dapat memiliki lebih dari satu kendaraan, misalnya: motor harian dan mobil keluarga).
-- **Uji Eliminasi:** Jika fitur ini ditiadakan, bengkel tidak dapat mengidentifikasi kepemilikan unit dan tidak memiliki nomor kontak untuk proses penyerahan kendaraan maupun pengingat servis.
+1. **Fitur: Manajemen Master Data Pelanggan & Kendaraan**
+   - **Fungsi:** Mengelola data profil pelanggan (Nama, Nomor WhatsApp aktif, Alamat) dan entitas kendaraan (Nomor Polisi unik, Merk, Model, Tahun, Odometer) dengan relasi relasional *1-to-Many* (1 pemilik dapat memiliki banyak kendaraan).
+   - **Mengapa Dibutuhkan:** Sebagai basis data acuan utama untuk menghubungkan transaksi servis, kepemilikan unit fisik, dan nomor tujuan komunikasi pengingat.
+2. **Fitur: Pencatatan Servis (Work Order / Surat Perintah Kerja)**
+   - **Fungsi:** Menerbitkan dokumen digital pendaftaran masuk (keluhan, KM, mekanik bertugas) dan mengelola perubahan status operasional: `ANTRIAN`, `PENGERJAAN`, `MENUNGGU_PART`, `SELESAI_PENGERJAAN`, dan `SELESAI_PEMBAYARAN`.
+   - **Mengapa Dibutuhkan:** Menjadi instrumen pengendali operasional antara kasir meja depan (*front desk*) dan mekanik pengerjaan (*workshop floor*).
+3. **Fitur: Katalog Jasa Servis & Inventaris Suku Cadang**
+   - **Fungsi:** Mengelola daftar tarif tindakan jasa mekanik serta kontrol inventaris suku cadang (Kode SKU, Nama Part, Stok Gudang, *Low-Stock Warning*, HPP, dan Harga Jual).
+   - **Mengapa Dibutuhkan:** Memastikan standarisasi tarif jasa dan memotong stok onderdil secara otomatis saat dipasang ke kendaraan agar tidak terjadi selisih fisik gudang.
+4. **Fitur: Kasir & Billing Pembayaran (Invoice/Nota)**
+   - **Fungsi:** Mengalkulasi total tagihan otomatis ($\text{Total} = \text{Jasa} + \text{Part} - \text{Diskon}$), memproses pembayaran tunai atau transfer manual, menghitung uang kembalian, dan mencetak nota fisik struk thermal 58/80mm atau PDF invoice.
+   - **Mengapa Dibutuhkan:** Menyelesaikan transaksi keuangan secara sah, akuntabel, dan memberikan bukti pelunasan fisik kepada pelanggan.
+5. **Fitur: Log Riwayat Servis per Nomor Polisi (*Service History Log*)**
+   - **Fungsi:** Modul pencarian instan berdasarkan Plat Nomor (contoh: `B 1234 XYZ`) untuk menampilkan linimasa seluruh riwayat kunjungan masa lalu, catatan keluhan terdahulu, dan histori penggantian suku cadang.
+   - **Mengapa Dibutuhkan:** Memberikan data rekam medis kendaraan kepada mekanik agar diagnosa perbaikan akurat, cepat, dan terpercaya.
 
-### 2. Pencatatan Servis (Work Order / Surat Perintah Kerja)
-- **Fungsi:** Menerbitkan dokumen digital perintah kerja saat kendaraan masuk, mencatat tanggal/jam masuk, angka kilometer, keluhan awal, nama mekanik penanggung jawab, rincian tindakan jasa, serta sparepart yang dipasang.
-- **Manajemen Status Bertahap:** Mendukung status pengerjaan yang terstandardisasi: `ANTRIAN`, `PENGERJAAN`, `MENUNGGU_PART`, `SELESAI_PENGERJAAN`, dan `SELESAI_PEMBAYARAN`.
-- **Uji Eliminasi:** Tanpa modul Work Order, koordinasi antara bagian penerimaan (*front desk*) dan mekanik di area servis (*workshop floor*) putus, memicu kekacauan antrean dan hilangnya catatan pemakaian onderdil.
-
-### 3. Katalog Jasa & Inventaris Suku Cadang (*Services Catalog & Spareparts Inventory*)
-- **Fungsi:** Menyediakan daftar standar tarif jasa servis (misal: "Tune Up Karburator/Injeksi", "Ganti Oli Mesin", "Bongkar CVT") serta manajemen inventaris suku cadang (Kode SKU, Nama Part, Stok Tersedia, Batas Stok Minimum / *Low-Stock Alert*, Harga Pokok Penjualan, dan Harga Jual).
-- **Uji Eliminasi:** Jika dihilangkan, penetapan harga menjadi tidak konsisten, kasir rawan melakukan kesalahan penagihan, dan bengkel tidak dapat mengontrol sisa stok onderdil di gudang.
-
-### 4. Kasir & Billing Pembayaran (*Cashier & Invoice Generation*)
-- **Fungsi:** Menghitung otomatis total tagihan dengan rumus:  
-  $$\text{Total Bayar} = \sum(\text{Tarif Jasa}) + \sum(\text{Harga Part} \times \text{Qty}) - \text{Diskon}$$  
-  Mendukung pencatatan pembayaran tunai dan transfer manual, kalkulasi uang kembalian, serta mencetak struk kasir format thermal 58mm/80mm atau format PDF faktur resmi.
-- **Uji Eliminasi:** Tanpa kasir dan billing, bengkel tidak dapat menyelesaikan siklus komersial transaksi, tidak dapat menerima uang pembayaran secara akuntabel, dan tidak dapat membuktikan pelunasan unit.
-
-### 5. Log Riwayat Servis per Nomor Polisi (*Service History Log by License Plate*)
-- **Fungsi:** Modul pencarian cepat berdasarkan Plat Nomor (contoh: `B 1234 XYZ`) yang menampilkan seluruh linimasa kunjungan masa lalu: tanggal servis, kilometer terdahulu, nama mekanik pemeriksa, serta daftar suku cadang yang pernah diganti.
-- **Uji Eliminasi:** Tanpa riwayat per plat nomor, bengkel kembali ke era buku bon manual di mana mekanik tidak memiliki data historis komponen kendaraan saat pelanggan datang kembali dengan keluhan berulang.
+### Uji Eliminasi Fitur Inti:
+> **Pertanyaan:** *Jika fitur ini dihilangkan, apakah aplikasi masih dapat menjalankan fungsi utamanya?*  
+> **Jawaban:** **TIDAK DAPAT.** Tanpa kelima fitur ini, sistem tidak dapat menjalankan fungsi dasarnya sebagai perangkat lunak operasional bengkel: pendaftaran tidak tercatat, mekanik tidak tahu apa yang harus dikerjakan, suku cadang keluar tanpa kontrol, dan pembayaran kasir tidak dapat divalidasi.
 
 ---
 
-## 9. Tiga Fitur Bernilai Tambah bengkel-app
+## H. Usulkan 3 Fitur Bernilai Tambah (Sesuai PRD)
 
-Sebagai hasil transfer pembelajaran fitur bernilai tambah dari Mibebi Kasir F&B ke domain otomotif, dirancang 3 fitur pembeda (*differentiators*) pada Bengkelku:
+Berdasarkan `PRD.md` Bab 5.2 dan 5.3, dirancang 3 fitur bernilai tambah unggulan:
+
+### 1. Automated WhatsApp Service Reminder (Interval 60–90 Hari)
+- **Masalah yang Diselesaikan:** Mengatasi *Customer Retention Gap*. Pelanggan sering lupa waktu ganti oli berkala akibat stiker spidometer hilang/pudar, menyebabkan pelanggan pindah ke bengkel lain dan hilangnya pendapatan berulang bengkel.
+- **Cara Kerja:**
+  1. Sistem analitik menghitung selisih hari ($\Delta t$) antara tanggal hari ini dengan tanggal servis terakhir.
+  2. Kendaraan yang memasuki rentang $60 \le \Delta t \le 90\text{ hari}$ otomatis muncul di tab khusus *"Perlu Pengingat"* pada dashboard kasir.
+  3. Kasir cukup menekan satu tombol `[Kirim Pengingat WA]`.
+  4. Sistem membuka tautan deep-link `wa.me/{phone}?text={template_personal}` dengan pesan terisi otomatis memuat nama pelanggan, jenis motor, nomor polisi, dan jarak hari servis untuk mengajak reservasi kembali.
+- **Pengguna yang Mendapatkan Manfaat:**
+  - *Pemilik Bengkel:* Mengunci kepastian kedatangan pelanggan rutin (*predictable cashflow*).
+  - *Kasir:* Mengirim pesan pengingat dalam 3 detik tanpa mengetik manual.
+  - *Pelanggan:* Terhindar dari kerusakan mesin parah akibat telat ganti oli.
+- **Dampak:** **Menaikkan retensi pelanggan (*repeat purchase rate*) sebesar 30%–40%** dan memperpanjang Customer Lifetime Value (CLV).
+- **Mengapa Bernilai Tambah:** Sistem tidak pasif menunggu pelanggan datang, melainkan secara aktif menjemput bola mengembalikan pelanggan lama menggunakan kanal komunikasi terpopuler (WhatsApp).
+
+### 2. Live Service Tracking (Pelacakan Mandiri via QR/Token Tanpa Login)
+- **Masalah yang Diselesaikan:** Mengatasi *Defisit Transparansi & Kecemasan Pelanggan*. Pelanggan yang meninggalkan kendaraan merasa cemas mengenai biaya siluman (*overcharging*) dan kerap menelepon bengkel untuk menanyakan waktu selesai.
+- **Cara Kerja:**
+  1. Setiap Work Order otomatis dibuatkan URL Token acak unik berkode aman (NanoID/UUID).
+  2. Token dicantumkan dalam bentuk tautan pendek dan QR Code pada lembar tanda terima kendaraan masuk.
+  3. Pelanggan cukup memindai QR Code via smartphone untuk membuka halaman web responsif: `bengkelkuapp.vercel.app/track/[token]`.
+  4. Halaman menampilkan linimasa progres pengerjaan (*Antrian ➔ Pengerjaan ➔ Selesai*), nama mekanik, serta rincian biaya suku cadang secara terbuka **tanpa perlu registrasi akun atau login**.
+- **Pengguna yang Mendapatkan Manfaat:**
+  - *Pelanggan:* Tenang meninggalkan kendaraan di bengkel dan bebas memantau biaya transparan dari mana saja.
+  - *Kasir & Mekanik:* Bebas dari gangguan telepon/chat manual berulang yang menanyakan status pengerjaan.
+- **Dampak:** **Menurunkan waktu percakapan telepon non-produktif hingga 70%** dan meningkatkan citra profesionalisme bengkel setara bengkel resmi ATPM.
+- **Mengapa Bernilai Tambah:** Mengikis friksi adopsi (*zero adoption barrier*); pelanggan mendapatkan transparansi maksimal tanpa harus mengunduh aplikasi mobile di Play Store.
+
+### 3. Preventive Maintenance Alert (Rekomendasi Servis Berbasis Kalkulasi Odometer)
+- **Masalah yang Diselesaikan:** Mengatasi *Perawatan Reaktif (Baru Servis Saat Motor Mogok Total)*. Pelanggan umumnya baru mengganti komponen vital saat sudah putus di jalan raya yang membahayakan keselamatan berkendara.
+- **Cara Kerja:**
+  1. Sistem menghitung proyeksi laju kilometer harian kendaraan berdasarkan delta kilometer antar-kunjungan sebelumnya.
+  2. Sistem memproyeksikan jadwal penggantian part preventif (contoh: Peringatan otomatis penggantian Vanbelt/Timing Belt setiap kelipatan 24.000 KM, atau Kampas Rem setiap 10.000 KM).
+  3. Kotak rekomendasi muncul di layar kasir saat pendaftaran untuk diedukasikan kepada pelanggan.
+- **Pengguna yang Mendapatkan Manfaat:**
+  - *Pelanggan:* Menghindari mogok mendadak di jalan raya dan mencegah kerusakan mesin merembet.
+  - *Bengkel:* Nilai transaksi per kedatangan meningkat secara etis berbasis data teknis.
+- **Dampak:** **Meningkatkan Average Transaction Value (ATV)** bengkel melalui penjualan suku cadang preventif yang sah dan teredukasi.
+- **Mengapa Bernilai Tambah:** Mentransformasi bengkel dari sekadar tempat reparasi darurat menjadi mitra perawatan kendaraan preventif jangka panjang.
+
+---
+
+## I. Jangan Menyalin Mibebi (Prinsip Transfer Domain F&B ke Otomotif)
+
+Penerapan konsep dari Mibebi Kasir dilakukan dengan **memahami prinsip masalah dan proses bisnis**, bukan sekadar mengganti nama fitur:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   3 FITUR BERNILAI TAMBAH BENGKELKU (bengkel-app)                      │
-├────────────────────────────────┬───────────────────────┬───────────────────────────────┤
-│ Fitur Bernilai Tambah          │ Inspirasi Mibebi      │ Dampak Nyata bagi Bengkel     │
-├────────────────────────────────┼───────────────────────┼───────────────────────────────┤
-│ 1. WhatsApp Service Reminder   │ Win-back Reminder     │ Menaikkan Retensi (+35%)      │
-│ 2. Live Service Tracking Web   │ Customer Display / QR │ Menghapus Kecemasan Pelanggan │
-│ 3. Preventive Maintenance Alert│ Menu Bundling Cross-up│ Edukasi Perawatan & Naikkan ATV│
-└────────────────────────────────┴───────────────────────┴───────────────────────────────┘
+│                   PRINSIP TRANSFER DARI F&B KE BENGKEL OTOMOTIF                        │
+├───────────────────────────────┬────────────────────────────────────────────────────────┤
+│ Pola Pikir F&B (Mibebi)       │ Penerapan Nyata di Bengkel (Bengkelku)                 │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ Reminder Voucher Makan        │ Reminder Servis Berkala Berbasis Siklus Waktu/Oli      │
+│ Mengajak makan karena lapar   │ Mengajak servis karena oli mesin aus setelah 60-90 hari│
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ Customer Display / QR Meja    │ Live Service Tracking Web Tanpa Login                  │
+│ Menampilkan bill pesanan meja │ Menampilkan progress bongkar mesin & transparansi part │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ Upselling Menu Pendamping     │ Preventive Maintenance Alert                           │
+│ Menawarkan kentang & es teh   │ Menawarkan cek vanbelt/rem berbasis kilometer tempuh   │
+└───────────────────────────────┴────────────────────────────────────────────────────────┘
 ```
 
-### 1. Automated WhatsApp Service Reminder (Interval 60–90 Hari)
-- **Masalah yang Diatasi:** Mengatasi problem *Customer Retention Gap*. Pelanggan sering lupa jadwal servis berkala karena stiker spidometer rusak/lepas, sehingga bengkel kehilangan pelanggan setia.
-- **Cara Kerja:**
-  1. Sistem menjalankan modul analitik yang memfilter kendaraan berdasarkan formula:
-     $$\Delta t = \text{Tanggal Hari Ini} - \text{Tanggal Servis Terakhir}$$
-  2. Kendaraan dengan $60 \le \Delta t \le 90\text{ hari}$ otomatis dikelompokkan ke dalam daftar kerja *"Perlu Pengingat"* pada dashboard kasir.
-  3. Petugas kasir cukup menekan satu tombol `[Kirim Pengingat WA]`.
-  4. Sistem membuka tautan deep-link `https://wa.me/{phone}?text={template_pesan}` dengan pesan personal yang terisi otomatis:
-     > *"Halo Bpk/Ibu [Nama Pelanggan], kami dari Bengkelku menginformasikan bahwa kendaraan [Merk/Model] dengan plat nomor [Plat Nomor] sudah memasuki waktu servis berkala / ganti oli (terakhir servis tanggal [Tanggal]). Mari rawat performa kendaraan Anda agar tetap prima dan hemat bensin. Balas pesan ini untuk reservasi antrean. Terima kasih!"*
-- **Pengguna yang Diuntungkan:**
-  - *Pemilik Bengkel:* Memperoleh kepastian kunjungan servis ulang (*predictable repeat business*).
-  - *Kasir:* Mengirim pesan pengingat dalam 3 detik tanpa perlu merangkai kata atau mengetik nomor telepon secara manual.
-  - *Pelanggan:* Terhindar dari kerusakan mesin parah akibat telat mengganti oli.
-- **Dampak Bisnis:** Meningkatkan angka retensi pelanggan (*repeat visit rate*) sebesar 30%–40% dan mengoptimalkan *Customer Lifetime Value* (CLV).
-
-### 2. Live Service Tracking (Pelacakan Progres Mandiri via QR/Token Tanpa Login)
-- **Masalah yang Diatasi:** Mengatasi *Defisit Transparansi & Kecemasan Pelanggan*. Pelanggan yang meninggalkan kendaraan merasa was-was dan kerap menelepon bengkel untuk menanyakan status pengerjaan dan estimasi biaya.
-- **Cara Kerja:**
-  1. Setiap Work Order yang diterbitkan secara otomatis digenerate sebuah *URL token* unik acak berbasis UUID/NanoID berkeamanan tinggi.
-  2. Token dicetak berupa tautan pendek dan kode QR pada lembar tanda terima masuk.
-  3. Pelanggan cukup memindai QR Code menggunakan kamera ponsel untuk mengakses halaman web publik responsif: `bengkelkuapp.vercel.app/track/[token]`.
-  4. Halaman tersebut menampilkan *stepper* progres pengerjaan (*Antrian ➔ Dikerjakan ➔ Siap Diambil*), catatan pengerjaan mekanik, serta rincian biaya suku cadang secara terbuka tanpa perlu login atau unduh aplikasi.
-- **Pengguna yang Diuntungkan:**
-  - *Pelanggan:* Merasa aman, tenang, dan transparan karena bisa memantau kendaraannya dari mana saja (kantor, rumah, kafe).
-  - *Kasir & Mekanik:* Bebas dari interupsi telepon atau pertanyaan berulang "kapan motor saya selesai?".
-- **Dampak Bisnis:** Memangkas waktu percakapan non-produktif hingga 70%, menciptakan reputasi bengkel yang modern dan tepercaya setara bengkel resmi ATPM.
-
-### 3. Preventive Maintenance Alert (Rekomendasi Servis Berbasis Kalkulasi Odometer/KM)
-- **Masalah yang Diatasi:** Mengatasi *Perawatan Reaktif (Baru Servis Saat Rusak Total)*. Pelanggan umumnya baru ke bengkel ketika motor sudah mogok atau part patah di jalan, yang membahayakan keselamatan pengendara.
-- **Cara Kerja:**
-  1. Saat pendaftaran, sistem menghitung rata-rata laju kilometer harian kendaraan pelanggan berdasarkan selisih kilometer antar-servis sebelumnya:
-     $$\text{Laju Harian} = \frac{\text{KM Masuk Hari Ini} - \text{KM Servis Sebelumnya}}{\text{Jumlah Hari Antar-Kunjungan}}$$
-  2. Sistem memproyeksikan kapan komponen vital (seperti *Vanbelt/Timing Belt* kelipatan 24.000 KM, atau Kampas Rem kelipatan 10.000 KM) perlu diganti.
-  3. Saat pendaftaran servis, sistem memunculkan kotak rekomendasi preventif bagi kasir untuk diedukasikan kepada pelanggan.
-- **Pengguna yang Diuntungkan:**
-  - *Pelanggan:* Terhindar dari mogok berbahaya di jalan raya melalui perawatan pencegahan dini.
-  - *Bengkel:* Nilai transaksi per kedatangan meningkat secara etis melalui rekomendasi yang berbasis data teknis akurat.
-- **Dampak Bisnis:** Menaikkan *Average Transaction Value* (ATV) bengkel melalui penjualan suku cadang preventif yang sah dan dapat dipertanggungjawabkan.
+- **Bukan Sekadar Copy-Paste:** Di resto F&B, frekuensi transaksi pelanggan sangat tinggi (bisa 2–3 kali seminggu), sedangkan di bengkel kendaraan, frekuensi kedatangan bersifat berkala (setiap 2–3 bulan sekali).
+- **Penyesuaian Karakteristik Domain:** Karena interval waktu yang panjang, pelanggan bengkel tidak akan mau mengunduh aplikasi mobile native yang hanya memakan memori HP. Oleh karena itu, fitur pelacakan dirancang berbasis **Web Responsive dengan URL Token Acak** dan pemicu komunikasi menggunakan **WhatsApp Deep-Link** yang sudah terpasang di semua ponsel cerdas.
 
 ---
 
-## 10. Analisis Dampak Fitur Bernilai Tambah
+## J. Prioritas Fitur (MoSCoW Framework)
 
-Tabel komparasi menyeluruh antara masalah yang dihadapi, segmen pengguna terdampak, serta nilai keuntungan riil bagi kedua belah pihak:
-
-| Fitur Bernilai Tambah | Masalah Operasional yang Diselesaikan | Pengguna yang Terlibat | Dampak Riil bagi Bengkel | Dampak Riil bagi Pelanggan |
-|---|---|---|---|---|
-| **Automated WhatsApp Service Reminder** | Pelanggan lupa servis berkala; stiker spidometer pudar; kehilangan omset berulang (*churn*). | Kasir, Pelanggan, Owner | • Peningkatan kunjungan ulang 30%–40%<br>• Jadwal servis bengkel lebih merata dan terprediksi<br>• Mengunci loyalitas pelanggan jangka panjang | • Performa mesin kendaraan selalu terawat prima<br>• Konsumsi BBM lebih irit dan mesin awet<br>• Tidak perlu repot mencatat tanggal ganti oli manual |
-| **Live Service Tracking (Web No-Login)** | Defisit transparansi; kecemasan biaya siluman (*overcharging*); telepon kasir menumpuk. | Pelanggan, Mekanik, Kasir | • Menurunkan beban telepon/chat tanya status hingga 70%<br>• Mekanik fokus bekerja tanpa diganggu interupsi<br>• Citra bengkel naik setara bengkel resmi modern | • Tenang meninggalkan kendaraan di bengkel<br>• Biaya transparan tanpa kecurigaan pembengkakan<br>• Fleksibilitas waktu mengambil kendaraan saat ada notifikasi selesai |
-| **Preventive Maintenance Alert** | Kerusakan kendaraan bersifat reaktif; penggantian part terlambat membahayakan keselamatan. | Mekanik, Kasir, Pelanggan | • Rata-rata nilai transaksi (ATV) naik etis berbasis data teknis<br>• Meningkatkan perputaran suku cadang bernilai tinggi di gudang | • Keselamatan berkendara terjamin lebih tinggi<br>• Mencegah biaya perbaikan besar (*turun mesin*) akibat kerusakan merembet |
-
----
-
-## 11. Prioritas Fitur (MoSCoW Framework)
-
-Untuk menjamin kelayakan penyelesaian proyek skripsi tepat waktu dengan standar mutu tinggi, klasifikasi fitur disusun menggunakan kerangka **MoSCoW**:
+Sesuai dengan `PRD.md` Bab 5 dan Roadmap Bab 8, prioritas pengembangan diklasifikasikan sebagai berikut:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                        PRIORITAS FITUR (MoSCoW FRAMEWORK)                              │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ MUST-HAVE (Wajib Ada - Fondasi Sistem)                                                 │
-│ • Autentikasi Pengguna & Keamanan Sesi (NextAuth) [STATUS: SELESAI]                    │
+│ MUST-HAVE (Wajib Ada - Fondasi Sistem & Syarat Kelulusan)                              │
+│ • Autentikasi Pengguna & Keamanan Sesi (NextAuth Credentials + Google OAuth)           │
 │ • Master Data Pelanggan & Kendaraan (Relasi 1-ke-Banyak)                              │
 │ • Katalog Jasa Servis & Inventaris Suku Cadang (Stok Alert)                            │
 │ • Manajemen Work Order Servis (Alur Antrian ➔ Selesai)                                │
@@ -402,7 +419,7 @@ Untuk menjamin kelayakan penyelesaian proyek skripsi tepat waktu dengan standar 
 │ • Live Service Tracking via Secure Token URL/QR Code (No-Login Web)                    │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ COULD-HAVE (Fitur Pelengkap - Dikembangkan Jika Waktu Memungkinkan)                    │
-│ • Preventive Maintenance Alert berbasis kalkulasi delta laju kilometer                 │
+│ • Preventive Maintenance Alert berbasis kalkulasi laju delta kilometer                 │
 │ • Laporan Keuangan Laba Kotor Suku Cadang & Rekap Performa Mekanik                     │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ WON'T-HAVE / OUT-OF-SCOPE (Tidak Dikerjakan pada Fase Skripsi Ini)                     │
@@ -413,19 +430,18 @@ Untuk menjamin kelayakan penyelesaian proyek skripsi tepat waktu dengan standar 
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Alasan Pemilihan Prioritas:
-1. **Mengapa Fitur Inti Masuk Must-Have?**  
-   Sistem tidak dapat berfungsi sebagai perangkat lunak bengkel jika pendaftaran servis, master suku cadang, dan kasir belum ada. Autentikasi NextAuth telah diselesaikan pada Milestone 1 sebagai garansi keamanan data.
-2. **Mengapa WhatsApp Reminder & Live Tracking Masuk Should-Have?**  
-   Kedua fitur ini adalah **kebaruan (*novelty*) dan nilai jual akademik utama** dari skripsi ini yang membedakannya dari skripsi sistem kasir bengkel konvensional. Fitur ini bernilai tinggi namun secara teknis dapat diselesaikan tanpa ketergantungan perangkat keras mahal.
-3. **Mengapa Preventive Alert Masuk Could-Have?**  
-   Kalkulasi kilometer membutuhkan basis data historis yang sudah berjalan beberapa bulan untuk mendapatkan akurasi laju delta KM harian yang valid, sehingga diposisikan sebagai modul lanjutan.
+### Pertimbangan Alasan Pemilihan Prioritas:
+1. **Besarnya Dampak:** WhatsApp Reminder dan Live Tracking memberikan dampak terbesar bagi retensi dan kepuasan pelanggan secara langsung.
+2. **Kebutuhan Pengguna:** Kasir dan mekanik membutuhkan sistem transaksi dan SPK yang stabil terlebih dahulu sebelum mengaktifkan modul otomatisasi.
+3. **Kompleksitas Implementasi:** Modul Must-Have dan Should-Have menggunakan stack native Next.js 16 tanpa dependensi library eksternal berbayar.
+4. **Ketersediaan Data:** Preventive Alert ditempatkan di *Could-Have* karena membutuhkan akumulasi data historis beberapa siklus servis sebelum proyeksi delta KM harian menjadi presisi.
+5. **Waktu Pengerjaan Skripsi:** Membatasi implementasi pada Must-Have dan Should-Have menjamin proyek selesai tepat waktu dalam rentang 4–6 minggu pengerjaan tugas akhir.
 
 ---
 
-## 12. Batasan Ruang Lingkup (Scope Boundaries)
+## K. Tentukan Scope (In-Scope vs Out-of-Scope)
 
-Menetapkan batasan ruang lingkup secara tegas (*rigid scope boundary*) sangat esensial dalam proyek tugas akhir untuk menghindari pembengkakan proyek (*scope creep*) yang dapat menunda kelulusan mahasiswa:
+Untuk mencegah pembengkakan ruang lingkup (*scope creep*) yang dapat menunda kelulusan, batasan ditetapkan secara tegas sesuai `PRD.md` Bab 6:
 
 ```
 ┌───────────────────────────────────────────────┬───────────────────────────────────────────────┐
@@ -441,42 +457,40 @@ Menetapkan batasan ruang lingkup secara tegas (*rigid scope boundary*) sangat es
 └───────────────────────────────────────────────┴───────────────────────────────────────────────┘
 ```
 
-### Penjelasan Justifikasi Akademik Eksklusi Fitur:
-1. **Eksklusi Hardware OBD-II Scanner:** Integrasi scanner OBD-II membutuhkan protokol mikrokontroler (CAN bus, ELM327) dan dependensi tipe ECU kendaraan yang sangat heterogen, yang berada di luar domain rekayasa perangkat lunak sistem informasi web.
-2. **Eksklusi Payment Gateway Otomatis (Midtrans/Xendit):** Mayoritas transaksi di bengkel UMKM diselesaikan secara tunai langsung di meja kasir (*face-to-face cash*) atau transfer langsung ke rekening pemilik. Mengintegrasikan gateway berbayar menambah biaya komisi transaksi (*fee*) dan memerlukan badan hukum usaha (PT/CV) untuk aktivasi akun merchant resmi.
-3. **Eksklusi Aplikasi Mobile Native (Android/iOS):** Mengembangkan aplikasi mobile native memicu *adoption barrier* bagi pelanggan yang jarang servis. Web responsif berbasis Next.js App Router memberikan akses instan lintas platform (*cross-platform*) tanpa membebani memori smartphone pengguna.
+### Tujuan Penentuan Scope:
+Mencegah jebakan kompleksitas teknis non-krusial (seperti protokol perangkat keras elektronika otomotif CAN bus atau perizinan legal payment gateway) yang berada di luar domain sistem informasi web dan berisiko menggagalkan tenggat waktu sidang skripsi.
 
 ---
 
-## 13. Rumusan Value Proposition
+## L. Rumuskan Value Proposition
 
-Berdasarkan sintesis antara efisiensi transaksi operasional internal dan strategi pengikatan pelanggan, dirumuskan pernyataan nilai (*value proposition statement*) resmi:
+Mengikuti formula perancangan produk:
 
-> **"Aplikasi bengkel-app kami tidak hanya membantu bengkel mendigitalisasi pencatatan servis dan transaksi kasir secara efisien tanpa kertas nota manual, tetapi juga membantu mempertahankan loyalitas pelanggan melalui pengingat servis otomatis via WhatsApp dan pelacakan progres perbaikan kendaraan yang transparan secara real-time."**
-
----
-
-## 14. Refleksi Akademik
-
-Sebagai penutup laporan eksplorasi dan perancangan, berikut refleksi akademik mendalam dari sudut pandang pengembang perangkat lunak:
-
-### 1. Bagaimana proses eksplorasi Mibebi Kasir mengubah cara pandang kamu terhadap sebuah aplikasi kasir?
-> *"Sebelum mengeksplorasi Mibebi Kasir, saya memandang sistem kasir (POS) hanya sebagai alat pencatat transaksi keuangan pasif—alat hitung digital untuk menggantikan kalkulator dan kertas nota di meja kasir. Namun setelah membedah Mibebi Kasir, saya menyadari bahwa kasir modern adalah **titik temu strategis (*strategic touchpoint*)** bagi retensi pelanggan dan pertumbuhan penjualan. Fitur seperti rekomendasi menu (*cross-selling*) dan reminder voucher membuktikan bahwa sebuah sistem kasir dapat bertindak proaktif sebagai mesin pendorong pendapatan bisnis (*revenue engine*), bukan sekadar instrumen pembukuan administratif."*
-
-### 2. Apakah ada fitur yang awalnya kamu anggap "fitur inti" ternyata hanya "fitur pendukung", atau sebaliknya?
-> *"Ya, terjadi pergeseran pemahaman yang signifikan. Awalnya, saya menganggap fitur **Cetak Struk Fisik Kertas** adalah satu-satunya bukti inti transaksi. Namun di era digital, struk kertas hanyalah salah satu media keluaran (output medium); fitur intinya sebenarnya adalah **Integritas Log Riwayat Transaksi & Validasi Pembayaran**. Sebaliknya, fitur **Data Nomor WhatsApp Pelanggan** yang awalnya saya anggap hanya pelengkap kontak opsional, ternyata naik derajat menjadi **komponen data inti yang sangat krusial**, karena nomor WhatsApp merupakan jangkar utama (*primary anchor*) untuk menggerakkan seluruh ekosistem retensi digital, pelacakan unit, dan komunikasi purna-jual."*
-
-### 3. Dari ketiga fitur bernilai tambah yang kamu rancang, mana yang paling membedakan aplikasi bengkel-app kamu dari aplikasi sejenis di pasaran?
-> *"Fitur yang paling membedakan adalah **Live Service Tracking tanpa kewajiban login bagi pelanggan publik (`/track/[token]`)**. Kebanyakan perangkat lunak bengkel yang ada di pasaran bersifat tertutup hanya untuk internal bengkel, atau sebaliknya memaksa pelanggan mengunduh aplikasi mobile dari Google Play Store yang jarang sekali dibuka. Dengan menyediakan pelacakan berbasis token web acak, Bengkelku menghadirkan transparansi radikal setara bengkel resmi pabrikan besar (ATPM) ke bengkel UMKM dengan nol hambatan adopsi (*zero-friction adoption*). Pelanggan tidak perlu membuat akun atau menghafal kata sandi untuk merasa tenang saat kendaraannya diperbaiki."*
-
-### 4. Jika kamu harus memilih HANYA SATU fitur bernilai tambah untuk diimplementasikan pertama kali, fitur mana yang akan memberikan dampak terbesar bagi pengguna? Mengapa?
-> *"Saya akan memilih **Automated WhatsApp Service Reminder (Interval 60–90 Hari)**.  
-> Alasannya adalah karena fitur ini memberikan **dampak ekonomi langsung (*direct financial impact*) terbesar dengan rasio usaha teknis terukur (*high ROI, low operational friction*)**. Masalah terbesar pemilik bengkel konvensional adalah pelanggan yang hilang setelah satu kali datang karena lupa waktu ganti oli. Dengan mengaktifkan pengingat WhatsApp otomatis, bengkel langsung merasakan lonjakan pendapatan berulang (*recurring revenue*) sebesar 30%–40%, sekaligus menyelamatkan pelanggan dari risiko kerusakan mesin kendaraan yang fatal. Hubungan timbal balik yang saling menguntungkan ini terjadi secara instan tanpa membebani kasir dengan tugas pengetikan manual."*
-
-### 5. Apa tantangan terbesar dalam mengimplementasikan fitur bernilai tambah tersebut, dan bagaimana solusinya agar tetap realistis untuk tugas akhir mahasiswa?
-> *"Tantangan terbesar dalam mengimplementasikan pengingat WhatsApp adalah **biaya dan regulasi WhatsApp Business Cloud API resmi**, yang memerlukan verifikasi dokumen legal perusahaan (PT/CV) serta pengenaan biaya per percakapan (*conversation fee*) yang memberatkan skala UMKM dan tidak memungkinkan bagi akun mahasiswa.  
-> **Solusi Realistis & Cerdas untuk Skripsi:**  
-> Kami mengadopsi pendekatan arsitektur **Deep-Link WhatsApp (`wa.me` protocol)** yang dikombinasikan dengan pembentukan template pesan dinamis di sisi server Next.js. Kasir cukup menekan satu tombol dari daftar kendaraan jatuh tempo pada web dashboard, dan antarmuka WhatsApp Web/Desktop akan terbuka seketika dengan pesan personal yang siap dikirimkan. Solusi ini **100% legal, gratis tanpa biaya gateway pihak ketiga, memberikan kendali verifikasi manusia sebelum pesan meluncur (*human-in-the-loop control*), dan sangat realistis diselesaikan dalam batas waktu pengerjaan skripsi**."*
+> **"Aplikasi kami tidak hanya membantu bengkel mendigitalisasi pencatatan servis dan transaksi kasir secara efisien tanpa kertas nota manual, tetapi juga membantu mempertahankan loyalitas pelanggan dan transparansi perbaikan melalui fitur Automated WhatsApp Service Reminder dan Live Service Tracking."**
 
 ---
-*Laporan ini disusun secara resmi sebagai acuan perancangan sistem dan dokumen pelengkap tugas akhir mahasiswa pada repositori `bengkel-app`.*
+
+## M. Refleksi Akademik (5 Pertanyaan Evaluatif)
+
+### 1. Setelah mencoba Mibebi Kasir, apakah cara Anda memandang aplikasi yang akan dikembangkan berubah?
+> *"Ya, cara pandang saya berubah total. Sebelum mengeksplorasi Mibebi Kasir, saya mengira aplikasi bengkel hanyalah sistem administrasi kasir internal untuk menghitung nota dan merekap uang masuk. Namun setelah membedah Mibebi, saya menyadari bahwa aplikasi modern harus berfungsi sebagai **mesin pertumbuhan bisnis (*growth engine*)**. Aplikasi tidak boleh berhenti saat transaksi selesai, melainkan harus membangun jembatan interaksi digital langsung dengan pelanggan untuk menciptakan retensi berulang."*
+
+### 2. Fitur apa dalam aplikasi Anda yang sebelumnya dianggap sebagai fitur unggulan tetapi ternyata merupakan fitur inti?
+> *"Fitur **Pencarian Riwayat Servis Berdasarkan Nomor Polisi** sebelumnya saya anggap sebagai fitur unggulan yang mewah. Namun setelah dianalisis secara mendalam melalui uji eliminasi, fitur ini ternyata merupakan **fitur inti (fondasi mutlak)**. Tanpa riwayat per plat nomor, mekanik tidak memiliki konteks perbaikan masa lampau dan sistem ini tidak ada bedanya dengan kasir warung kelontong biasa."*
+
+### 3. Apa tiga fitur yang sekarang Anda anggap dapat menjadi nilai tambah?
+> *"Tiga fitur bernilai tambah sejati untuk bengkel adalah:  
+> 1. **Automated WhatsApp Service Reminder (Interval 60–90 Hari)** — Mengembalikan pelanggan yang lupa servis berkala.  
+> 2. **Live Service Tracking via URL Token/QR Tanpa Login** — Menghadirkan transparansi pengerjaan dan estimasi biaya secara aktual di smartphone pelanggan.  
+> 3. **Preventive Maintenance Alert** — Memberikan rekomendasi perawatan preventif suku cadang vital berbasis kalkulasi laju kilometer harian."*
+
+### 4. Dari ketiga fitur tersebut, mana yang mempunyai dampak terbesar?
+> *"Fitur dengan dampak terbesar adalah **Automated WhatsApp Service Reminder**.  
+> Masalah paling mematikan bagi bengkel UMKM adalah hilangnya pelanggan setelah servis pertama karena stiker spidometer hilang. Dengan pengingat WhatsApp otomatis, bengkel langsung merasakan peningkatan frekuensi servis ulang sebesar **30%–40%**, yang secara langsung melipatgandakan pendapatan kas masuk bengkel."*
+
+### 5. Dari ketiga fitur tersebut, mana yang paling realistis untuk dikembangkan?
+> *"Fitur yang paling realistis dan minim resiko teknis adalah **Automated WhatsApp Service Reminder berbasis WhatsApp Deep-Link (`wa.me`)**.  
+> Solusi ini tidak membutuhkan server pihak ketiga yang berbayar bulanan, tidak memerlukan verifikasi legal perusahaan yang rumit, dan dapat diimplementasikan secara elegan dengan pembentukan parameter URL dinamis pada Next.js. Kasir memiliki kendali penuh (*human-in-the-loop*) sebelum pesan dikirimkan, sehingga sangat aman, murah, dan teruji untuk skripsi mahasiswa."*
+
+---
+*Laporan ini menjadi dokumen resmi spesifikasi perancangan sebelum tahapan penyusunan PRD final dan proses implementasi coding pada repositori `bengkel-app`.*

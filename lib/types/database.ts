@@ -69,3 +69,61 @@ export interface PartsInventory {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export type PaymentMethod = "CASH" | "TRANSFER" | "QRIS";
+export type PaymentStatus = "PENDING" | "PAID" | "CANCELLED";
+
+export interface ServiceOrderItem {
+  id: string;
+  orderId: string;
+  serviceId: string;
+  serviceName: string;
+  price: number;
+  qty: number;
+  subtotal: number;
+}
+
+export interface ServiceOrderPart {
+  id: string;
+  orderId: string;
+  partId: string;
+  partName: string;
+  costPrice: number;
+  sellPrice: number;
+  qty: number;
+  subtotal: number;
+}
+
+export interface ServiceOrder {
+  id: string;
+  orderNumber: string;
+  token: string;
+  customerId: string;
+  customer?: Customer;
+  vehicleId: string;
+  vehicle?: Vehicle;
+  mechanicId?: string | null;
+  mechanicName?: string | null;
+  createdById?: string | null;
+  currentKm?: number | null;
+  complaints: string;
+  diagnosis?: string | null;
+  status: ServiceStatus;
+  paymentStatus: PaymentStatus;
+  paymentMethod?: PaymentMethod | null;
+  totalServices: number;
+  totalParts: number;
+  discount: number;
+  grandTotal: number;
+  paidAmount: number;
+  changeAmount: number;
+  notes?: string | null;
+  entryDate: Date;
+  completedDate?: Date | null;
+  paidDate?: Date | null;
+  items: ServiceOrderItem[];
+  parts: ServiceOrderPart[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+

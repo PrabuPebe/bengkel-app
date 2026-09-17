@@ -75,28 +75,33 @@ export function Sidebar({ user }: SidebarProps) {
       ],
     },
     {
-      group: "Fase Berikutnya",
+      group: "Operasional Servis (Milestone 3)",
       items: [
         {
           name: "Work Order Servis",
-          href: "#",
-          badge: "Milestone 3",
+          href: "/services",
+          badge: "Aktif",
           icon: (
-            <svg className="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           ),
         },
         {
           name: "Kasir & Billing",
-          href: "#",
-          badge: "Milestone 3",
+          href: "/cashier",
+          badge: "Aktif",
           icon: (
-            <svg className="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           ),
         },
+      ],
+    },
+    {
+      group: "Fase Berikutnya",
+      items: [
         {
           name: "Pengingat WhatsApp",
           href: "#",

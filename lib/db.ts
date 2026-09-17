@@ -1,4 +1,14 @@
-import { Customer, Vehicle, ServicesCatalog, PartsInventory } from "./types/database";
+import {
+  Customer,
+  Vehicle,
+  ServicesCatalog,
+  PartsInventory,
+  ServiceOrder,
+  ServiceOrderItem,
+  ServiceOrderPart,
+  ServiceStatus,
+  PaymentMethod,
+} from "./types/database";
 import { prisma } from "./prisma";
 
 // Periksa apakah koneksi PostgreSQL nyata telah diisi
@@ -321,6 +331,263 @@ const memoryParts: PartsInventory[] = [
   },
 ];
 
+const memoryServiceOrders: ServiceOrder[] = [
+  {
+    id: "ord-1",
+    orderNumber: "WO-202609-0001",
+    token: "trk-vario160-budi",
+    customerId: "cust-1",
+    vehicleId: "veh-1",
+    mechanicId: "usr-3",
+    mechanicName: "Budi Santoso",
+    currentKm: 12400,
+    complaints: "Servis rutin berkala dan ganti oli mesin. Tarikan awal terasa agak gredek saat macet.",
+    diagnosis: null,
+    status: "ANTRIAN",
+    paymentStatus: "PENDING",
+    paymentMethod: null,
+    totalServices: 25000,
+    totalParts: 58000,
+    discount: 0,
+    grandTotal: 83000,
+    paidAmount: 0,
+    changeAmount: 0,
+    notes: "Pelanggan menunggu di ruang tunggu bengkel.",
+    entryDate: new Date(Date.now() - 45 * 60 * 1000),
+    items: [
+      {
+        id: "item-1-1",
+        orderId: "ord-1",
+        serviceId: "srv-1",
+        serviceName: "Ganti Oli Mesin",
+        price: 25000,
+        qty: 1,
+        subtotal: 25000,
+      },
+    ],
+    parts: [
+      {
+        id: "part-1-1",
+        orderId: "ord-1",
+        partId: "part-1",
+        partName: "Oli AHM MPX2 0.8L (Matic)",
+        costPrice: 46000,
+        sellPrice: 58000,
+        qty: 1,
+        subtotal: 58000,
+      },
+    ],
+  },
+  {
+    id: "ord-2",
+    orderNumber: "WO-202609-0002",
+    token: "trk-nmax-maya",
+    customerId: "cust-2",
+    vehicleId: "veh-2",
+    mechanicId: "usr-3",
+    mechanicName: "Budi Santoso",
+    currentKm: 18250,
+    complaints: "Getar keras di bagian CVT saat rpm rendah (kecepatan 20-30 km/jam). Rem belakang kurang pakem.",
+    diagnosis: "Roller aus dan puli CVT kotor tertutup serbuk kampas ganda. Kampas rem belakang sudah tipis.",
+    status: "PENGERJAAN",
+    paymentStatus: "PENDING",
+    paymentMethod: null,
+    totalServices: 95000,
+    totalParts: 237000,
+    discount: 0,
+    grandTotal: 332000,
+    paidAmount: 0,
+    changeAmount: 0,
+    notes: "Unit ditinggal, konfirmasi via WhatsApp jika pengerjaan selesai.",
+    entryDate: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    items: [
+      {
+        id: "item-2-1",
+        orderId: "ord-2",
+        serviceId: "srv-4",
+        serviceName: "Servis CVT Lengkap & Pembersihan",
+        price: 65000,
+        qty: 1,
+        subtotal: 65000,
+      },
+      {
+        id: "item-2-2",
+        orderId: "ord-2",
+        serviceId: "srv-5",
+        serviceName: "Ganti Kampas Rem Depan / Belakang",
+        price: 30000,
+        qty: 1,
+        subtotal: 30000,
+      },
+    ],
+    parts: [
+      {
+        id: "part-2-1",
+        orderId: "ord-2",
+        partId: "part-8",
+        partName: "V-Belt & Roller Kit Yamaha NMAX 155",
+        costPrice: 145000,
+        sellPrice: 195000,
+        qty: 1,
+        subtotal: 195000,
+      },
+      {
+        id: "part-2-2",
+        orderId: "ord-2",
+        partId: "part-7",
+        partName: "Kampas Rem Tromol Belakang Honda Matic",
+        costPrice: 28000,
+        sellPrice: 42000,
+        qty: 1,
+        subtotal: 42000,
+      },
+    ],
+  },
+  {
+    id: "ord-3",
+    orderNumber: "WO-202609-0003",
+    token: "trk-beat-hendra",
+    customerId: "cust-3",
+    vehicleId: "veh-3",
+    mechanicId: "usr-3",
+    mechanicName: "Budi Santoso",
+    currentKm: 24100,
+    complaints: "Mesin sulit di-starter di pagi hari, tenaga ngempos saat menanjak curam.",
+    diagnosis: "Elektroda busi aus renggang dan filter udara kotor tersumbat debu. Telah dilakukan tune up injeksi, reset ECU, dan ganti oli.",
+    status: "SELESAI_PENGERJAAN",
+    paymentStatus: "PENDING",
+    paymentMethod: null,
+    totalServices: 110000,
+    totalParts: 138000,
+    discount: 10000,
+    grandTotal: 238000,
+    paidAmount: 0,
+    changeAmount: 0,
+    notes: "Pengerjaan selesai diuji coba dan siap dipanggil ke meja kasir.",
+    entryDate: new Date(Date.now() - 3.5 * 60 * 60 * 1000),
+    completedDate: new Date(Date.now() - 15 * 60 * 1000),
+    items: [
+      {
+        id: "item-3-1",
+        orderId: "ord-3",
+        serviceId: "srv-3",
+        serviceName: "Tune Up Injeksi Motor",
+        price: 85000,
+        qty: 1,
+        subtotal: 85000,
+      },
+      {
+        id: "item-3-2",
+        orderId: "ord-3",
+        serviceId: "srv-1",
+        serviceName: "Ganti Oli Mesin",
+        price: 25000,
+        qty: 1,
+        subtotal: 25000,
+      },
+    ],
+    parts: [
+      {
+        id: "part-3-1",
+        orderId: "ord-3",
+        partId: "part-1",
+        partName: "Oli AHM MPX2 0.8L (Matic)",
+        costPrice: 46000,
+        sellPrice: 58000,
+        qty: 1,
+        subtotal: 58000,
+      },
+      {
+        id: "part-3-2",
+        orderId: "ord-3",
+        partId: "part-5",
+        partName: "Busi NGK CPR9EA-9 Nickel",
+        costPrice: 18000,
+        sellPrice: 28000,
+        qty: 1,
+        subtotal: 28000,
+      },
+      {
+        id: "part-3-3",
+        orderId: "ord-3",
+        partId: "part-9",
+        partName: "Filter Udara Honda Beat FI ESP",
+        costPrice: 38000,
+        sellPrice: 52000,
+        qty: 1,
+        subtotal: 52000,
+      },
+    ],
+  },
+  {
+    id: "ord-4",
+    orderNumber: "WO-202609-0004",
+    token: "trk-scoopy-agus",
+    customerId: "cust-5",
+    vehicleId: "veh-6",
+    mechanicId: "usr-3",
+    mechanicName: "Budi Santoso",
+    currentKm: 8900,
+    complaints: "Ganti oli mesin dan oli transmisi gardan rutin bulanan.",
+    diagnosis: "Kondisi mesin prima, pelumas transmisi diganti bersih.",
+    status: "SELESAI_PEMBAYARAN",
+    paymentStatus: "PAID",
+    paymentMethod: "CASH",
+    totalServices: 40000,
+    totalParts: 76000,
+    discount: 0,
+    grandTotal: 116000,
+    paidAmount: 120000,
+    changeAmount: 4000,
+    notes: "Pembayaran lunas via Kasir (Tunai). Struk telah diserahkan.",
+    entryDate: new Date(Date.now() - 5 * 60 * 60 * 1000),
+    completedDate: new Date(Date.now() - 4 * 60 * 60 * 1000),
+    paidDate: new Date(Date.now() - 4 * 60 * 60 * 1000 + 10 * 60 * 1000),
+    items: [
+      {
+        id: "item-4-1",
+        orderId: "ord-4",
+        serviceId: "srv-1",
+        serviceName: "Ganti Oli Mesin",
+        price: 25000,
+        qty: 1,
+        subtotal: 25000,
+      },
+      {
+        id: "item-4-2",
+        orderId: "ord-4",
+        serviceId: "srv-2",
+        serviceName: "Ganti Oli Gardan / Transmisi",
+        price: 15000,
+        qty: 1,
+        subtotal: 15000,
+      },
+    ],
+    parts: [
+      {
+        id: "part-4-1",
+        orderId: "ord-4",
+        partId: "part-1",
+        partName: "Oli AHM MPX2 0.8L (Matic)",
+        costPrice: 46000,
+        sellPrice: 58000,
+        qty: 1,
+        subtotal: 58000,
+      },
+      {
+        id: "part-4-2",
+        orderId: "ord-4",
+        partId: "part-4",
+        partName: "Oli Gardan AHM Gear Oil 120ml",
+        costPrice: 13000,
+        sellPrice: 18000,
+        qty: 1,
+        subtotal: 18000,
+      },
+    ],
+  },
+];
+
 // Helper database abstraction layer yang tangguh (Resilient Hybrid Layer)
 export const db = {
   // === CUSTOMERS & VEHICLES ===
@@ -556,12 +823,265 @@ export const db = {
     },
   },
 
+  // === SERVICE ORDERS (WORK ORDERS & BILLING) ===
+  serviceOrder: {
+    async findMany(filters?: { status?: string; query?: string }): Promise<ServiceOrder[]> {
+      let results = memoryServiceOrders.map((order) => {
+        const customer = memoryCustomers.find((c) => c.id === order.customerId);
+        const vehicle = customer?.vehicles.find((v) => v.id === order.vehicleId);
+        return {
+          ...order,
+          customer,
+          vehicle,
+        };
+      });
+
+      if (filters?.status && filters.status !== "ALL") {
+        results = results.filter((o) => o.status === filters.status);
+      }
+
+      if (filters?.query && filters.query.trim()) {
+        const q = filters.query.toLowerCase().trim();
+        results = results.filter(
+          (o) =>
+            o.orderNumber.toLowerCase().includes(q) ||
+            o.customer?.name.toLowerCase().includes(q) ||
+            o.customer?.phone.toLowerCase().includes(q) ||
+            o.vehicle?.plateNumber.toLowerCase().includes(q) ||
+            o.vehicle?.model.toLowerCase().includes(q)
+        );
+      }
+
+      return results.sort((a, b) => b.entryDate.getTime() - a.entryDate.getTime());
+    },
+
+    async findById(id: string): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === id || o.orderNumber === id);
+      if (!order) return null;
+      const customer = memoryCustomers.find((c) => c.id === order.customerId);
+      const vehicle = customer?.vehicles.find((v) => v.id === order.vehicleId);
+      return {
+        ...order,
+        customer,
+        vehicle,
+      };
+    },
+
+    async create(data: {
+      customerId: string;
+      vehicleId: string;
+      mechanicId?: string;
+      mechanicName?: string;
+      currentKm?: number;
+      complaints: string;
+      notes?: string;
+      initialServiceIds?: string[];
+      initialPartIds?: { partId: string; qty: number }[];
+    }): Promise<ServiceOrder> {
+      const count = memoryServiceOrders.length + 1;
+      const dateStr = new Date().toISOString().slice(0, 7).replace("-", "");
+      const orderNumber = `WO-${dateStr}-${String(count).padStart(4, "0")}`;
+      const token = `trk-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+      const orderId = `ord-${Date.now()}`;
+
+      const items: ServiceOrderItem[] = [];
+      let totalServices = 0;
+      if (data.initialServiceIds && data.initialServiceIds.length > 0) {
+        for (const srvId of data.initialServiceIds) {
+          const srv = memoryServices.find((s) => s.id === srvId);
+          if (srv) {
+            items.push({
+              id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+              orderId,
+              serviceId: srv.id,
+              serviceName: srv.name,
+              price: srv.price,
+              qty: 1,
+              subtotal: srv.price,
+            });
+            totalServices += srv.price;
+          }
+        }
+      }
+
+      const parts: ServiceOrderPart[] = [];
+      let totalParts = 0;
+      if (data.initialPartIds && data.initialPartIds.length > 0) {
+        for (const p of data.initialPartIds) {
+          const part = memoryParts.find((x) => x.id === p.partId);
+          if (part && part.stock >= p.qty) {
+            part.stock -= p.qty;
+            const subtotal = part.sellPrice * p.qty;
+            parts.push({
+              id: `partItem-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+              orderId,
+              partId: part.id,
+              partName: part.name,
+              costPrice: part.costPrice,
+              sellPrice: part.sellPrice,
+              qty: p.qty,
+              subtotal,
+            });
+            totalParts += subtotal;
+          }
+        }
+      }
+
+      const newOrder: ServiceOrder = {
+        id: orderId,
+        orderNumber,
+        token,
+        customerId: data.customerId,
+        vehicleId: data.vehicleId,
+        mechanicId: data.mechanicId || "usr-3",
+        mechanicName: data.mechanicName || "Budi Santoso",
+        currentKm: data.currentKm || null,
+        complaints: data.complaints.trim(),
+        diagnosis: null,
+        status: "ANTRIAN",
+        paymentStatus: "PENDING",
+        paymentMethod: null,
+        totalServices,
+        totalParts,
+        discount: 0,
+        grandTotal: totalServices + totalParts,
+        paidAmount: 0,
+        changeAmount: 0,
+        notes: data.notes?.trim() || null,
+        entryDate: new Date(),
+        items,
+        parts,
+      };
+
+      memoryServiceOrders.unshift(newOrder);
+      return newOrder;
+    },
+
+    async updateStatus(id: string, status: ServiceStatus, diagnosis?: string): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === id);
+      if (!order) return null;
+      order.status = status;
+      if (diagnosis !== undefined) {
+        order.diagnosis = diagnosis.trim() || null;
+      }
+      if (status === "SELESAI_PENGERJAAN" && !order.completedDate) {
+        order.completedDate = new Date();
+      }
+      return order;
+    },
+
+    async addItem(orderId: string, serviceId: string): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === orderId);
+      const srv = memoryServices.find((s) => s.id === serviceId);
+      if (!order || !srv) return null;
+
+      order.items.push({
+        id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        orderId: order.id,
+        serviceId: srv.id,
+        serviceName: srv.name,
+        price: srv.price,
+        qty: 1,
+        subtotal: srv.price,
+      });
+
+      order.totalServices = order.items.reduce((acc, i) => acc + i.subtotal, 0);
+      order.grandTotal = Math.max(0, order.totalServices + order.totalParts - order.discount);
+      return order;
+    },
+
+    async removeItem(orderId: string, itemId: string): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === orderId);
+      if (!order) return null;
+      order.items = order.items.filter((i) => i.id !== itemId);
+      order.totalServices = order.items.reduce((acc, i) => acc + i.subtotal, 0);
+      order.grandTotal = Math.max(0, order.totalServices + order.totalParts - order.discount);
+      return order;
+    },
+
+    async addPart(orderId: string, partId: string, qty = 1): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === orderId);
+      const part = memoryParts.find((p) => p.id === partId);
+      if (!order || !part || part.stock < qty) return null;
+
+      part.stock -= qty;
+      const subtotal = part.sellPrice * qty;
+
+      order.parts.push({
+        id: `partItem-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        orderId: order.id,
+        partId: part.id,
+        partName: part.name,
+        costPrice: part.costPrice,
+        sellPrice: part.sellPrice,
+        qty,
+        subtotal,
+      });
+
+      order.totalParts = order.parts.reduce((acc, p) => acc + p.subtotal, 0);
+      order.grandTotal = Math.max(0, order.totalServices + order.totalParts - order.discount);
+      return order;
+    },
+
+    async removePart(orderId: string, partItemId: string): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === orderId);
+      if (!order) return null;
+      const partItem = order.parts.find((p) => p.id === partItemId);
+      if (partItem) {
+        const part = memoryParts.find((p) => p.id === partItem.partId);
+        if (part) {
+          part.stock += partItem.qty;
+        }
+      }
+      order.parts = order.parts.filter((p) => p.id !== partItemId);
+      order.totalParts = order.parts.reduce((acc, p) => acc + p.subtotal, 0);
+      order.grandTotal = Math.max(0, order.totalServices + order.totalParts - order.discount);
+      return order;
+    },
+
+    async checkoutBilling(orderId: string, data: {
+      paymentMethod: PaymentMethod;
+      discount?: number;
+      paidAmount: number;
+    }): Promise<ServiceOrder | null> {
+      const order = memoryServiceOrders.find((o) => o.id === orderId);
+      if (!order) return null;
+
+      const discount = data.discount || 0;
+      const grandTotal = Math.max(0, order.totalServices + order.totalParts - discount);
+      const paidAmount = data.paidAmount;
+      const changeAmount = Math.max(0, paidAmount - grandTotal);
+
+      order.discount = discount;
+      order.grandTotal = grandTotal;
+      order.paidAmount = paidAmount;
+      order.changeAmount = changeAmount;
+      order.paymentMethod = data.paymentMethod;
+      order.paymentStatus = "PAID";
+      order.status = "SELESAI_PEMBAYARAN";
+      order.paidDate = new Date();
+      if (!order.completedDate) {
+        order.completedDate = new Date();
+      }
+
+      return order;
+    },
+  },
+
   // === DASHBOARD STATS ===
   async getStats() {
     const totalCustomers = memoryCustomers.length;
     const totalVehicles = memoryCustomers.reduce((acc, c) => acc + c.vehicles.length, 0);
     const totalServices = memoryServices.length;
     const lowStockParts = memoryParts.filter((p) => p.stock <= p.minStock);
+
+    const activeQueueCount = memoryServiceOrders.filter((o) => o.status === "ANTRIAN").length;
+    const inProgressCount = memoryServiceOrders.filter((o) => o.status === "PENGERJAAN").length;
+    const readyForCashierCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PENGERJAAN").length;
+    const completedOrdersCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PEMBAYARAN").length;
+    const todayRevenue = memoryServiceOrders
+      .filter((o) => o.paymentStatus === "PAID")
+      .reduce((acc, o) => acc + o.grandTotal, 0);
 
     return {
       totalCustomers,
@@ -570,6 +1090,11 @@ export const db = {
       totalParts: memoryParts.length,
       lowStockCount: lowStockParts.length,
       lowStockItems: lowStockParts,
+      activeQueueCount,
+      inProgressCount,
+      readyForCashierCount,
+      completedOrdersCount,
+      todayRevenue,
     };
   },
 };
