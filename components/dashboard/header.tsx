@@ -15,16 +15,19 @@ export function Header({ title, subtitle, actionButton }: HeaderProps) {
   });
 
   return (
-    <header className="mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-4 pb-6 border-b border-slate-100">
+    <header className="mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-4 pb-6 border-b border-[#435663]/15">
       <div>
-        <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">
-          PitCare Auto Suite • {today}
-        </p>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="inline-block w-2 h-2 rounded-full bg-[#A3B087] animate-pulse" />
+          <p className="text-[11px] font-bold text-[#435663] uppercase tracking-widest">
+            PitCare Auto Suite • {today}
+          </p>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#313647] tracking-tight">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-sm text-slate-500 mt-1.5 max-w-2xl leading-relaxed">
+          <p className="text-sm text-[#435663] mt-1.5 max-w-2xl leading-relaxed font-medium">
             {subtitle}
           </p>
         )}

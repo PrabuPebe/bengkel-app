@@ -175,22 +175,22 @@ export default function ServiceOrderDetailPage({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center p-24 text-slate-400">
-        <div className="w-10 h-10 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-sm font-medium">Memuat rincian Work Order PitCare Auto...</p>
+      <div className="flex flex-col items-center justify-center p-24 text-[#435663]">
+        <div className="w-10 h-10 border-2 border-[#A3B087] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-semibold">Memuat rincian Work Order PitCare Auto...</p>
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="p-12 text-center card max-w-lg mx-auto">
-        <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3 text-xl font-bold border border-rose-100">!</div>
-        <h2 className="text-base font-bold text-slate-900 mb-1">Work Order Tidak Ditemukan</h2>
-        <p className="text-xs text-slate-400 mb-6">
+      <div className="p-12 text-center card-floating max-w-lg mx-auto">
+        <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3 text-xl font-bold border border-rose-200">!</div>
+        <h2 className="text-base font-bold text-[#313647] mb-1">Work Order Tidak Ditemukan</h2>
+        <p className="text-xs text-[#435663] mb-6">
           Nomor SPK atau ID yang dicari tidak tersedia dalam database PitCare Auto.
         </p>
-        <Link href="/services" className="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition-all cursor-pointer">
+        <Link href="/services" className="btn-sage inline-flex items-center px-5 py-2.5 text-xs cursor-pointer">
           ← Kembali ke Daftar SPK
         </Link>
       </div>
@@ -215,8 +215,6 @@ export default function ServiceOrderDetailPage({
     return "upcoming";
   };
 
-  const inputClass = "w-full h-11 px-3.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/15 transition-all";
-
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Top Header */}
@@ -224,7 +222,7 @@ export default function ServiceOrderDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/services"
-            className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
+            className="btn-outline-steel p-2.5 cursor-pointer"
             title="Kembali ke Daftar SPK"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -233,18 +231,18 @@ export default function ServiceOrderDetailPage({
           </Link>
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-[#313647] tracking-tight">
                 {order.orderNumber}
               </h1>
-              <span className="font-mono text-xs px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100 font-bold">
+              <span className="font-mono text-xs px-2.5 py-1 rounded-lg bg-[#A3B087]/25 text-[#313647] border border-[#A3B087]/50 font-bold">
                 {order.vehicle?.plateNumber}
               </span>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-xs text-[#435663] font-bold">
                 ({order.vehicle?.brand} {order.vehicle?.model})
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
-              <span>Token: <span className="font-mono text-slate-600">{order.token}</span></span>
+            <p className="text-xs text-[#435663] mt-0.5 flex items-center gap-2 flex-wrap">
+              <span>Token: <span className="font-mono text-[#313647] font-bold">{order.token}</span></span>
               <span>•</span>
               <span>Diterima: {formatDate(order.entryDate)}</span>
             </p>
@@ -255,7 +253,7 @@ export default function ServiceOrderDetailPage({
           <button
             type="button"
             onClick={handleCopyTrackingLink}
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="btn-outline-steel px-3.5 py-2 text-xs flex items-center gap-1.5 cursor-pointer"
           >
             {copiedLink ? "✓ Tersalin!" : "🔗 Salin Link Tracking"}
           </button>
@@ -263,7 +261,7 @@ export default function ServiceOrderDetailPage({
           <Link
             href={`/track/${order.token}`}
             target="_blank"
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-bold text-[#313647] bg-[#FFF8D4] border border-[#A3B087]/50 hover:bg-[#FFF8D4]/80 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             Buka Pelacakan ↗
           </Link>
@@ -271,7 +269,7 @@ export default function ServiceOrderDetailPage({
           {order.status === "SELESAI_PENGERJAAN" && (
             <Link
               href={`/cashier/${order.id}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-200 transition-all cursor-pointer"
+              className="btn-sage flex items-center gap-2 px-4 py-2 text-xs cursor-pointer"
             >
               Proses Bayar Kasir 💳
             </Link>
@@ -280,7 +278,7 @@ export default function ServiceOrderDetailPage({
           {order.status === "SELESAI_PEMBAYARAN" && (
             <Link
               href={`/cashier/${order.id}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all cursor-pointer"
+              className="btn-charcoal flex items-center gap-2 px-4 py-2 text-xs cursor-pointer"
             >
               Cetak Faktur Kasir 🖨️
             </Link>
@@ -289,14 +287,14 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {actionError && (
-        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-100 text-rose-700 text-sm font-medium flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium flex items-center justify-between">
           <span>{actionError}</span>
-          <button type="button" onClick={() => setActionError("")} className="text-rose-400 hover:text-rose-600 ml-4 cursor-pointer">✕</button>
+          <button type="button" onClick={() => setActionError("")} className="text-rose-600 hover:text-rose-800 ml-4 cursor-pointer font-bold">✕</button>
         </div>
       )}
 
       {/* Pipeline Stepper */}
-      <div className="card p-6 sm:p-7">
+      <div className="card-floating p-6 sm:p-7">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {steps.map((s, idx) => {
             const st = getStepStatus(s.key);
@@ -305,42 +303,44 @@ export default function ServiceOrderDetailPage({
                 key={s.key}
                 className={`p-4 rounded-xl border transition-all duration-300 ${
                   st === "current"
-                    ? "bg-indigo-50 border-indigo-200 shadow-sm"
+                    ? "bg-[#A3B087]/25 border-[#A3B087] shadow-xs"
                     : st === "completed"
-                      ? "bg-emerald-50 border-emerald-200"
-                      : "bg-slate-50 border-slate-200"
+                      ? "bg-[#313647] text-[#FFF8D4] border-[#313647]"
+                      : "bg-[#FFF8D4]/50 border-[#435663]/20"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
-                    st === "current" ? "text-indigo-500" : st === "completed" ? "text-emerald-600" : "text-slate-400"
+                    st === "completed" ? "text-[#A3B087]" : st === "current" ? "text-[#313647]" : "text-[#435663]"
                   }`}>
                     Tahap {idx + 1}
                   </span>
-                  {st === "completed" && <span className="text-xs font-bold text-emerald-600">✓</span>}
+                  {st === "completed" && <span className="text-xs font-bold text-[#A3B087]">✓</span>}
                   {st === "current" && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-600 text-white">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#313647] text-[#FFF8D4]">
                       {order.status === "MENUNGGU_PART" ? "Tunda" : "Aktif"}
                     </span>
                   )}
                 </div>
                 <p className={`text-xs font-bold ${
-                  st === "current" ? "text-indigo-800" : st === "completed" ? "text-emerald-800" : "text-slate-500"
+                  st === "completed" ? "text-[#FFF8D4]" : "text-[#313647]"
                 }`}>
                   {s.label}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{s.desc}</p>
+                <p className={`text-[11px] mt-0.5 leading-snug ${
+                  st === "completed" ? "text-[#FFF8D4]/70" : "text-[#435663]"
+                }`}>{s.desc}</p>
               </div>
             );
           })}
         </div>
 
         {/* Status Controls */}
-        <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <span>Status: <span className="font-bold text-indigo-600">{order.status.replace("_", " ")}</span></span>
+        <div className="mt-5 pt-4 border-t border-[#435663]/15 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs text-[#435663]">
+            <span>Status: <span className="font-bold text-[#313647]">{order.status.replace("_", " ")}</span></span>
             <span>•</span>
-            <span>Teknisi: <span className="font-bold text-slate-800">{order.mechanicName || "Teknisi PitCare Auto"}</span></span>
+            <span>Teknisi: <span className="font-bold text-[#313647]">{order.mechanicName || "Teknisi PitCare Auto"}</span></span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
@@ -349,7 +349,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 active:scale-95 transition-all cursor-pointer"
+                className="btn-sage flex items-center gap-2 px-5 py-2.5 text-xs cursor-pointer"
               >
                 🚀 Mulai Pengerjaan Pit
               </button>
@@ -361,7 +361,7 @@ export default function ServiceOrderDetailPage({
                   type="button"
                   disabled={isPending}
                   onClick={() => handleStatusChange("MENUNGGU_PART")}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100 transition-all cursor-pointer"
+                  className="btn-outline-steel px-4 py-2.5 text-xs cursor-pointer"
                 >
                   ⏸️ Tunda: Menunggu Part
                 </button>
@@ -369,7 +369,7 @@ export default function ServiceOrderDetailPage({
                   type="button"
                   disabled={isPending}
                   onClick={() => setIsCompleteModalOpen(true)}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-200 active:scale-95 transition-all cursor-pointer"
+                  className="btn-sage flex items-center gap-2 px-5 py-2.5 text-xs cursor-pointer"
                 >
                   ✅ Selesaikan Pengerjaan
                 </button>
@@ -381,7 +381,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all cursor-pointer"
+                className="btn-sage flex items-center gap-2 px-5 py-2.5 text-xs cursor-pointer"
               >
                 ▶️ Part Siap: Lanjutkan
               </button>
@@ -392,7 +392,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="px-3.5 py-2 rounded-xl text-xs font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="btn-outline-steel px-3.5 py-2 text-xs cursor-pointer"
               >
                 ↩️ Kembalikan ke Pit
               </button>
@@ -404,54 +404,54 @@ export default function ServiceOrderDetailPage({
       {/* Info Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Customer & Vehicle Card */}
-        <div className="card p-6 space-y-4">
-          <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider pb-3 border-b border-slate-100">
+        <div className="card-floating p-6 space-y-4">
+          <h2 className="text-xs font-bold text-[#435663] uppercase tracking-wider pb-3 border-b border-[#435663]/15">
             Identitas Pelanggan & Unit
           </h2>
           <div>
-            <p className="text-[11px] text-slate-400">Pemilik Kendaraan</p>
-            <p className="text-sm font-bold text-slate-900 mt-0.5">{order.customer?.name}</p>
+            <p className="text-[11px] text-[#435663]">Pemilik Kendaraan</p>
+            <p className="text-sm font-bold text-[#313647] mt-0.5">{order.customer?.name}</p>
             <a
               href={`https://wa.me/${order.customer?.phone?.replace(/^0/, "62")}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-medium hover:underline mt-1"
+              className="inline-flex items-center gap-1.5 text-xs text-[#313647] font-semibold hover:underline mt-1"
             >
               📱 WhatsApp: {order.customer?.phone}
             </a>
           </div>
-          <div className="pt-3 border-t border-slate-100">
-            <p className="text-[11px] text-slate-400">Kendaraan</p>
-            <p className="text-sm font-bold text-slate-900 mt-0.5">
+          <div className="pt-3 border-t border-[#435663]/15">
+            <p className="text-[11px] text-[#435663]">Kendaraan</p>
+            <p className="text-sm font-bold text-[#313647] mt-0.5">
               {order.vehicle?.brand} {order.vehicle?.model}
             </p>
-            <p className="font-mono text-xs font-bold text-indigo-600 mt-0.5">{order.vehicle?.plateNumber}</p>
+            <p className="font-mono text-xs font-bold text-[#313647] mt-0.5">{order.vehicle?.plateNumber}</p>
             {order.currentKm && (
-              <p className="text-xs text-slate-500 mt-1">
-                KM: <span className="font-mono font-bold text-slate-700">{order.currentKm.toLocaleString("id-ID")} KM</span>
+              <p className="text-xs text-[#435663] mt-1">
+                KM: <span className="font-mono font-bold text-[#313647]">{order.currentKm.toLocaleString("id-ID")} KM</span>
               </p>
             )}
           </div>
-          <div className="pt-3 border-t border-slate-100">
-            <p className="text-[11px] text-slate-400">Keluhan Masuk</p>
-            <p className="text-xs text-slate-600 mt-1 italic leading-relaxed">
+          <div className="pt-3 border-t border-[#435663]/15">
+            <p className="text-[11px] text-[#435663]">Keluhan Masuk</p>
+            <p className="text-xs text-[#313647] mt-1 italic leading-relaxed">
               &quot;{order.complaints}&quot;
             </p>
           </div>
         </div>
 
         {/* Diagnosis Card */}
-        <div className="lg:col-span-2 card p-6 flex flex-col justify-between">
+        <div className="lg:col-span-2 card-floating p-6 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <div className="flex items-center justify-between pb-3 border-b border-[#435663]/15 mb-3">
+              <h2 className="text-xs font-bold text-[#435663] uppercase tracking-wider">
                 Catatan Pemeriksaan & Diagnosis
               </h2>
-              <span className="text-[11px] text-slate-400">
-                Mekanik: <strong className="text-slate-700">{order.mechanicName}</strong>
+              <span className="text-[11px] text-[#435663]">
+                Mekanik: <strong className="text-[#313647]">{order.mechanicName}</strong>
               </span>
             </div>
-            <p className="text-xs text-slate-500 mb-2">
+            <p className="text-xs text-[#435663] mb-2">
               Tuliskan temuan masalah teknis, rekomendasi perbaikan, atau kondisi hasil uji jalan:
             </p>
             <textarea
@@ -459,18 +459,18 @@ export default function ServiceOrderDetailPage({
               value={diagnosisInput}
               onChange={(e) => setDiagnosisInput(e.target.value)}
               placeholder="Contoh: Busi aus renggang, seal shock kanan rembes oli, v-belt mulai retak rambut..."
-              className="w-full p-3.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/15 leading-relaxed transition-all"
+              className="input-custom w-full p-3.5 text-xs leading-relaxed"
             />
           </div>
-          <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
-            <span className="text-[11px] text-slate-400">
+          <div className="flex items-center justify-between pt-3 mt-3 border-t border-[#435663]/15">
+            <span className="text-[11px] text-[#435663]">
               {order.diagnosis ? "✓ Catatan tersimpan" : "Belum ada catatan diagnosis"}
             </span>
             <button
               type="button"
               disabled={isPending}
               onClick={handleSaveDiagnosis}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-all cursor-pointer"
+              className="btn-sage px-4 py-2 text-xs cursor-pointer"
             >
               Simpan Catatan
             </button>
@@ -479,20 +479,20 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {/* Tindakan Jasa */}
-      <div className="card p-6 sm:p-7">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+      <div className="card-floating p-6 sm:p-7">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#435663]/15">
           <div>
-            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <h2 className="text-sm font-bold text-[#313647] flex items-center gap-2">
               🔧 Tindakan Jasa Servis
-              <span className="text-xs font-normal text-slate-400">({order.items.length} tindakan)</span>
+              <span className="text-xs font-normal text-[#435663]">({order.items.length} tindakan)</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">Pekerjaan jasa yang dikerjakan teknisi pada unit ini.</p>
+            <p className="text-xs text-[#435663] mt-0.5">Pekerjaan jasa yang dikerjakan teknisi pada unit ini.</p>
           </div>
           {order.status !== "SELESAI_PEMBAYARAN" && (
             <button
               type="button"
               onClick={() => { setActionError(""); setIsAddServiceModalOpen(true); }}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition-all cursor-pointer"
+              className="btn-sage px-4 py-2 text-xs cursor-pointer"
             >
               + Tambah Jasa Servis
             </button>
@@ -500,12 +500,12 @@ export default function ServiceOrderDetailPage({
         </div>
 
         {order.items.length === 0 ? (
-          <p className="py-8 text-center text-xs text-slate-400">Belum ada tindakan jasa yang dicatat.</p>
+          <p className="py-8 text-center text-xs text-[#435663]">Belum ada tindakan jasa yang dicatat.</p>
         ) : (
           <div className="overflow-x-auto mt-3">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider">
+                <tr className="text-[#435663] border-b border-[#435663]/15 text-[11px] font-bold uppercase tracking-wider">
                   <th className="py-3 px-3">Nama Jasa Servis</th>
                   <th className="py-3 px-3 text-right">Biaya Satuan</th>
                   <th className="py-3 px-3 text-center">Qty</th>
@@ -513,16 +513,16 @@ export default function ServiceOrderDetailPage({
                   {order.status !== "SELESAI_PEMBAYARAN" && <th className="py-3 px-3 text-right">Aksi</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[#435663]/10">
                 {order.items.map((item) => (
-                  <tr key={item.id} className="text-slate-700 hover:bg-slate-50/50 transition-colors">
-                    <td className="py-3.5 px-3 font-medium text-slate-900">{item.serviceName}</td>
-                    <td className="py-3.5 px-3 text-right font-mono text-slate-500">{formatRupiah(item.price)}</td>
+                  <tr key={item.id} className="text-[#313647] hover:bg-[#FFF8D4]/40 transition-colors">
+                    <td className="py-3.5 px-3 font-bold">{item.serviceName}</td>
+                    <td className="py-3.5 px-3 text-right font-mono text-[#435663]">{formatRupiah(item.price)}</td>
                     <td className="py-3.5 px-3 text-center font-mono">{item.qty}</td>
-                    <td className="py-3.5 px-3 text-right font-mono font-bold text-emerald-700">{formatRupiah(item.subtotal)}</td>
+                    <td className="py-3.5 px-3 text-right font-mono font-black">{formatRupiah(item.subtotal)}</td>
                     {order.status !== "SELESAI_PEMBAYARAN" && (
                       <td className="py-3.5 px-3 text-right">
-                        <button type="button" onClick={() => handleRemoveService(item.id)} className="text-rose-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors cursor-pointer" title="Hapus Jasa">✕</button>
+                        <button type="button" onClick={() => handleRemoveService(item.id)} className="text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors cursor-pointer" title="Hapus Jasa">✕</button>
                       </td>
                     )}
                   </tr>
@@ -531,28 +531,28 @@ export default function ServiceOrderDetailPage({
             </table>
           </div>
         )}
-        <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
-          <p className="text-xs text-slate-500">
-            Subtotal Jasa: <span className="font-mono font-bold text-slate-900 ml-1.5">{formatRupiah(order.totalServices)}</span>
+        <div className="mt-4 pt-3 border-t border-[#435663]/15 flex justify-end">
+          <p className="text-xs text-[#435663]">
+            Subtotal Jasa: <span className="font-mono font-black text-[#313647] ml-1.5">{formatRupiah(order.totalServices)}</span>
           </p>
         </div>
       </div>
 
       {/* Suku Cadang */}
-      <div className="card p-6 sm:p-7">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+      <div className="card-floating p-6 sm:p-7">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#435663]/15">
           <div>
-            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <h2 className="text-sm font-bold text-[#313647] flex items-center gap-2">
               📦 Suku Cadang Terpakai
-              <span className="text-xs font-normal text-slate-400">({order.parts.length} part)</span>
+              <span className="text-xs font-normal text-[#435663]">({order.parts.length} part)</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">Stok gudang dipotong otomatis dan dikembalikan jika dibatalkan.</p>
+            <p className="text-xs text-[#435663] mt-0.5">Stok gudang dipotong otomatis dan dikembalikan jika dibatalkan.</p>
           </div>
           {order.status !== "SELESAI_PEMBAYARAN" && (
             <button
               type="button"
               onClick={() => { setActionError(""); setIsAddPartModalOpen(true); }}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition-all cursor-pointer"
+              className="btn-sage px-4 py-2 text-xs cursor-pointer"
             >
               + Ambil Suku Cadang
             </button>
@@ -560,12 +560,12 @@ export default function ServiceOrderDetailPage({
         </div>
 
         {order.parts.length === 0 ? (
-          <p className="py-8 text-center text-xs text-slate-400">Belum ada pemakaian suku cadang.</p>
+          <p className="py-8 text-center text-xs text-[#435663]">Belum ada pemakaian suku cadang.</p>
         ) : (
           <div className="overflow-x-auto mt-3">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider">
+                <tr className="text-[#435663] border-b border-[#435663]/15 text-[11px] font-bold uppercase tracking-wider">
                   <th className="py-3 px-3">Nama Suku Cadang</th>
                   <th className="py-3 px-3 text-right">Harga Satuan</th>
                   <th className="py-3 px-3 text-center">Qty</th>
@@ -573,16 +573,16 @@ export default function ServiceOrderDetailPage({
                   {order.status !== "SELESAI_PEMBAYARAN" && <th className="py-3 px-3 text-right">Aksi</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[#435663]/10">
                 {order.parts.map((p) => (
-                  <tr key={p.id} className="text-slate-700 hover:bg-slate-50/50 transition-colors">
-                    <td className="py-3.5 px-3 font-medium text-slate-900">{p.partName}</td>
-                    <td className="py-3.5 px-3 text-right font-mono text-slate-500">{formatRupiah(p.sellPrice)}</td>
+                  <tr key={p.id} className="text-[#313647] hover:bg-[#FFF8D4]/40 transition-colors">
+                    <td className="py-3.5 px-3 font-bold">{p.partName}</td>
+                    <td className="py-3.5 px-3 text-right font-mono text-[#435663]">{formatRupiah(p.sellPrice)}</td>
                     <td className="py-3.5 px-3 text-center font-mono">{p.qty}</td>
-                    <td className="py-3.5 px-3 text-right font-mono font-bold text-emerald-700">{formatRupiah(p.subtotal)}</td>
+                    <td className="py-3.5 px-3 text-right font-mono font-black">{formatRupiah(p.subtotal)}</td>
                     {order.status !== "SELESAI_PEMBAYARAN" && (
                       <td className="py-3.5 px-3 text-right">
-                        <button type="button" onClick={() => handleRemovePart(p.id)} className="text-rose-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors cursor-pointer" title="Kembalikan Part">✕</button>
+                        <button type="button" onClick={() => handleRemovePart(p.id)} className="text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors cursor-pointer" title="Kembalikan Part">✕</button>
                       </td>
                     )}
                   </tr>
@@ -591,21 +591,21 @@ export default function ServiceOrderDetailPage({
             </table>
           </div>
         )}
-        <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
-          <p className="text-xs text-slate-500">
-            Subtotal Suku Cadang: <span className="font-mono font-bold text-slate-900 ml-1.5">{formatRupiah(order.totalParts)}</span>
+        <div className="mt-4 pt-3 border-t border-[#435663]/15 flex justify-end">
+          <p className="text-xs text-[#435663]">
+            Subtotal Suku Cadang: <span className="font-mono font-black text-[#313647] ml-1.5">{formatRupiah(order.totalParts)}</span>
           </p>
         </div>
       </div>
 
       {/* Grand Total */}
-      <div className="card p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-gradient-to-r from-slate-50 to-indigo-50/30">
+      <div className="card-floating p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-[#FFF8D4] border border-[#A3B087]/50">
         <div className="space-y-1">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Rekapitulasi SPK</p>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 pt-1">
-            <span>Jasa: <strong className="font-mono text-slate-900">{formatRupiah(order.totalServices)}</strong></span>
+          <p className="text-xs font-bold text-[#435663] uppercase tracking-wider">Total Rekapitulasi SPK</p>
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[#435663] pt-1">
+            <span>Jasa: <strong className="font-mono text-[#313647]">{formatRupiah(order.totalServices)}</strong></span>
             <span>•</span>
-            <span>Sparepart: <strong className="font-mono text-slate-900">{formatRupiah(order.totalParts)}</strong></span>
+            <span>Sparepart: <strong className="font-mono text-[#313647]">{formatRupiah(order.totalParts)}</strong></span>
             {order.discount > 0 && (
               <>
                 <span>•</span>
@@ -615,8 +615,8 @@ export default function ServiceOrderDetailPage({
           </div>
         </div>
         <div className="flex items-baseline gap-3">
-          <span className="text-xs font-bold text-slate-500 uppercase">Grand Total:</span>
-          <span className="text-3xl font-black font-mono text-emerald-700">{formatRupiah(order.grandTotal)}</span>
+          <span className="text-xs font-bold text-[#435663] uppercase">Grand Total:</span>
+          <span className="text-3xl font-black font-mono text-[#313647]">{formatRupiah(order.grandTotal)}</span>
         </div>
       </div>
 
@@ -624,17 +624,17 @@ export default function ServiceOrderDetailPage({
       <Modal isOpen={isAddServiceModalOpen} onClose={() => setIsAddServiceModalOpen(false)} title="Tambahkan Tindakan Jasa" description="Pilih jenis pekerjaan dari katalog bengkel PitCare Auto.">
         <form onSubmit={handleAddService} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Pilih Jasa Servis *</label>
-            <select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} required className={inputClass}>
+            <label className="block text-xs font-semibold text-[#313647] mb-1.5">Pilih Jasa Servis *</label>
+            <select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} required className="input-custom w-full h-11 px-3.5 text-xs">
               <option value="">-- Pilih dari Katalog Jasa --</option>
               {availableServices.map((s) => (
                 <option key={s.id} value={s.id}>{s.name} — {formatRupiah(s.price)} (~{s.duration || 30} mnt)</option>
               ))}
             </select>
           </div>
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <button type="button" onClick={() => setIsAddServiceModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">Batal</button>
-            <button type="submit" disabled={isPending || !selectedServiceId} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm cursor-pointer disabled:opacity-60">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#435663]/15">
+            <button type="button" onClick={() => setIsAddServiceModalOpen(false)} className="btn-outline-steel px-4 py-2 text-xs cursor-pointer">Batal</button>
+            <button type="submit" disabled={isPending || !selectedServiceId} className="btn-sage px-5 py-2.5 text-xs cursor-pointer disabled:opacity-60">
               {isPending ? "Menambahkan..." : "Tambah ke SPK"}
             </button>
           </div>
@@ -645,8 +645,8 @@ export default function ServiceOrderDetailPage({
       <Modal isOpen={isAddPartModalOpen} onClose={() => setIsAddPartModalOpen(false)} title="Ambil Suku Cadang dari Gudang" description="Stok gudang akan otomatis dipotong sesuai kuantitas pemakaian.">
         <form onSubmit={handleAddPart} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Pilih Suku Cadang *</label>
-            <select value={selectedPartId} onChange={(e) => setSelectedPartId(e.target.value)} required className={inputClass}>
+            <label className="block text-xs font-semibold text-[#313647] mb-1.5">Pilih Suku Cadang *</label>
+            <select value={selectedPartId} onChange={(e) => setSelectedPartId(e.target.value)} required className="input-custom w-full h-11 px-3.5 text-xs">
               <option value="">-- Pilih Suku Cadang --</option>
               {availableParts.map((p) => (
                 <option key={p.id} value={p.id} disabled={p.stock <= 0}>
@@ -656,13 +656,13 @@ export default function ServiceOrderDetailPage({
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Jumlah Pemakaian (Qty) *</label>
-            <input type="number" min={1} value={partQty} onChange={(e) => setPartQty(parseInt(e.target.value, 10) || 1)} required className={inputClass} />
+            <label className="block text-xs font-semibold text-[#313647] mb-1.5">Jumlah Pemakaian (Qty) *</label>
+            <input type="number" min={1} value={partQty} onChange={(e) => setPartQty(parseInt(e.target.value, 10) || 1)} required className="input-custom w-full h-11 px-3.5 text-xs" />
           </div>
           {actionError && <p className="text-xs text-rose-600 font-medium">{actionError}</p>}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <button type="button" onClick={() => setIsAddPartModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">Batal</button>
-            <button type="submit" disabled={isPending || !selectedPartId} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm cursor-pointer disabled:opacity-60">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#435663]/15">
+            <button type="button" onClick={() => setIsAddPartModalOpen(false)} className="btn-outline-steel px-4 py-2 text-xs cursor-pointer">Batal</button>
+            <button type="submit" disabled={isPending || !selectedPartId} className="btn-sage px-5 py-2.5 text-xs cursor-pointer disabled:opacity-60">
               {isPending ? "Memproses..." : "Ambil & Pasang"}
             </button>
           </div>
@@ -673,21 +673,21 @@ export default function ServiceOrderDetailPage({
       <Modal isOpen={isCompleteModalOpen} onClose={() => setIsCompleteModalOpen(false)} title="Konfirmasi Pengerjaan Selesai" description="Unit kendaraan akan ditandai selesai dan siap ditagih di terminal kasir.">
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Hasil Akhir Pemeriksaan *</label>
+            <label className="block text-xs font-semibold text-[#313647] mb-1.5">Hasil Akhir Pemeriksaan *</label>
             <textarea
               rows={3}
               value={diagnosisInput}
               onChange={(e) => setDiagnosisInput(e.target.value)}
               placeholder="Contoh: Seluruh pengerjaan tuntas, oli mesin dan filter baru, mesin ditest normal dan responsif."
-              className="w-full p-3.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/15 leading-relaxed transition-all"
+              className="input-custom w-full p-3.5 text-xs leading-relaxed"
             />
           </div>
-          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs">
+          <div className="p-3.5 rounded-xl bg-[#FFF8D4] border border-[#A3B087]/50 text-[#313647] text-xs">
             💡 Setelah diselesaikan, SPK ini langsung muncul di <strong>Kasir & Billing</strong> siap untuk ditagih.
           </div>
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-            <button type="button" onClick={() => setIsCompleteModalOpen(false)} className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">Batal</button>
-            <button type="button" disabled={isPending} onClick={() => handleStatusChange("SELESAI_PENGERJAAN", diagnosisInput)} className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm cursor-pointer disabled:opacity-60">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#435663]/15">
+            <button type="button" onClick={() => setIsCompleteModalOpen(false)} className="btn-outline-steel px-4 py-2 text-xs cursor-pointer">Batal</button>
+            <button type="button" disabled={isPending} onClick={() => handleStatusChange("SELESAI_PENGERJAAN", diagnosisInput)} className="btn-sage px-5 py-2.5 text-xs cursor-pointer disabled:opacity-60">
               {isPending ? "Memproses..." : "Konfirmasi Selesai Servis"}
             </button>
           </div>

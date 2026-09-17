@@ -33,7 +33,7 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm"
+        className="fixed inset-0 bg-[#313647]/60 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -44,16 +44,16 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-2xl shadow-slate-300/30 text-slate-900 max-h-[90vh] flex flex-col"
+        className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-white border border-[#435663]/20 shadow-2xl shadow-[#313647]/20 text-[#313647] max-h-[90vh] flex flex-col"
       >
         {/* Modal Header */}
-        <div className="flex items-start justify-between p-6 border-b border-slate-100">
+        <div className="flex items-start justify-between p-6 border-b border-[#435663]/15">
           <div>
-            <h2 id="modal-title" className="text-base font-bold tracking-tight text-slate-900">
+            <h2 id="modal-title" className="text-base font-bold tracking-tight text-[#313647]">
               {title}
             </h2>
             {description && (
-              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+              <p className="text-xs text-[#435663] mt-1 leading-relaxed">
                 {description}
               </p>
             )}
@@ -61,7 +61,7 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer ml-4 shrink-0"
+            className="p-1.5 rounded-lg text-[#435663] hover:text-[#313647] hover:bg-[#FFF8D4]/60 transition-colors cursor-pointer ml-4 shrink-0"
             aria-label="Tutup"
           >
             <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
