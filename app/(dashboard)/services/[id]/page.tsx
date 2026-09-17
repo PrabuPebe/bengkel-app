@@ -197,8 +197,8 @@ export default function ServiceOrderDetailPage({
 
   if (!order) {
     return (
-      <div className="p-12 text-center rounded-2xl bg-slate-900 border border-slate-800 max-w-lg mx-auto">
-        <div className="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+      <div className="p-12 text-center rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 max-w-lg mx-auto">
+        <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-3 text-xl font-bold">
           !
         </div>
         <h2 className="text-base font-bold text-white mb-1">Work Order Tidak Ditemukan</h2>
@@ -207,7 +207,7 @@ export default function ServiceOrderDetailPage({
         </p>
         <Link
           href="/services"
-          className="inline-flex items-center px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+          className="inline-flex items-center px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
         >
           ← Kembali ke Daftar SPK
         </Link>
@@ -246,7 +246,7 @@ export default function ServiceOrderDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/services"
-            className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2.5 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/10 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             title="Kembali ke Daftar SPK"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,13 +255,13 @@ export default function ServiceOrderDetailPage({
           </Link>
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl font-bold text-white tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
                 {order.orderNumber}
               </h1>
-              <span className="font-mono text-xs px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-semibold">
+              <span className="font-mono text-xs px-2.5 py-1 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">
                 {order.vehicle?.plateNumber}
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-400 font-medium">
                 ({order.vehicle?.brand} {order.vehicle?.model})
               </span>
             </div>
@@ -278,8 +278,8 @@ export default function ServiceOrderDetailPage({
           <button
             type="button"
             onClick={handleCopyTrackingLink}
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 hover:bg-slate-800 hover:text-white transition-all flex items-center gap-1.5"
-            title="Salin link live tracking untuk dikirim ke pelanggan"
+            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-200 bg-slate-900/60 backdrop-blur-md border border-white/10 hover:bg-slate-800 hover:text-white transition-all duration-200 flex items-center gap-1.5"
+            title="Salin tautan live tracking untuk dikirim via WhatsApp ke pemilik"
           >
             <span>{copiedLink ? "✓ Tersalin!" : "🔗 Salin Link Tracking"}</span>
           </button>
@@ -287,7 +287,7 @@ export default function ServiceOrderDetailPage({
           <Link
             href={`/track/${order.token}`}
             target="_blank"
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all duration-200 flex items-center gap-1.5"
           >
             <span>Buka Pelacakan ↗</span>
           </Link>
@@ -295,7 +295,7 @@ export default function ServiceOrderDetailPage({
           {order.status === "SELESAI_PENGERJAAN" && (
             <Link
               href={`/cashier/${order.id}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/20 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/25 transition-all"
             >
               Proses Bayar Kasir 💳
             </Link>
@@ -304,7 +304,7 @@ export default function ServiceOrderDetailPage({
           {order.status === "SELESAI_PEMBAYARAN" && (
             <Link
               href={`/cashier/${order.id}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all"
             >
               Cetak Faktur Kasir 🖨️
             </Link>
@@ -313,7 +313,7 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {actionError && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-medium flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-medium flex items-center justify-between">
           <span>{actionError}</span>
           <button
             type="button"
@@ -326,22 +326,22 @@ export default function ServiceOrderDetailPage({
       )}
 
       {/* Visual Workflow Pipeline Stepper */}
-      <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl shadow-slate-950/40">
+      <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-slate-950/40">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
           {steps.map((s, idx) => {
             const st = getStepStatus(s.key);
             return (
               <div
                 key={s.key}
-                className={`p-3.5 rounded-xl border transition-all ${
+                className={`p-4 rounded-2xl border transition-all duration-300 ${
                   st === "current"
-                    ? "bg-indigo-600/10 border-indigo-500/50 shadow-md shadow-indigo-500/10"
+                    ? "bg-indigo-600/15 border-indigo-500 shadow-lg shadow-indigo-500/15"
                     : st === "completed"
-                      ? "bg-slate-950/60 border-emerald-500/30 text-emerald-400"
-                      : "bg-slate-950/40 border-slate-800/80 text-slate-500"
+                      ? "bg-slate-950/70 border-emerald-500/30 text-emerald-400"
+                      : "bg-slate-950/40 border-white/5 text-slate-500"
                 }`}
               >
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider">
                     Tahap {idx + 1}
                   </span>
@@ -349,29 +349,29 @@ export default function ServiceOrderDetailPage({
                     <span className="text-xs font-bold text-emerald-400">✓ Selesai</span>
                   )}
                   {st === "current" && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-600 text-white">
-                      {order.status === "MENUNGGU_PART" ? "Tunda Part" : "Sedang Aktif"}
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-600 text-white animate-pulse">
+                      {order.status === "MENUNGGU_PART" ? "Tunda Part" : "Sedang Berjalan"}
                     </span>
                   )}
                 </div>
                 <p className={`text-xs font-bold ${st === "current" ? "text-white" : ""}`}>
                   {s.label}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5">{s.desc}</p>
+                <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{s.desc}</p>
               </div>
             );
           })}
         </div>
 
         {/* Operational Action Controls for Mechanic / Admin */}
-        <div className="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-5 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <span>Status SPK: </span>
             <span className="font-bold text-indigo-400 uppercase tracking-wider">
               {order.status.replace("_", " ")}
             </span>
             <span>• Teknisi Penanggung Jawab: </span>
-            <span className="font-bold text-white">{order.mechanicName || "Teknisi"}</span>
+            <span className="font-bold text-white">{order.mechanicName || "Teknisi PitCare Auto"}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
@@ -380,7 +380,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:brightness-110 shadow-lg shadow-indigo-600/25 active:scale-95 transition-all duration-200 cursor-pointer"
               >
                 🚀 Mulai Pengerjaan Pit
               </button>
@@ -392,7 +392,7 @@ export default function ServiceOrderDetailPage({
                   type="button"
                   disabled={isPending}
                   onClick={() => handleStatusChange("MENUNGGU_PART")}
-                  className="px-3.5 py-2 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition-all"
+                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition-all duration-200"
                 >
                   ⏸️ Tunda: Menunggu Part
                 </button>
@@ -400,7 +400,7 @@ export default function ServiceOrderDetailPage({
                   type="button"
                   disabled={isPending}
                   onClick={() => setIsCompleteModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-600/20 transition-all"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all duration-200 cursor-pointer"
                 >
                   ✅ Selesaikan Pengerjaan
                 </button>
@@ -412,7 +412,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all duration-200 cursor-pointer"
               >
                 ▶️ Part Siap: Lanjutkan Pengerjaan
               </button>
@@ -423,7 +423,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white bg-slate-950 border border-slate-800 transition-colors"
+                className="px-3.5 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white bg-slate-950 border border-white/10 transition-colors"
               >
                 ↩️ Kembalikan ke Pit
               </button>
@@ -435,8 +435,8 @@ export default function ServiceOrderDetailPage({
       {/* Grid: Unit Info & Keluhan / Diagnosis */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Customer & Vehicle Card */}
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4 shadow-xl shadow-slate-950/40">
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-800">
+        <div className="p-6 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 space-y-4 shadow-xl shadow-slate-950/40">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-white/5">
             Identitas Pelanggan & Unit
           </h2>
 
@@ -444,7 +444,7 @@ export default function ServiceOrderDetailPage({
             <p className="text-[11px] text-slate-500">Pemilik Kendaraan</p>
             <p className="text-sm font-bold text-white mt-0.5">{order.customer?.name}</p>
             <a
-              href={`https://wa.me/${order.customer?.phone.replace(/^0/, "62")}`}
+              href={`https://wa.me/${order.customer?.phone?.replace(/^0/, "62")}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-medium hover:underline mt-1"
@@ -453,7 +453,7 @@ export default function ServiceOrderDetailPage({
             </a>
           </div>
 
-          <div className="pt-3 border-t border-slate-800">
+          <div className="pt-3 border-t border-white/5">
             <p className="text-[11px] text-slate-500">Kendaraan</p>
             <p className="text-sm font-bold text-white mt-0.5">
               {order.vehicle?.brand} {order.vehicle?.model}
@@ -468,7 +468,7 @@ export default function ServiceOrderDetailPage({
             )}
           </div>
 
-          <div className="pt-3 border-t border-slate-800">
+          <div className="pt-3 border-t border-white/5">
             <p className="text-[11px] text-slate-500">Keluhan Masuk</p>
             <p className="text-xs text-slate-300 mt-1 italic leading-relaxed">
               &quot;{order.complaints}&quot;
@@ -477,14 +477,14 @@ export default function ServiceOrderDetailPage({
         </div>
 
         {/* Diagnosis & Technical Inspection Notes */}
-        <div className="lg:col-span-2 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between shadow-xl shadow-slate-950/40">
+        <div className="lg:col-span-2 p-6 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 flex flex-col justify-between shadow-xl shadow-slate-950/40">
           <div>
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800 mb-3">
+            <div className="flex items-center justify-between pb-2 border-b border-white/5 mb-3">
               <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Catatan Pemeriksaan & Diagnosis Teknisi
               </h2>
               <span className="text-[11px] text-slate-400">
-                Mekanik: <strong className="text-slate-200">{order.mechanicName}</strong>
+                Mekanik: <strong className="text-white">{order.mechanicName}</strong>
               </span>
             </div>
 
@@ -497,19 +497,19 @@ export default function ServiceOrderDetailPage({
               value={diagnosisInput}
               onChange={(e) => setDiagnosisInput(e.target.value)}
               placeholder="Contoh: Busi aus renggang, seal shock kanan rembes oli, v-belt sudah mulai retak rambut. Direkomendasikan servis injeksi & tune up."
-              className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-all leading-relaxed"
+              className="w-full p-3.5 rounded-2xl bg-slate-950/80 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 leading-relaxed"
             />
           </div>
 
-          <div className="flex items-center justify-between pt-3 mt-2 border-t border-slate-800">
+          <div className="flex items-center justify-between pt-3 mt-2 border-t border-white/5">
             <span className="text-[11px] text-slate-400">
-              {order.diagnosis ? "Status: Tersimpan" : "Belum ada catatan"}
+              {order.diagnosis ? "Status: Catatan Tersimpan" : "Belum ada catatan diagnosis"}
             </span>
             <button
               type="button"
               disabled={isPending}
               onClick={handleSaveDiagnosis}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all duration-200"
             >
               Simpan Catatan Diagnosis
             </button>
@@ -518,13 +518,13 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {/* Items Section: Tindakan Jasa Servis */}
-      <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl shadow-slate-950/40">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-slate-950/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/5">
           <div>
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
               <span>🔧 Tindakan Jasa Servis</span>
               <span className="text-xs font-normal text-slate-400">
-                ({order.items.length} tindakan)
+                ({order.items.length} tindakan tercatat)
               </span>
             </h2>
             <p className="text-xs text-slate-400">
@@ -539,7 +539,7 @@ export default function ServiceOrderDetailPage({
                 setActionError("");
                 setIsAddServiceModalOpen(true);
               }}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all duration-200"
             >
               + Tambah Jasa Servis
             </button>
@@ -554,27 +554,27 @@ export default function ServiceOrderDetailPage({
           <div className="overflow-x-auto mt-3">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-800">
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider">Nama Jasa Servis</th>
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider text-right">Biaya Satuan</th>
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider text-center">Qty</th>
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider text-right">Subtotal</th>
+                <tr className="text-slate-400 border-b border-white/5 text-[11px] font-semibold uppercase tracking-wider">
+                  <th className="py-3.5 px-3">Nama Jasa Servis</th>
+                  <th className="py-3.5 px-3 text-right">Biaya Satuan</th>
+                  <th className="py-3.5 px-3 text-center">Qty</th>
+                  <th className="py-3.5 px-3 text-right">Subtotal</th>
                   {order.status !== "SELESAI_PEMBAYARAN" && (
-                    <th className="pb-2.5 text-right">Aksi</th>
+                    <th className="py-3.5 px-3 text-right">Aksi</th>
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-white/5">
                 {order.items.map((item) => (
-                  <tr key={item.id} className="text-slate-200 hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3 font-medium text-white">{item.serviceName}</td>
-                    <td className="py-3 text-right font-mono text-slate-400">{formatRupiah(item.price)}</td>
-                    <td className="py-3 text-center font-mono">{item.qty}</td>
-                    <td className="py-3 text-right font-mono font-bold text-emerald-400">
+                  <tr key={item.id} className="text-slate-200 hover:bg-white/5 transition-colors">
+                    <td className="py-4 px-3 font-medium text-white">{item.serviceName}</td>
+                    <td className="py-4 px-3 text-right font-mono text-slate-400">{formatRupiah(item.price)}</td>
+                    <td className="py-4 px-3 text-center font-mono">{item.qty}</td>
+                    <td className="py-4 px-3 text-right font-mono font-bold text-emerald-400">
                       {formatRupiah(item.subtotal)}
                     </td>
                     {order.status !== "SELESAI_PEMBAYARAN" && (
-                      <td className="py-3 text-right">
+                      <td className="py-4 px-3 text-right">
                         <button
                           type="button"
                           onClick={() => handleRemoveService(item.id)}
@@ -592,7 +592,7 @@ export default function ServiceOrderDetailPage({
           </div>
         )}
 
-        <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
+        <div className="mt-4 pt-3 border-t border-white/5 flex justify-end">
           <p className="text-xs text-slate-400">
             Subtotal Jasa: <span className="font-mono font-bold text-white ml-1.5">{formatRupiah(order.totalServices)}</span>
           </p>
@@ -600,17 +600,17 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {/* Parts Section: Pemakaian Suku Cadang & Sinkronisasi Stok */}
-      <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl shadow-slate-950/40">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-slate-950/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/5">
           <div>
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
               <span>📦 Suku Cadang Terpakai</span>
               <span className="text-xs font-normal text-slate-400">
-                ({order.parts.length} part terpakai)
+                ({order.parts.length} part terpasang)
               </span>
             </h2>
             <p className="text-xs text-slate-400">
-              Suku cadang otomatis memotong stok gudang saat ditambahkan dan dikembalikan jika dihapus.
+              Suku cadang otomatis memotong stok gudang saat ditambahkan dan dikembalikan jika dibatalkan.
             </p>
           </div>
 
@@ -621,7 +621,7 @@ export default function ServiceOrderDetailPage({
                 setActionError("");
                 setIsAddPartModalOpen(true);
               }}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all duration-200"
             >
               + Ambil Suku Cadang
             </button>
@@ -636,32 +636,32 @@ export default function ServiceOrderDetailPage({
           <div className="overflow-x-auto mt-3">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-800">
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider">Nama Suku Cadang</th>
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider text-right">Harga Satuan</th>
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider text-center">Jumlah (Qty)</th>
-                  <th className="pb-2.5 font-semibold uppercase tracking-wider text-right">Subtotal</th>
+                <tr className="text-slate-400 border-b border-white/5 text-[11px] font-semibold uppercase tracking-wider">
+                  <th className="py-3.5 px-3">Nama Suku Cadang</th>
+                  <th className="py-3.5 px-3 text-right">Harga Satuan</th>
+                  <th className="py-3.5 px-3 text-center">Jumlah (Qty)</th>
+                  <th className="py-3.5 px-3 text-right">Subtotal</th>
                   {order.status !== "SELESAI_PEMBAYARAN" && (
-                    <th className="pb-2.5 text-right">Aksi</th>
+                    <th className="py-3.5 px-3 text-right">Aksi</th>
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-white/5">
                 {order.parts.map((p) => (
-                  <tr key={p.id} className="text-slate-200 hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3 font-medium text-white">{p.partName}</td>
-                    <td className="py-3 text-right font-mono text-slate-400">{formatRupiah(p.sellPrice)}</td>
-                    <td className="py-3 text-center font-mono">{p.qty}</td>
-                    <td className="py-3 text-right font-mono font-bold text-emerald-400">
+                  <tr key={p.id} className="text-slate-200 hover:bg-white/5 transition-colors">
+                    <td className="py-4 px-3 font-medium text-white">{p.partName}</td>
+                    <td className="py-4 px-3 text-right font-mono text-slate-400">{formatRupiah(p.sellPrice)}</td>
+                    <td className="py-4 px-3 text-center font-mono">{p.qty}</td>
+                    <td className="py-4 px-3 text-right font-mono font-bold text-emerald-400">
                       {formatRupiah(p.subtotal)}
                     </td>
                     {order.status !== "SELESAI_PEMBAYARAN" && (
-                      <td className="py-3 text-right">
+                      <td className="py-4 px-3 text-right">
                         <button
                           type="button"
                           onClick={() => handleRemovePart(p.id)}
                           className="text-rose-400 hover:text-white hover:bg-rose-500/20 p-1 rounded-lg transition-colors"
-                          title="Kembalikan Part ke Stok"
+                          title="Kembalikan Part ke Stok Gudang"
                         >
                           ✕
                         </button>
@@ -674,7 +674,7 @@ export default function ServiceOrderDetailPage({
           </div>
         )}
 
-        <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
+        <div className="mt-4 pt-3 border-t border-white/5 flex justify-end">
           <p className="text-xs text-slate-400">
             Subtotal Suku Cadang: <span className="font-mono font-bold text-white ml-1.5">{formatRupiah(order.totalParts)}</span>
           </p>
@@ -682,7 +682,7 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {/* Financial Breakdown Total Card */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl shadow-slate-950/40">
+      <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-2xl shadow-slate-950/50">
         <div className="space-y-1">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
             Total Rekapitulasi SPK
@@ -694,7 +694,7 @@ export default function ServiceOrderDetailPage({
             {order.discount > 0 && (
               <>
                 <span>•</span>
-                <span className="text-rose-400">Diskon: -{formatRupiah(order.discount)}</span>
+                <span className="text-rose-400 font-mono">Diskon: -{formatRupiah(order.discount)}</span>
               </>
             )}
           </div>
@@ -702,7 +702,7 @@ export default function ServiceOrderDetailPage({
 
         <div className="flex items-baseline gap-3">
           <span className="text-xs font-bold text-slate-400 uppercase">Grand Total:</span>
-          <span className="text-2xl font-black font-mono text-emerald-400">
+          <span className="text-3xl font-black font-mono text-emerald-400">
             {formatRupiah(order.grandTotal)}
           </span>
         </div>
@@ -724,7 +724,7 @@ export default function ServiceOrderDetailPage({
               value={selectedServiceId}
               onChange={(e) => setSelectedServiceId(e.target.value)}
               required
-              className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+              className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"
             >
               <option value="">-- Pilih dari Katalog Jasa --</option>
               {availableServices.map((s) => (
@@ -735,7 +735,7 @@ export default function ServiceOrderDetailPage({
             </select>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
             <button
               type="button"
               onClick={() => setIsAddServiceModalOpen(false)}
@@ -746,7 +746,7 @@ export default function ServiceOrderDetailPage({
             <button
               type="submit"
               disabled={isPending || !selectedServiceId}
-              className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
+              className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
             >
               {isPending ? "Menambahkan..." : "Tambah ke SPK"}
             </button>
@@ -759,7 +759,7 @@ export default function ServiceOrderDetailPage({
         isOpen={isAddPartModalOpen}
         onClose={() => setIsAddPartModalOpen(false)}
         title="Ambil Suku Cadang dari Gudang"
-        description="Stok gudang PitCare Auto akan otomatis dipotong sesuai kuantitas."
+        description="Stok gudang PitCare Auto akan otomatis dipotong sesuai kuantitas pemakaian."
       >
         <form onSubmit={handleAddPart} className="space-y-4">
           <div>
@@ -770,7 +770,7 @@ export default function ServiceOrderDetailPage({
               value={selectedPartId}
               onChange={(e) => setSelectedPartId(e.target.value)}
               required
-              className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+              className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"
             >
               <option value="">-- Pilih Suku Cadang --</option>
               {availableParts.map((p) => (
@@ -791,11 +791,11 @@ export default function ServiceOrderDetailPage({
               value={partQty}
               onChange={(e) => setPartQty(parseInt(e.target.value, 10) || 1)}
               required
-              className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+              className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
             <button
               type="button"
               onClick={() => setIsAddPartModalOpen(false)}
@@ -806,7 +806,7 @@ export default function ServiceOrderDetailPage({
             <button
               type="submit"
               disabled={isPending || !selectedPartId}
-              className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
+              className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
             >
               {isPending ? "Memproses..." : "Ambil & Pasang"}
             </button>
@@ -831,15 +831,15 @@ export default function ServiceOrderDetailPage({
               value={diagnosisInput}
               onChange={(e) => setDiagnosisInput(e.target.value)}
               placeholder="Contoh: Seluruh pengerjaan tuntas, oli mesin dan filter baru, mesin telah ditest normal dan responsif."
-              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 leading-relaxed"
+              className="w-full p-3 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 leading-relaxed"
             />
           </div>
 
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+          <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
             💡 Setelah diselesaikan, pesanan ini akan langsung muncul di halaman <strong>Kasir & Billing</strong> siap untuk ditagih dan dicetak fakturnya.
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/5">
             <button
               type="button"
               onClick={() => setIsCompleteModalOpen(false)}

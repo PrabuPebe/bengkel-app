@@ -103,10 +103,6 @@ export default function NewServiceOrderPage() {
         prev.map((p) => (p.partId === partId ? { ...p, qty: p.qty + 1 } : p))
       );
     } else {
-      if (part.stock < 1) {
-        alert("Suku cadang ini sedang habis di gudang!");
-        return;
-      }
       setSelectedParts((prev) => [...prev, { partId, qty: 1 }]);
     }
   }
@@ -115,32 +111,30 @@ export default function NewServiceOrderPage() {
     const part = availableParts.find((p) => p.id === partId);
     if (!part) return;
 
-    setSelectedParts((prev) =>
-      prev
-        .map((p) => {
-          if (p.partId === partId) {
-            const newQty = p.qty + delta;
-            if (newQty > part.stock) {
-              alert(`Maksimal stok tersedia hanya ${part.stock} ${part.unit}`);
-              return p;
-            }
-            return { ...p, qty: newQty };
-          }
-          return p;
-        })
-        .filter((p) => p.qty > 0)
-    );
+    setSelectedParts((prev) => {
+      const existing = prev.find((p) => p.partId === partId);
+      if (!existing) return prev;
+      const newQty = existing.qty + delta;
+      if (newQty <= 0) {
+        return prev.filter((p) => p.partId !== partId);
+      }
+      if (newQty > part.stock) {
+        alert(`Maksimal stok tersedia hanya ${part.stock} ${part.unit}`);
+        return prev;
+      }
+      return prev.map((p) => (p.partId === partId ? { ...p, qty: newQty } : p));
+    });
   }
 
-  // Cost estimates
+  // Calculate live estimate
   const totalServiceEst = selectedServiceIds.reduce((sum, sId) => {
-    const s = availableServices.find((x) => x.id === sId);
+    const s = availableServices.find((srv) => srv.id === sId);
     return sum + (s?.price || 0);
   }, 0);
 
-  const totalPartsEst = selectedParts.reduce((sum, pItem) => {
-    const part = availableParts.find((x) => x.id === pItem.partId);
-    return sum + (part?.sellPrice || 0) * pItem.qty;
+  const totalPartsEst = selectedParts.reduce((sum, item) => {
+    const p = availableParts.find((part) => part.id === item.partId);
+    return sum + (p?.sellPrice || 0) * item.qty;
   }, 0);
 
   const grandTotalEst = totalServiceEst + totalPartsEst;
@@ -187,9 +181,9 @@ export default function NewServiceOrderPage() {
 
   if (isLoading) {
     return (
-      <div className="p-16 text-center text-slate-400 text-xs">
+      <div className="p-20 text-center text-slate-400 text-xs">
         <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        Memuat data formulir penerimaan unit...
+        Memuat formulir penerimaan unit PitCare Auto...
       </div>
     );
   }
@@ -200,7 +194,7 @@ export default function NewServiceOrderPage() {
       <div className="flex items-center gap-3">
         <Link
           href="/services"
-          className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="p-2.5 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/10 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           title="Kembali ke Daftar SPK"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -208,17 +202,17 @@ export default function NewServiceOrderPage() {
           </svg>
         </Link>
         <div>
-          <h1 className="text-xl font-extrabold text-white tracking-tight">
-            Penerimaan Unit & Penerbitan SPK Baru
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+            Penerimaan Unit & SPK Baru
           </h1>
           <p className="text-xs text-slate-400">
-            Catat data masuk unit kendaraan, keluhan pelanggan, dan tugaskan teknisi pit.
+            Catat data masuk unit kendaraan, keluhan pelanggan, dan tugaskan teknisi pit PitCare Auto.
           </p>
         </div>
       </div>
 
       {errorMessage && (
-        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-2">
+        <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-semibold flex items-center gap-2">
           <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -228,10 +222,10 @@ export default function NewServiceOrderPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Pelanggan & Kendaraan */}
-        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
-          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+        <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-slate-950/40">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
             <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
+              <span className="w-5 h-5 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 text-white flex items-center justify-center text-[10px] font-black">
                 1
               </span>
               Identitas Pemilik & Unit Kendaraan
@@ -239,7 +233,7 @@ export default function NewServiceOrderPage() {
             <Link
               href="/customers"
               target="_blank"
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors"
             >
               + Daftar Pelanggan Baru ↗
             </Link>
@@ -247,14 +241,14 @@ export default function NewServiceOrderPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Nama Pelanggan (Pemilik) *
               </label>
               <select
                 value={selectedCustomerId}
                 onChange={(e) => handleCustomerChange(e.target.value)}
                 required
-                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">-- Pilih Pelanggan Terdaftar --</option>
                 {customers.map((c) => (
@@ -266,7 +260,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Kendaraan yang Diservis *
               </label>
               <select
@@ -274,7 +268,7 @@ export default function NewServiceOrderPage() {
                 onChange={(e) => setSelectedVehicleId(e.target.value)}
                 required
                 disabled={!selectedCustomerId || customerVehicles.length === 0}
-                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500 disabled:opacity-50"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-40"
               >
                 {customerVehicles.length === 0 ? (
                   <option value="">-- Pilih pelanggan terlebih dahulu --</option>
@@ -289,7 +283,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Kilometer Spidometer Masuk (KM)
               </label>
               <input
@@ -297,18 +291,18 @@ export default function NewServiceOrderPage() {
                 value={currentKm}
                 onChange={(e) => setCurrentKm(e.target.value)}
                 placeholder="Contoh: 14200"
-                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Teknisi / Mekanik Ditugaskan
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Teknisi / Mekanik Penanggung Jawab
               </label>
               <select
                 value={selectedMechanicId}
                 onChange={(e) => setSelectedMechanicId(e.target.value)}
-                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               >
                 {AVAILABLE_MECHANICS.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -321,9 +315,9 @@ export default function NewServiceOrderPage() {
         </div>
 
         {/* Section 2: Keluhan & Catatan Khusus */}
-        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
-          <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4 pb-3 border-b border-slate-800 flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
+        <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-slate-950/40">
+          <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4 pb-3 border-b border-white/5 flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 text-white flex items-center justify-center text-[10px] font-black">
               2
             </span>
             Keluhan Masuk & Catatan Kondisi Fisik
@@ -331,7 +325,7 @@ export default function NewServiceOrderPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Keluhan Utama Kendaraan (Ditanyakan ke Pemilik) *
               </label>
               <textarea
@@ -340,29 +334,29 @@ export default function NewServiceOrderPage() {
                 required
                 rows={3}
                 placeholder="Contoh: Mesin brebet saat akselerasi awal, rem depan bunyi mendecit, ganti oli mesin rutin..."
-                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
+                className="w-full p-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 leading-relaxed"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Catatan Kondisi Fisik / Permintaan Tambahan (Opsional)
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Catatan Fisik Kendaraan / Permintaan Khusus (Opsional)
               </label>
               <input
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Contoh: Bodi kiri ada goresan halus, helm ditinggal di bagasi, pelanggan menunggu di lounge."
-                className="w-full h-11 px-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-indigo-500"
+                className="w-full h-11 px-3.5 rounded-xl bg-slate-950/80 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
           </div>
         </div>
 
         {/* Section 3: Estimasi Tindakan Awal */}
-        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
-          <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4 pb-3 border-b border-slate-800 flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
+        <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-slate-950/40">
+          <h2 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4 pb-3 border-b border-white/5 flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 text-white flex items-center justify-center text-[10px] font-black">
               3
             </span>
             Tindakan Jasa & Estimasi Suku Cadang Awal
@@ -379,10 +373,10 @@ export default function NewServiceOrderPage() {
                     <div
                       key={srv.id}
                       onClick={() => toggleService(srv.id)}
-                      className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
+                      className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 flex items-center justify-between ${
                         isChecked
-                          ? "bg-indigo-950/40 border-indigo-500 text-white"
-                          : "bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700"
+                          ? "bg-indigo-600/15 border-indigo-500 text-white shadow-sm"
+                          : "bg-slate-950/80 border-white/5 text-slate-300 hover:border-white/15"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
@@ -390,7 +384,7 @@ export default function NewServiceOrderPage() {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => {}}
-                          className="rounded border-slate-700 text-indigo-600"
+                          className="rounded border-slate-700 text-indigo-600 focus:ring-0"
                         />
                         <div>
                           <p className="text-xs font-semibold text-white">{srv.name}</p>
@@ -415,7 +409,7 @@ export default function NewServiceOrderPage() {
                   return (
                     <div
                       key={part.id}
-                      className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between"
+                      className="p-3 rounded-2xl bg-slate-950/80 border border-white/5 flex items-center justify-between"
                     >
                       <div className="min-w-0 flex-1 mr-2">
                         <p className="text-xs font-semibold text-white truncate">{part.name}</p>
@@ -430,21 +424,21 @@ export default function NewServiceOrderPage() {
                         </span>
 
                         {inOrder ? (
-                          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-0.5">
+                          <div className="flex items-center gap-1.5 bg-slate-900 border border-white/10 rounded-xl px-2.5 py-1">
                             <button
                               type="button"
                               onClick={() => updatePartQty(part.id, -1)}
-                              className="text-xs font-bold text-rose-400 hover:text-white px-1"
+                              className="text-xs font-bold text-rose-400 hover:text-white px-1 transition-colors"
                             >
                               -
                             </button>
-                            <span className="text-xs font-bold text-white min-w-3 text-center">
+                            <span className="text-xs font-bold font-mono text-white min-w-3 text-center">
                               {inOrder.qty}
                             </span>
                             <button
                               type="button"
                               onClick={() => updatePartQty(part.id, 1)}
-                              className="text-xs font-bold text-emerald-400 hover:text-white px-1"
+                              className="text-xs font-bold text-emerald-400 hover:text-white px-1 transition-colors"
                             >
                               +
                             </button>
@@ -454,9 +448,9 @@ export default function NewServiceOrderPage() {
                             type="button"
                             disabled={part.stock <= 0}
                             onClick={() => addPartToOrder(part.id)}
-                            className="px-2.5 py-1 rounded-lg text-xs font-bold text-indigo-300 bg-slate-900 border border-slate-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all disabled:opacity-40"
+                            className="px-3 py-1 rounded-xl text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all duration-200 disabled:opacity-30"
                           >
-                            + Tambah
+                            + Ambil
                           </button>
                         )}
                       </div>
@@ -468,15 +462,15 @@ export default function NewServiceOrderPage() {
           </div>
 
           {/* Running total estimate banner */}
-          <div className="mt-5 p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mt-5 p-4 rounded-2xl bg-slate-950/90 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="text-xs text-slate-400 flex items-center gap-4">
               <span>Jasa ({selectedServiceIds.length}): <strong className="text-white font-mono">{formatRupiah(totalServiceEst)}</strong></span>
               <span>•</span>
               <span>Sparepart ({selectedParts.reduce((acc, p) => acc + p.qty, 0)} pcs): <strong className="text-white font-mono">{formatRupiah(totalPartsEst)}</strong></span>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Estimasi Awal:</span>
-              <span className="text-xl font-black text-emerald-400 font-mono">
+              <span className="text-[11px] font-semibold text-slate-400 uppercase">Estimasi Awal:</span>
+              <span className="text-2xl font-black text-emerald-400 font-mono">
                 {formatRupiah(grandTotalEst)}
               </span>
             </div>
@@ -487,14 +481,14 @@ export default function NewServiceOrderPage() {
         <div className="flex items-center justify-end gap-3 pt-2">
           <Link
             href="/services"
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
           >
             Batal
           </Link>
           <button
             type="submit"
             disabled={isPending}
-            className="px-6 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 shadow-md shadow-indigo-600/30 transition-all cursor-pointer disabled:opacity-50"
+            className="px-6 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:brightness-110 shadow-lg shadow-indigo-600/25 active:scale-95 transition-all duration-300 cursor-pointer disabled:opacity-50"
           >
             {isPending ? "Menerbitkan SPK..." : "✓ Terbitkan SPK & Masukkan Antrian Pit"}
           </button>
