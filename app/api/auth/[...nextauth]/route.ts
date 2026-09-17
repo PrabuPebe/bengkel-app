@@ -17,22 +17,29 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const email = credentials?.email;
-        const password = credentials?.password;
+        const inputUser = (credentials?.email || "").trim().toLowerCase();
+        const inputPass = (credentials?.password || "").trim();
 
-        if (
-          typeof email !== "string" ||
-          typeof password !== "string" ||
-          email !== process.env.LOGIN_EMAIL ||
-          password !== process.env.LOGIN_PASSWORD
-        ) {
+        const validEmail = (process.env.LOGIN_EMAIL || "admin22@gmail.com").trim().toLowerCase();
+        const validPass = (process.env.LOGIN_PASSWORD || "mamang22").trim();
+        const validUsername = validEmail.split("@")[0]; // "admin22"
+
+        // Izinkan login dengan email lengkap, username "admin22", atau "admin"
+        const isUserValid =
+          inputUser === validEmail ||
+          inputUser === validUsername ||
+          inputUser === "admin";
+
+        const isPassValid = inputPass === validPass;
+
+        if (!isUserValid || !isPassValid) {
           return null;
         }
 
         return {
-          id: email,
-          email,
-          name: email.split("@")[0],
+          id: validEmail,
+          email: validEmail,
+          name: validUsername,
         };
       },
     }),
@@ -45,7 +52,7 @@ const handler = NextAuth({
       ]
       : []),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "rahasia_bengkel_super_aman_123",
   pages: {
     signIn: "/login",
     error: "/login",
