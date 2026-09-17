@@ -61,7 +61,7 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#412D15] hover:text-[#1F150C] hover:bg-[#E1DCC9]/60 transition-colors cursor-pointer ml-4 shrink-0"
+            className="p-1.5 rounded-lg text-[#412D15] hover:text-[#1F150C] hover:bg-[#412D15]/20 transition-colors cursor-pointer ml-4 shrink-0"
             aria-label="Tutup"
           >
             <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

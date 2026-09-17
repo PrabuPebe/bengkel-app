@@ -38,7 +38,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#E1DCC9] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#000000] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Decorative ambient subtle blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#412D15]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#1F150C]/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
@@ -47,12 +47,12 @@ export default function LoginPage() {
         {/* Logo + Brand */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-[#1F150C] shadow-xl shadow-[#000000]/20 mb-4 border border-[#412D15]/40">
-            <span className="text-xl font-black text-[#E1DCC9] tracking-wider">PA</span>
+            <span className="text-xl font-black text-white tracking-wider">PA</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-[#1F150C] tracking-tight">
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">
             PitCare Auto
           </h1>
-          <p className="text-sm font-semibold text-[#412D15] mt-1">
+          <p className="text-sm font-semibold text-zinc-400 mt-1">
             Sistem Manajemen Bengkel Modern
           </p>
         </div>
@@ -111,7 +111,7 @@ export default function LoginPage() {
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-[#E1DCC9]/40 border-t-[#E1DCC9] rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                   Memverifikasi...
                 </span>
               ) : (
@@ -128,17 +128,17 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={fillDemo}
-              className="w-full p-3 rounded-xl bg-[#E1DCC9]/50 hover:bg-[#E1DCC9] border border-[#412D15]/30 transition-all cursor-pointer text-left group"
+              className="w-full p-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 border border-[#412D15]/30 transition-all cursor-pointer text-left group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-xs font-bold">
+                <div className="w-8 h-8 rounded-full bg-[#1F150C] text-white flex items-center justify-center text-xs font-bold">
                   PJ
                 </div>
                 <div>
                   <p className="text-xs font-bold text-[#1F150C]">Pak Joko — Admin Bengkel</p>
                   <p className="text-[11px] text-[#412D15]">admin22@gmail.com · password: mamang22</p>
                 </div>
-                <span className="ml-auto text-[10px] font-bold text-[#E1DCC9] bg-[#412D15] px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="ml-auto text-[10px] font-bold text-white bg-[#412D15] px-2.5 py-0.5 rounded-full shadow-xs">
                   Isi Otomatis
                 </span>
               </div>
@@ -147,7 +147,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-[11px] text-[#412D15] mt-6 font-medium">
+        <p className="text-center text-[11px] text-zinc-500 mt-6 font-medium">
           © {new Date().getFullYear()} PitCare Auto — Platform Manajemen Bengkel Modern
         </p>
       </div>

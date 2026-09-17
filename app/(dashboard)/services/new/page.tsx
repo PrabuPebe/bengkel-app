@@ -185,7 +185,7 @@ export default function NewServiceOrderPage() {
         <div className="card-floating p-6 sm:p-7">
           <div className="flex items-center justify-between mb-5 pb-4 border-b border-[#412D15]/15">
             <h2 className="text-sm font-bold text-[#1F150C] flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-[11px] font-black">1</span>
+              <span className="w-6 h-6 rounded-full bg-[#1F150C] text-white flex items-center justify-center text-[11px] font-black">1</span>
               Identitas Pemilik & Unit Kendaraan
             </h2>
             <Link href="/customers" target="_blank" className="text-xs text-[#1F150C] hover:underline font-bold transition-colors">
@@ -263,7 +263,7 @@ export default function NewServiceOrderPage() {
         {/* Section 2: Keluhan */}
         <div className="card-floating p-6 sm:p-7">
           <h2 className="text-sm font-bold text-[#1F150C] mb-5 pb-4 border-b border-[#412D15]/15 flex items-center gap-2.5">
-            <span className="w-6 h-6 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-[11px] font-black">2</span>
+            <span className="w-6 h-6 rounded-full bg-[#1F150C] text-white flex items-center justify-center text-[11px] font-black">2</span>
             Keluhan Masuk & Catatan Kondisi Fisik
           </h2>
 
@@ -296,7 +296,7 @@ export default function NewServiceOrderPage() {
         {/* Section 3: Tindakan & Sparepart */}
         <div className="card-floating p-6 sm:p-7">
           <h2 className="text-sm font-bold text-[#1F150C] mb-5 pb-4 border-b border-[#412D15]/15 flex items-center gap-2.5">
-            <span className="w-6 h-6 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-[11px] font-black">3</span>
+            <span className="w-6 h-6 rounded-full bg-[#1F150C] text-white flex items-center justify-center text-[11px] font-black">3</span>
             Tindakan Jasa & Estimasi Suku Cadang Awal
           </h2>
 
@@ -313,7 +313,7 @@ export default function NewServiceOrderPage() {
                       onClick={() => toggleService(srv.id)}
                       className={`p-3 rounded-xl border cursor-pointer transition-all duration-200 flex items-center justify-between ${
                         isChecked
-                          ? "bg-[#E1DCC9] border-[#412D15] shadow-xs"
+                          ? "bg-[#000000] text-white border-[#412D15] shadow-xs"
                           : "bg-white border-[#412D15]/20 hover:border-[#412D15]/40"
                       }`}
                     >
@@ -356,7 +356,7 @@ export default function NewServiceOrderPage() {
                       <div className="flex items-center gap-2.5 shrink-0">
                         <span className="text-xs font-black text-[#1F150C] font-mono">{formatRupiah(part.sellPrice)}</span>
                         {inOrder ? (
-                          <div className="flex items-center gap-1 bg-[#E1DCC9] border border-[#412D15]/50 rounded-lg px-2.5 py-1">
+                          <div className="flex items-center gap-1 bg-[#000000] text-white border border-[#412D15]/50 rounded-lg px-2.5 py-1">
                             <button type="button" onClick={() => updatePartQty(part.id, -1)} className="text-xs font-bold text-rose-600 px-0.5 cursor-pointer">-</button>
                             <span className="text-xs font-bold font-mono text-[#1F150C] min-w-4 text-center">{inOrder.qty}</span>
                             <button type="button" onClick={() => updatePartQty(part.id, 1)} className="text-xs font-bold text-[#1F150C] px-0.5 cursor-pointer">+</button>
@@ -380,7 +380,7 @@ export default function NewServiceOrderPage() {
           </div>
 
           {/* Running total estimate */}
-          <div className="mt-5 p-4 rounded-xl bg-[#E1DCC9] border border-[#412D15]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mt-5 p-4 rounded-xl bg-[#000000] text-white border border-[#412D15]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="text-xs text-[#412D15] flex items-center gap-4 font-medium">
               <span>Jasa ({selectedServiceIds.length}): <strong className="text-[#1F150C] font-mono">{formatRupiah(totalServiceEst)}</strong></span>
               <span>•</span>

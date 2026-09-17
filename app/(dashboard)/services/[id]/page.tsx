@@ -261,7 +261,7 @@ export default function ServiceOrderDetailPage({
           <Link
             href={`/track/${order.token}`}
             target="_blank"
-            className="px-3.5 py-2 rounded-xl text-xs font-bold text-[#1F150C] bg-[#E1DCC9] border border-[#412D15]/50 hover:bg-[#E1DCC9]/80 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#000000] border border-[#412D15]/50 hover:bg-[#412D15] transition-all flex items-center gap-1.5 cursor-pointer"
           >
             Buka Pelacakan ↗
           </Link>
@@ -305,8 +305,8 @@ export default function ServiceOrderDetailPage({
                   st === "current"
                     ? "bg-[#412D15]/25 border-[#412D15] shadow-xs"
                     : st === "completed"
-                      ? "bg-[#1F150C] text-[#E1DCC9] border-[#1F150C]"
-                      : "bg-[#E1DCC9]/50 border-[#412D15]/20"
+                      ? "bg-[#1F150C] text-white border-[#1F150C]"
+                      : "bg-zinc-50 border-[#412D15]/20"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
@@ -317,18 +317,18 @@ export default function ServiceOrderDetailPage({
                   </span>
                   {st === "completed" && <span className="text-xs font-bold text-[#412D15]">✓</span>}
                   {st === "current" && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1F150C] text-[#E1DCC9]">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1F150C] text-white">
                       {order.status === "MENUNGGU_PART" ? "Tunda" : "Aktif"}
                     </span>
                   )}
                 </div>
                 <p className={`text-xs font-bold ${
-                  st === "completed" ? "text-[#E1DCC9]" : "text-[#1F150C]"
+                  st === "completed" ? "text-white" : "text-[#1F150C]"
                 }`}>
                   {s.label}
                 </p>
                 <p className={`text-[11px] mt-0.5 leading-snug ${
-                  st === "completed" ? "text-[#E1DCC9]/70" : "text-[#412D15]"
+                  st === "completed" ? "text-white/70" : "text-[#412D15]"
                 }`}>{s.desc}</p>
               </div>
             );
@@ -515,7 +515,7 @@ export default function ServiceOrderDetailPage({
               </thead>
               <tbody className="divide-y divide-[#412D15]/10">
                 {order.items.map((item) => (
-                  <tr key={item.id} className="text-[#1F150C] hover:bg-[#E1DCC9]/40 transition-colors">
+                  <tr key={item.id} className="text-[#1F150C] hover:bg-zinc-50 transition-colors">
                     <td className="py-3.5 px-3 font-bold">{item.serviceName}</td>
                     <td className="py-3.5 px-3 text-right font-mono text-[#412D15]">{formatRupiah(item.price)}</td>
                     <td className="py-3.5 px-3 text-center font-mono">{item.qty}</td>
@@ -575,7 +575,7 @@ export default function ServiceOrderDetailPage({
               </thead>
               <tbody className="divide-y divide-[#412D15]/10">
                 {order.parts.map((p) => (
-                  <tr key={p.id} className="text-[#1F150C] hover:bg-[#E1DCC9]/40 transition-colors">
+                  <tr key={p.id} className="text-[#1F150C] hover:bg-zinc-50 transition-colors">
                     <td className="py-3.5 px-3 font-bold">{p.partName}</td>
                     <td className="py-3.5 px-3 text-right font-mono text-[#412D15]">{formatRupiah(p.sellPrice)}</td>
                     <td className="py-3.5 px-3 text-center font-mono">{p.qty}</td>
@@ -599,7 +599,7 @@ export default function ServiceOrderDetailPage({
       </div>
 
       {/* Grand Total */}
-      <div className="card-floating p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-[#E1DCC9] border border-[#412D15]/50">
+      <div className="card-floating p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-[#000000] text-white border border-[#412D15]/50">
         <div className="space-y-1">
           <p className="text-xs font-bold text-[#412D15] uppercase tracking-wider">Total Rekapitulasi SPK</p>
           <div className="flex flex-wrap items-center gap-4 text-xs text-[#412D15] pt-1">
@@ -682,7 +682,7 @@ export default function ServiceOrderDetailPage({
               className="input-custom w-full p-3.5 text-xs leading-relaxed"
             />
           </div>
-          <div className="p-3.5 rounded-xl bg-[#E1DCC9] border border-[#412D15]/50 text-[#1F150C] text-xs">
+          <div className="p-3.5 rounded-xl bg-[#000000] text-white border border-[#412D15]/50 text-[#1F150C] text-xs">
             💡 Setelah diselesaikan, SPK ini langsung muncul di <strong>Kasir & Billing</strong> siap untuk ditagih.
           </div>
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#412D15]/15">

@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #E1DCC9;
+  --background: #000000;
   --foreground: #1F150C;
 
-  /* Custom Color Palette: #000000, #1F150C, #412D15, #E1DCC9 */
+  /* Custom Color Palette: #000000 (Black), #1F150C (Espresso), #412D15 (Mocha) */
   --c-black: #000000;
   --c-espresso: #1F150C;
   --c-mocha: #412D15;
-  --c-cream: #E1DCC9;
+  --c-cream: #000000;
 }
 
 @theme inline {
@@ -17,13 +17,13 @@
   --color-black: #000000;
   --color-espresso: #1F150C;
   --color-mocha: #412D15;
-  --color-cream: #E1DCC9;
+  --color-cream: #000000;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 body {
-  background-color: #E1DCC9;
+  background-color: #000000;
   color: #1F150C;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
@@ -31,8 +31,8 @@ body {
 }
 
 /* ============================================================
-   PitCare Auto — Luxury Espresso & Mocha Leather Palette System
-   Colors: #000000 | #1F150C | #412D15 | #E1DCC9
+   PitCare Auto — Luxury Dark Espresso & Mocha Leather Palette
+   Colors: #000000 | #1F150C | #412D15
    ============================================================ */
 
 .bg-black { background-color: #000000; }
@@ -47,9 +47,9 @@ body {
 .text-mocha { color: #412D15; }
 .border-mocha { border-color: #412D15; }
 
-.bg-cream { background-color: #E1DCC9; }
-.text-cream { color: #E1DCC9; }
-.border-cream { border-color: #E1DCC9; }
+.bg-cream { background-color: #000000; }
+.text-cream { color: #ffffff; }
+.border-cream { border-color: #000000; }
 
 /* Floating Card System (RideCheck Style) */
 .card-floating {
@@ -69,7 +69,7 @@ body {
 /* Button System */
 .btn-sage, .btn-mocha {
   background-color: #412D15;
-  color: #E1DCC9;
+  color: #ffffff;
   font-weight: 700;
   border-radius: 0.75rem;
   transition: all 0.2s ease-in-out;
@@ -89,7 +89,7 @@ body {
 
 .btn-charcoal, .btn-espresso {
   background-color: #1F150C;
-  color: #E1DCC9;
+  color: #ffffff;
   font-weight: 700;
   border-radius: 0.75rem;
   transition: all 0.2s ease-in-out;
@@ -111,7 +111,7 @@ body {
 }
 
 .btn-outline-steel:hover, .btn-outline-mocha:hover {
-  background-color: rgba(225, 220, 201, 0.5);
+  background-color: rgba(65, 45, 21, 0.15);
   border-color: #412D15;
 }
 
@@ -149,9 +149,9 @@ body {
 }
 
 .badge-cream {
-  background-color: #E1DCC9;
-  color: #1F150C;
-  border: 1px solid rgba(65, 45, 21, 0.25);
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid rgba(65, 45, 21, 0.4);
 }
 
 .badge-steel {
@@ -183,9 +183,9 @@ body {
 }
 
 .stat-icon-cream {
-  background: #E1DCC9;
-  color: #1F150C;
-  border: 1px solid rgba(65, 45, 21, 0.2);
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid rgba(65, 45, 21, 0.3);
 }
 
 /* Custom Sleek Scrollbar */
@@ -195,7 +195,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #E1DCC9;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -149,7 +149,7 @@ export default function ServicesCatalogPage() {
         </div>
       ) : services.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center text-2xl mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#000000] border border-[#412D15]/40 flex items-center justify-center text-2xl mx-auto mb-4 text-white">
             🔧
           </div>
           <p className="text-base font-bold text-[#1F150C] mb-1">Katalog jasa masih kosong</p>
@@ -167,7 +167,7 @@ export default function ServicesCatalogPage() {
       ) : (
         <div className="overflow-x-auto card-floating">
           <table className="w-full text-left text-xs text-[#1F150C]">
-            <thead className="bg-[#E1DCC9] text-[11px] font-bold uppercase tracking-wider text-[#412D15] border-b border-[#412D15]/15">
+            <thead className="bg-[#000000] text-[11px] font-bold uppercase tracking-wider text-white border-b border-[#412D15]/30">
               <tr>
                 <th className="py-4 px-5">Kode Jasa</th>
                 <th className="py-4 px-5">Nama Tindakan & Rincian Prosedur</th>
@@ -178,9 +178,9 @@ export default function ServicesCatalogPage() {
             </thead>
             <tbody className="divide-y divide-[#412D15]/10">
               {services.map((srv) => (
-                <tr key={srv.id} className="hover:bg-[#E1DCC9]/40 transition-colors group">
+                <tr key={srv.id} className="hover:bg-zinc-50 transition-colors group">
                   <td className="py-4 px-5 font-mono font-bold text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-[#1F150C] text-[#E1DCC9]">
+                    <span className="px-2.5 py-1 rounded-lg bg-[#1F150C] text-white">
                       {srv.code}
                     </span>
                   </td>

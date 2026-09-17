@@ -164,7 +164,7 @@ export default function CustomersPage() {
         </div>
       ) : customers.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center text-2xl mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#000000] border border-[#412D15]/40 flex items-center justify-center text-2xl mx-auto mb-4 text-white">
             👥
           </div>
           <p className="text-base font-bold text-[#1F150C] mb-1">Tidak ditemukan data pelanggan</p>
@@ -224,7 +224,7 @@ export default function CustomersPage() {
                       setSelectedCustomerName(cust.name);
                       setFormError("");
                     }}
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#1F150C] bg-[#E1DCC9] border border-[#412D15]/50 hover:bg-[#E1DCC9]/80 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-[#000000] border border-[#412D15]/50 hover:bg-[#412D15] transition-colors cursor-pointer"
                   >
                     + Tambah Kendaraan
                   </button>
@@ -254,11 +254,11 @@ export default function CustomersPage() {
                     {cust.vehicles.map((veh) => (
                       <div
                         key={veh.id}
-                        className="p-3.5 rounded-xl bg-[#E1DCC9]/40 border border-[#412D15]/15 flex items-center justify-between"
+                        className="p-3.5 rounded-xl bg-zinc-50 border border-[#412D15]/15 flex items-center justify-between"
                       >
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#1F150C] text-[#E1DCC9] tracking-wider">
+                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#1F150C] text-white tracking-wider">
                               {veh.plateNumber}
                             </span>
                             {veh.year && (

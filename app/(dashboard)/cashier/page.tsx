@@ -116,12 +116,12 @@ export default function CashierPage() {
             onClick={() => setActiveTab("PENDING")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               activeTab === "PENDING"
-                ? "bg-[#1F150C] text-[#E1DCC9] shadow-xs"
+                ? "bg-[#1F150C] text-white shadow-xs"
                 : "text-[#412D15] hover:text-[#1F150C]"
             }`}
           >
             <span>Siap Ditagih</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${activeTab === "PENDING" ? "bg-[#412D15] text-[#1F150C]" : "bg-[#E1DCC9] text-[#1F150C]"}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${activeTab === "PENDING" ? "bg-[#412D15] text-[#1F150C]" : "bg-[#000000] text-white"}`}>
               {pendingOrders.length}
             </span>
           </button>
@@ -131,12 +131,12 @@ export default function CashierPage() {
             onClick={() => setActiveTab("PAID")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               activeTab === "PAID"
-                ? "bg-[#1F150C] text-[#E1DCC9] shadow-xs"
+                ? "bg-[#1F150C] text-white shadow-xs"
                 : "text-[#412D15] hover:text-[#1F150C]"
             }`}
           >
             <span>Riwayat Faktur Lunas</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${activeTab === "PAID" ? "bg-[#412D15] text-[#1F150C]" : "bg-[#E1DCC9] text-[#1F150C]"}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${activeTab === "PAID" ? "bg-[#412D15] text-[#1F150C]" : "bg-[#000000] text-white"}`}>
               {paidOrders.length}
             </span>
           </button>
@@ -164,7 +164,7 @@ export default function CashierPage() {
         </div>
       ) : displayedOrders.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center text-2xl mx-auto mb-4">💳</div>
+          <div className="w-14 h-14 rounded-2xl bg-[#000000] border border-[#412D15]/40 flex items-center justify-center text-2xl mx-auto mb-4 text-white">💳</div>
           <p className="text-sm font-bold text-[#1F150C] mb-1">
             {activeTab === "PENDING" ? "Tidak ada antrean pembayaran" : "Belum ada riwayat faktur lunas"}
           </p>
@@ -180,7 +180,7 @@ export default function CashierPage() {
             <div key={order.id} className="card-floating p-5 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#412D15]/15">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#1F150C] text-[#E1DCC9]">{order.orderNumber}</span>
+                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#1F150C] text-white">{order.orderNumber}</span>
                   <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-[#412D15]/25 text-[#1F150C] border border-[#412D15]/50">{order.vehicle?.plateNumber}</span>
                   <span className="text-sm font-bold text-[#1F150C]">
                     {order.vehicle ? `${order.vehicle.brand} ${order.vehicle.model}` : ""}

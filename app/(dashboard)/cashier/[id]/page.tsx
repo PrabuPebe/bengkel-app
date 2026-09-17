@@ -285,7 +285,7 @@ export default function CashierBillingDetailPage({
                     {order.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#E1DCC9]/40 border border-[#412D15]/15"
+                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-zinc-50 border border-[#412D15]/15"
                       >
                         <span className="text-[#1F150C] font-semibold">{item.serviceName}</span>
                         <span className="font-mono font-black text-[#1F150C]">{formatRupiah(item.subtotal)}</span>
@@ -313,7 +313,7 @@ export default function CashierBillingDetailPage({
                     {order.parts.map((part) => (
                       <div
                         key={part.id}
-                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#E1DCC9]/40 border border-[#412D15]/15"
+                        className="flex items-center justify-between text-xs p-3 rounded-xl bg-zinc-50 border border-[#412D15]/15"
                       >
                         <span className="text-[#1F150C]">
                           <strong className="font-bold">{part.partName}</strong>{" "}
@@ -384,7 +384,7 @@ export default function CashierBillingDetailPage({
             </div>
 
             {/* Grand Total Display */}
-            <div className="py-4 px-4 rounded-xl bg-[#E1DCC9] border border-[#412D15]/50 my-4 flex items-baseline justify-between">
+            <div className="py-4 px-4 rounded-xl bg-[#000000] text-white border border-[#412D15]/50 my-4 flex items-baseline justify-between">
               <div>
                 <p className="text-[10px] font-bold text-[#412D15] uppercase tracking-wider">
                   Total Tagihan Bersih
@@ -399,7 +399,7 @@ export default function CashierBillingDetailPage({
             {isAlreadyPaid ? (
               /* Already Paid Details */
               <div className="space-y-4 pt-1">
-                <div className="p-4 rounded-xl bg-[#E1DCC9]/50 border border-[#412D15]/20 text-xs space-y-2.5">
+                <div className="p-4 rounded-xl bg-zinc-50 border border-[#412D15]/20 text-xs space-y-2.5">
                   <div className="flex justify-between">
                     <span className="text-[#412D15]">Metode Bayar:</span>
                     <strong className="text-[#1F150C] font-bold">{order.paymentMethod}</strong>
@@ -445,8 +445,8 @@ export default function CashierBillingDetailPage({
                         onClick={() => handleMethodChange(m)}
                         className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                           paymentMethod === m
-                            ? "bg-[#1F150C] text-[#E1DCC9] border-[#1F150C] shadow-xs"
-                            : "bg-white text-[#412D15] border-[#412D15]/20 hover:bg-[#E1DCC9]/40"
+                            ? "bg-[#1F150C] text-white border-[#1F150C] shadow-xs"
+                            : "bg-white text-[#412D15] border-[#412D15]/20 hover:bg-zinc-50"
                         }`}
                       >
                         {m === "CASH" ? "💵 Tunai" : m === "TRANSFER" ? "🏦 Transfer" : "📱 QRIS"}
@@ -490,7 +490,7 @@ export default function CashierBillingDetailPage({
                             key={amount}
                             type="button"
                             onClick={() => handleQuickCash(amount)}
-                            className="px-2.5 py-1 rounded-lg bg-[#E1DCC9] hover:bg-[#E1DCC9]/80 text-[#1F150C] text-[10px] font-mono font-bold transition-all border border-[#412D15]/40 cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg bg-[#000000] hover:bg-[#412D15] text-white text-[10px] font-mono font-bold transition-all border border-[#412D15]/40 cursor-pointer"
                           >
                             {formatRupiah(amount)}
                           </button>
@@ -500,7 +500,7 @@ export default function CashierBillingDetailPage({
                 </div>
 
                 {/* Change Calculation Display */}
-                <div className="p-3.5 rounded-xl bg-[#E1DCC9]/60 border border-[#412D15]/20 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-[#000000] text-white border border-[#412D15]/40 flex items-center justify-between">
                   <span className="text-xs text-[#412D15] font-semibold">Kembalian:</span>
                   <span
                     className={`font-mono text-base font-black ${

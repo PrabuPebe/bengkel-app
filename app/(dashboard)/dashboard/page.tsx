@@ -64,7 +64,7 @@ export default async function DashboardOverviewPage() {
           </div>
           <Link
             href="/inventory/parts"
-            className="px-4 py-2 rounded-xl text-xs font-bold text-[#E1DCC9] bg-[#1F150C] hover:bg-[#000000] transition-all shrink-0 text-center cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#1F150C] hover:bg-[#000000] transition-all shrink-0 text-center cursor-pointer"
           >
             Kelola Stok →
           </Link>
@@ -238,7 +238,7 @@ export default async function DashboardOverviewPage() {
             desc: "Terbitkan SPK baru, perbarui status pengerjaan mekanik, dan kurangi stok suku cadang otomatis.",
             href: "/services",
             label: "Buka Modul Servis",
-            numBg: "bg-[#1F150C] text-[#E1DCC9]",
+            numBg: "bg-[#1F150C] text-white",
           },
           {
             num: "02",
@@ -246,7 +246,7 @@ export default async function DashboardOverviewPage() {
             desc: "Penerimaan pembayaran tunai, transfer, dan QRIS, hitung diskon & kembalian, serta cetak nota struk resmi.",
             href: "/cashier",
             label: "Buka Modul Kasir",
-            numBg: "bg-[#412D15] text-[#E1DCC9]",
+            numBg: "bg-[#412D15] text-white",
           },
           {
             num: "03",
@@ -254,7 +254,7 @@ export default async function DashboardOverviewPage() {
             desc: "Database nomor kontak WhatsApp pelanggan dan relasi kepemilikan banyak armada kendaraan.",
             href: "/customers",
             label: "Buka Data Pelanggan",
-            numBg: "bg-[#000000] text-[#E1DCC9]",
+            numBg: "bg-[#000000] text-white",
           },
           {
             num: "04",
@@ -262,7 +262,7 @@ export default async function DashboardOverviewPage() {
             desc: "Halaman publik mobile tanpa login bagi pelanggan untuk melacak transparansi servis kendaraannya secara live.",
             href: "/track/trk-vario160-budi",
             label: "Buka Tracking Publik",
-            numBg: "bg-[#E1DCC9] text-[#1F150C] border border-[#412D15]/30",
+            numBg: "bg-[#000000] text-white border border-[#412D15]/30",
           },
         ].map((mod) => (
           <div key={mod.num} className="card-floating p-5 flex flex-col justify-between">

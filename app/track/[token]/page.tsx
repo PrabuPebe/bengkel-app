@@ -100,7 +100,7 @@ export default function PublicServiceTrackingPage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#E1DCC9] text-[#1F150C] flex flex-col items-center justify-center p-6">
+      <div className="min-h-screen bg-[#000000] text-white flex flex-col items-center justify-center p-6">
         <div className="w-10 h-10 border-3 border-[#412D15] border-t-transparent rounded-full animate-spin mb-4" />
         <p className="text-sm font-semibold text-[#412D15]">Menghubungkan ke PitCare Auto Live Tracker...</p>
       </div>
@@ -109,7 +109,7 @@ export default function PublicServiceTrackingPage({
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-[#E1DCC9] text-[#1F150C] flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-[#000000] text-white flex flex-col items-center justify-center p-6 text-center">
         <div className="w-16 h-16 rounded-3xl bg-white border border-[#412D15]/20 shadow-lg flex items-center justify-center text-rose-600 text-2xl font-bold mb-4">
           !
         </div>
@@ -132,7 +132,7 @@ export default function PublicServiceTrackingPage({
   );
 
   return (
-    <div className="min-h-screen bg-[#E1DCC9] text-[#1F150C] antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#000000] text-white antialiased py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Top Branding Header */}
         <div className="flex items-center justify-between pb-6 border-b border-[#412D15]/15">
@@ -169,7 +169,7 @@ export default function PublicServiceTrackingPage({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2.5 mb-2.5">
-                <span className="font-mono text-xs font-bold px-3 py-1 rounded-xl bg-[#1F150C] text-[#E1DCC9]">
+                <span className="font-mono text-xs font-bold px-3 py-1 rounded-xl bg-[#1F150C] text-white">
                   {order.orderNumber}
                 </span>
                 <span className="font-mono text-xs font-black px-3 py-1 rounded-xl bg-[#412D15]/25 text-[#1F150C] border border-[#412D15]/50">
@@ -218,8 +218,8 @@ export default function PublicServiceTrackingPage({
                     st === "current"
                       ? "bg-[#412D15]/25 border-[#412D15] shadow-xs"
                       : st === "completed"
-                        ? "bg-[#1F150C] text-[#E1DCC9] border-[#1F150C]"
-                        : "bg-[#E1DCC9]/50 border-[#412D15]/20"
+                        ? "bg-[#1F150C] text-white border-[#1F150C]"
+                        : "bg-zinc-50 border-[#412D15]/20"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -234,18 +234,18 @@ export default function PublicServiceTrackingPage({
                       </span>
                     )}
                     {st === "current" && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1F150C] text-[#E1DCC9]">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1F150C] text-white">
                         Berjalan
                       </span>
                     )}
                   </div>
                   <p className={`text-xs font-bold ${
-                    st === "completed" ? "text-[#E1DCC9]" : "text-[#1F150C]"
+                    st === "completed" ? "text-white" : "text-[#1F150C]"
                   }`}>
                     {s.label}
                   </p>
                   <p className={`text-[11px] mt-1 leading-snug ${
-                    st === "completed" ? "text-[#E1DCC9]/70" : "text-[#412D15]"
+                    st === "completed" ? "text-white/70" : "text-[#412D15]"
                   }`}>{s.desc}</p>
                 </div>
               );
@@ -267,7 +267,7 @@ export default function PublicServiceTrackingPage({
           </h3>
 
           <div className="space-y-3.5 text-xs">
-            <div className="p-4 rounded-2xl bg-[#E1DCC9]/50 border border-[#412D15]/15">
+            <div className="p-4 rounded-2xl bg-zinc-50 border border-[#412D15]/15">
               <span className="text-[#412D15] font-semibold block text-[11px] mb-1">
                 Keluhan Awal Saat Masuk:
               </span>
@@ -277,7 +277,7 @@ export default function PublicServiceTrackingPage({
             </div>
 
             {order.diagnosis ? (
-              <div className="p-4 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/50">
+              <div className="p-4 rounded-2xl bg-[#000000] text-white border border-[#412D15]/50">
                 <span className="text-[#1F150C] font-bold block text-[11px] mb-1">
                   Hasil Analisis / Diagnosis Teknisi:
                 </span>
@@ -320,7 +320,7 @@ export default function PublicServiceTrackingPage({
                   {order.items.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#E1DCC9]/40 border border-[#412D15]/15"
+                      className="flex items-center justify-between text-xs p-3 rounded-xl bg-zinc-50 border border-[#412D15]/15"
                     >
                       <span className="text-[#1F150C] font-semibold">{item.serviceName}</span>
                       <span className="font-mono font-black text-[#1F150C]">{formatRupiah(item.subtotal)}</span>
@@ -347,7 +347,7 @@ export default function PublicServiceTrackingPage({
                   {order.parts.map((p) => (
                     <div
                       key={p.id}
-                      className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#E1DCC9]/40 border border-[#412D15]/15"
+                      className="flex items-center justify-between text-xs p-3 rounded-xl bg-zinc-50 border border-[#412D15]/15"
                     >
                       <span className="text-[#1F150C]">
                         <strong className="font-bold">{p.partName}</strong>{" "}
@@ -361,17 +361,17 @@ export default function PublicServiceTrackingPage({
             </div>
 
             {/* Total */}
-            <div className="pt-4 border-t border-[#412D15]/15 flex items-center justify-between bg-[#E1DCC9] p-5 rounded-2xl border border-[#412D15]/50">
+            <div className="pt-4 border-t border-[#412D15]/15 flex items-center justify-between bg-[#000000] text-white p-5 rounded-2xl border border-[#412D15]/50">
               <div>
-                <span className="text-[10px] font-bold text-[#412D15] uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
                   Total Estimasi Biaya
                 </span>
-                <span className="text-2xl font-black font-mono text-[#1F150C] mt-0.5 block">
+                <span className="text-2xl font-black font-mono text-white mt-0.5 block">
                   {formatRupiah(order.grandTotal)}
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-xs text-[#412D15] block mb-1 font-medium">
+                <span className="text-xs text-zinc-300 block mb-1 font-medium">
                   Status Pembayaran:
                 </span>
                 <span

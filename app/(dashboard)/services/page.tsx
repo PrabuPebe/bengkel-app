@@ -59,8 +59,8 @@ function getStatusBadge(status: ServiceStatus) {
       );
     case "SELESAI_PEMBAYARAN":
       return (
-        <span className="badge-custom bg-[#1F150C] text-[#E1DCC9] border border-[#1F150C]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#E1DCC9]" />
+        <span className="badge-custom bg-[#1F150C] text-white border border-[#1F150C]">
+          <span className="w-1.5 h-1.5 rounded-full bg-white" />
           Faktur Lunas
         </span>
       );
@@ -166,15 +166,15 @@ export default function ServicesPage() {
                 onClick={() => handleFilterChange(tab.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                   isActive
-                    ? "bg-[#1F150C] text-[#E1DCC9] shadow-md shadow-[#000000]/20"
-                    : "bg-white text-[#412D15] hover:bg-[#E1DCC9]/50 border border-[#412D15]/20"
+                    ? "bg-[#1F150C] text-white shadow-md shadow-[#000000]/20"
+                    : "bg-white text-[#412D15] hover:bg-[#000000]/10 border border-[#412D15]/20"
                 }`}
               >
                 <span>{tab.label}</span>
                 {typeof tab.count === "number" && (
                   <span
                     className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
-                      isActive ? "bg-[#412D15] text-[#E1DCC9]" : "bg-[#E1DCC9] text-[#1F150C]"
+                      isActive ? "bg-[#412D15] text-white" : "bg-[#000000] text-white"
                     }`}
                   >
                     {tab.count}
@@ -218,7 +218,7 @@ export default function ServicesPage() {
         </div>
       ) : orders.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center mx-auto mb-4 text-[#1F150C]">
+          <div className="w-14 h-14 rounded-2xl bg-[#000000] border border-[#412D15]/40 flex items-center justify-center mx-auto mb-4 text-white">
             <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
@@ -244,7 +244,7 @@ export default function ServicesPage() {
               {/* Header row */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#412D15]/15">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#1F150C] text-[#E1DCC9]">
+                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#1F150C] text-white">
                     {order.orderNumber}
                   </span>
                   <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-[#412D15]/15 text-[#1F150C] border border-[#412D15]/30 tracking-wider">
@@ -326,7 +326,7 @@ export default function ServicesPage() {
                   <Link
                     href={`/track/${order.token}`}
                     target="_blank"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E1DCC9] border border-[#412D15]/40 text-[#1F150C] hover:bg-[#E1DCC9]/80 font-bold transition-colors text-xs cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#000000] border border-[#412D15]/40 text-white hover:bg-[#412D15] font-bold transition-colors text-xs cursor-pointer"
                   >
                     📱 Live Tracking Pelanggan ↗
                   </Link>
