@@ -32,14 +32,14 @@ function getStatusBadge(status: ServiceStatus) {
     case "ANTRIAN":
       return (
         <span className="badge-custom badge-cream">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#435663] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#412D15] animate-pulse" />
           Antrian Pit
         </span>
       );
     case "PENGERJAAN":
       return (
         <span className="badge-custom badge-steel">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#313647] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1F150C] animate-pulse" />
           Sedang Dikerjakan
         </span>
       );
@@ -53,14 +53,14 @@ function getStatusBadge(status: ServiceStatus) {
     case "SELESAI_PENGERJAAN":
       return (
         <span className="badge-custom badge-sage">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2c3621]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#412D15]" />
           Siap ke Kasir
         </span>
       );
     case "SELESAI_PEMBAYARAN":
       return (
-        <span className="badge-custom bg-[#313647] text-[#FFF8D4] border border-[#313647]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#A3B087]" />
+        <span className="badge-custom bg-[#1F150C] text-[#E1DCC9] border border-[#1F150C]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#E1DCC9]" />
           Faktur Lunas
         </span>
       );
@@ -166,15 +166,15 @@ export default function ServicesPage() {
                 onClick={() => handleFilterChange(tab.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                   isActive
-                    ? "bg-[#313647] text-[#FFF8D4] shadow-md shadow-[#313647]/20"
-                    : "bg-white text-[#435663] hover:bg-[#FFF8D4]/50 border border-[#435663]/20"
+                    ? "bg-[#1F150C] text-[#E1DCC9] shadow-md shadow-[#000000]/20"
+                    : "bg-white text-[#412D15] hover:bg-[#E1DCC9]/50 border border-[#412D15]/20"
                 }`}
               >
                 <span>{tab.label}</span>
                 {typeof tab.count === "number" && (
                   <span
                     className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
-                      isActive ? "bg-[#A3B087] text-[#313647]" : "bg-[#FFF8D4] text-[#313647]"
+                      isActive ? "bg-[#412D15] text-[#E1DCC9]" : "bg-[#E1DCC9] text-[#1F150C]"
                     }`}
                   >
                     {tab.count}
@@ -192,9 +192,9 @@ export default function ServicesPage() {
               placeholder="Cari nomor SPK, plat nomor, nama pelanggan, atau merk kendaraan..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="input-custom w-full h-11 pl-11 pr-4 text-xs placeholder:text-[#435663]/60"
+              className="input-custom w-full h-11 pl-11 pr-4 text-xs placeholder:text-[#412D15]/60"
             />
-            <svg className="w-4 h-4 text-[#435663] absolute left-4 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-[#412D15] absolute left-4 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </form>
@@ -212,19 +212,19 @@ export default function ServicesPage() {
 
       {/* Orders List */}
       {isLoading ? (
-        <div className="p-20 text-center text-[#435663] text-xs card-floating">
-          <div className="w-8 h-8 border-2 border-[#A3B087] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <div className="p-20 text-center text-[#412D15] text-xs card-floating">
+          <div className="w-8 h-8 border-2 border-[#412D15] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           Memuat data Work Order PitCare Auto...
         </div>
       ) : orders.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFF8D4] border border-[#435663]/20 flex items-center justify-center mx-auto mb-4 text-[#313647]">
+          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center mx-auto mb-4 text-[#1F150C]">
             <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
-          <p className="text-sm font-bold text-[#313647] mb-1">Tidak ada Work Order</p>
-          <p className="text-xs text-[#435663] mb-6 max-w-sm mx-auto">
+          <p className="text-sm font-bold text-[#1F150C] mb-1">Tidak ada Work Order</p>
+          <p className="text-xs text-[#412D15] mb-6 max-w-sm mx-auto">
             {searchQuery ? "Coba gunakan kata kunci lain atau pilih tab status lain." : "Belum ada SPK yang terdaftar untuk filter ini."}
           </p>
           <Link
@@ -242,15 +242,15 @@ export default function ServicesPage() {
               className="card-floating p-5 sm:p-6"
             >
               {/* Header row */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#435663]/15">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#412D15]/15">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#313647] text-[#FFF8D4]">
+                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#1F150C] text-[#E1DCC9]">
                     {order.orderNumber}
                   </span>
-                  <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-[#A3B087]/25 text-[#313647] border border-[#A3B087]/50 tracking-wider">
+                  <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-[#412D15]/15 text-[#1F150C] border border-[#412D15]/30 tracking-wider">
                     {order.vehicle?.plateNumber || "NO-PLATE"}
                   </span>
-                  <span className="text-xs font-bold text-[#313647]">
+                  <span className="text-xs font-bold text-[#1F150C]">
                     {order.vehicle ? `${order.vehicle.brand} ${order.vehicle.model}` : "Kendaraan Terhapus"}
                   </span>
                 </div>
@@ -262,76 +262,76 @@ export default function ServicesPage() {
               {/* Body row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 py-4 text-xs">
                 <div>
-                  <p className="text-[10px] font-bold text-[#435663] uppercase tracking-wider mb-1.5">
+                  <p className="text-[10px] font-bold text-[#412D15] uppercase tracking-wider mb-1.5">
                     Pemilik Kendaraan
                   </p>
-                  <p className="font-bold text-[#313647] text-sm">
+                  <p className="font-bold text-[#1F150C] text-sm">
                     {order.customer?.name || "Pelanggan Terhapus"}
                   </p>
                   <a
                     href={`https://wa.me/${order.customer?.phone?.replace(/^0/, "62")}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-[#313647] font-semibold hover:underline mt-1"
+                    className="inline-flex items-center gap-1 text-[#1F150C] font-semibold hover:underline mt-1"
                   >
                     📱 WA: {order.customer?.phone || "-"}
                   </a>
                   {order.currentKm && (
-                    <p className="text-[#435663] mt-1 font-medium">
-                      KM Masuk: <span className="font-mono font-bold text-[#313647]">{order.currentKm.toLocaleString("id-ID")} KM</span>
+                    <p className="text-[#412D15] mt-1 font-medium">
+                      KM Masuk: <span className="font-mono font-bold text-[#1F150C]">{order.currentKm.toLocaleString("id-ID")} KM</span>
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <p className="text-[10px] font-bold text-[#435663] uppercase tracking-wider mb-1.5">
+                  <p className="text-[10px] font-bold text-[#412D15] uppercase tracking-wider mb-1.5">
                     Keluhan & Tindakan
                   </p>
-                  <p className="text-[#435663] line-clamp-2 leading-relaxed">
-                    <span className="text-[#313647] font-semibold">Keluhan: </span>
+                  <p className="text-[#412D15] line-clamp-2 leading-relaxed">
+                    <span className="text-[#1F150C] font-semibold">Keluhan: </span>
                     &quot;{order.complaints}&quot;
                   </p>
                   {order.diagnosis && (
-                    <p className="text-[#313647] line-clamp-1 mt-1 leading-relaxed font-medium">
-                      <span className="text-[#435663] font-semibold">Diagnosis: </span>
+                    <p className="text-[#1F150C] line-clamp-1 mt-1 leading-relaxed font-medium">
+                      <span className="text-[#412D15] font-semibold">Diagnosis: </span>
                       {order.diagnosis}
                     </p>
                   )}
-                  <p className="text-[#435663] mt-1.5">
-                    Teknisi: <span className="font-bold text-[#313647]">{order.mechanicName || "Belum Ditugaskan"}</span>
+                  <p className="text-[#412D15] mt-1.5">
+                    Teknisi: <span className="font-bold text-[#1F150C]">{order.mechanicName || "Belum Ditugaskan"}</span>
                   </p>
                 </div>
 
                 <div className="md:text-right flex flex-col justify-between">
                   <div>
-                    <p className="text-[10px] font-bold text-[#435663] uppercase tracking-wider mb-1.5">
+                    <p className="text-[10px] font-bold text-[#412D15] uppercase tracking-wider mb-1.5">
                       Estimasi / Total Biaya
                     </p>
-                    <p className="text-2xl font-black font-mono text-[#313647]">
+                    <p className="text-2xl font-black font-mono text-[#1F150C]">
                       {formatRupiah(order.grandTotal)}
                     </p>
-                    <p className="text-[11px] font-mono text-[#435663] mt-1 font-medium">
+                    <p className="text-[11px] font-mono text-[#412D15] mt-1 font-medium">
                       {order.items.length} Jasa • {order.parts.length} Sparepart
                     </p>
                   </div>
-                  <p className="text-[10px] text-[#435663] mt-2">
+                  <p className="text-[10px] text-[#412D15] mt-2">
                     Masuk: {formatDate(order.entryDate)}
                   </p>
                 </div>
               </div>
 
               {/* Footer row */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#435663]/15">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#412D15]/15">
                 <div className="flex items-center gap-3 text-[11px]">
                   <Link
                     href={`/track/${order.token}`}
                     target="_blank"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FFF8D4] border border-[#A3B087]/50 text-[#313647] hover:bg-[#FFF8D4]/80 font-bold transition-colors text-xs cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E1DCC9] border border-[#412D15]/40 text-[#1F150C] hover:bg-[#E1DCC9]/80 font-bold transition-colors text-xs cursor-pointer"
                   >
                     📱 Live Tracking Pelanggan ↗
                   </Link>
                   {order.notes && (
-                    <span className="truncate max-w-xs text-[#435663] font-medium">• {order.notes}</span>
+                    <span className="truncate max-w-xs text-[#412D15] font-medium">• {order.notes}</span>
                   )}
                 </div>
 

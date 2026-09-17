@@ -174,8 +174,8 @@ export default function PartsInventoryPage() {
               onClick={() => handleFilter(cat)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 selectedCategory === cat
-                  ? "bg-[#313647] text-[#FFF8D4] shadow-xs font-bold"
-                  : "bg-white text-[#435663] hover:bg-[#FFF8D4]/50 border border-[#435663]/20"
+                  ? "bg-[#1F150C] text-[#E1DCC9] shadow-xs font-bold"
+                  : "bg-white text-[#412D15] hover:bg-[#E1DCC9]/50 border border-[#412D15]/20"
               }`}
             >
               {cat === "all" ? "Semua Kategori" : cat}
@@ -193,7 +193,7 @@ export default function PartsInventoryPage() {
               className="input-custom w-full h-11 pl-11 pr-4 text-xs"
             />
             <svg
-              className="w-4 h-4 text-[#435663] absolute left-4 top-3.5 pointer-events-none"
+              className="w-4 h-4 text-[#412D15] absolute left-4 top-3.5 pointer-events-none"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -218,17 +218,17 @@ export default function PartsInventoryPage() {
 
       {/* Parts Table */}
       {isLoading ? (
-        <div className="p-20 text-center text-[#435663] text-sm card-floating">
-          <div className="w-8 h-8 border-2 border-[#A3B087] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <div className="p-20 text-center text-[#412D15] text-sm card-floating">
+          <div className="w-8 h-8 border-2 border-[#412D15] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           Memuat stok inventaris PitCare Auto...
         </div>
       ) : parts.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFF8D4] border border-[#435663]/20 flex items-center justify-center text-2xl mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center text-2xl mx-auto mb-4">
             📦
           </div>
-          <p className="text-base font-bold text-[#313647] mb-1">Data suku cadang tidak ditemukan</p>
-          <p className="text-xs text-[#435663] mb-6 max-w-sm mx-auto">
+          <p className="text-base font-bold text-[#1F150C] mb-1">Data suku cadang tidak ditemukan</p>
+          <p className="text-xs text-[#412D15] mb-6 max-w-sm mx-auto">
             {searchQuery ? "Coba ganti filter atau kata kunci pencarian." : "Belum ada data suku cadang di gudang."}
           </p>
           <button
@@ -241,8 +241,8 @@ export default function PartsInventoryPage() {
         </div>
       ) : (
         <div className="overflow-x-auto card-floating">
-          <table className="w-full text-left text-xs text-[#313647]">
-            <thead className="bg-[#FFF8D4] text-[11px] font-bold uppercase tracking-wider text-[#435663] border-b border-[#435663]/15">
+          <table className="w-full text-left text-xs text-[#1F150C]">
+            <thead className="bg-[#E1DCC9] text-[11px] font-bold uppercase tracking-wider text-[#412D15] border-b border-[#412D15]/15">
               <tr>
                 <th className="py-4 px-5">SKU & Lokasi</th>
                 <th className="py-4 px-5">Nama Suku Cadang</th>
@@ -253,27 +253,27 @@ export default function PartsInventoryPage() {
                 <th className="py-4 px-5 text-center">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#435663]/10">
+            <tbody className="divide-y divide-[#412D15]/10">
               {parts.map((part) => {
                 const isLow = part.stock <= part.minStock;
                 const margin = part.sellPrice - part.costPrice;
                 const marginPercent = part.sellPrice > 0 ? Math.round((margin / part.sellPrice) * 100) : 0;
 
                 return (
-                  <tr key={part.id} className="hover:bg-[#FFF8D4]/40 transition-colors group">
+                  <tr key={part.id} className="hover:bg-[#E1DCC9]/40 transition-colors group">
                     <td className="py-4 px-5">
                       <p className="font-mono font-bold text-xs">
-                        <span className="px-2 py-0.5 rounded bg-[#313647] text-[#FFF8D4]">
+                        <span className="px-2 py-0.5 rounded bg-[#1F150C] text-[#E1DCC9]">
                           {part.sku}
                         </span>
                       </p>
                       {part.location && (
-                        <p className="text-[11px] text-[#435663] mt-1 font-medium">📍 {part.location}</p>
+                        <p className="text-[11px] text-[#412D15] mt-1 font-medium">📍 {part.location}</p>
                       )}
                     </td>
                     <td className="py-4 px-5">
-                      <p className="font-bold text-[#313647] text-sm">{part.name}</p>
-                      <p className="text-[11px] text-[#435663] mt-0.5">Satuan: {part.unit}</p>
+                      <p className="font-bold text-[#1F150C] text-sm">{part.name}</p>
+                      <p className="text-[11px] text-[#412D15] mt-0.5">Satuan: {part.unit}</p>
                     </td>
                     <td className="py-4 px-5">
                       <span className="badge-custom badge-steel">
@@ -288,17 +288,17 @@ export default function PartsInventoryPage() {
                         </span>
                       ) : (
                         <span className="badge-custom badge-sage">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#2c3621]" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#1F150C]" />
                           {part.stock} {part.unit} (Aman)
                         </span>
                       )}
                     </td>
-                    <td className="py-4 px-5 text-right font-mono text-xs text-[#435663]">
+                    <td className="py-4 px-5 text-right font-mono text-xs text-[#412D15]">
                       {formatIDR(part.costPrice)}
                     </td>
-                    <td className="py-4 px-5 text-right font-mono font-black text-sm text-[#313647]">
+                    <td className="py-4 px-5 text-right font-mono font-black text-sm text-[#1F150C]">
                       {formatIDR(part.sellPrice)}
-                      <span className="block text-[10px] text-[#435663] font-semibold mt-0.5">
+                      <span className="block text-[10px] text-[#412D15] font-semibold mt-0.5">
                         +{marginPercent}% margin
                       </span>
                     </td>
@@ -319,7 +319,7 @@ export default function PartsInventoryPage() {
                           type="button"
                           onClick={() => handleDeletePart(part.id, part.name)}
                           disabled={isPending}
-                          className="p-1.5 rounded-xl text-[#435663] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-xl text-[#412D15] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                           title="Hapus Part"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -353,7 +353,7 @@ export default function PartsInventoryPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Kode SKU / Part *
               </label>
               <input
@@ -365,7 +365,7 @@ export default function PartsInventoryPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Kategori *
               </label>
               <input
@@ -379,7 +379,7 @@ export default function PartsInventoryPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#313647] mb-1">
+            <label className="block text-xs font-semibold text-[#1F150C] mb-1">
               Nama Suku Cadang *
             </label>
             <input
@@ -393,7 +393,7 @@ export default function PartsInventoryPage() {
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Stok Awal *
               </label>
               <input
@@ -405,7 +405,7 @@ export default function PartsInventoryPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Batas Min. Stok *
               </label>
               <input
@@ -417,7 +417,7 @@ export default function PartsInventoryPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Satuan *
               </label>
               <input
@@ -432,7 +432,7 @@ export default function PartsInventoryPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Harga Modal / Beli (HPP)
               </label>
               <input
@@ -443,7 +443,7 @@ export default function PartsInventoryPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Harga Jual Konsumen *
               </label>
               <input
@@ -457,7 +457,7 @@ export default function PartsInventoryPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#313647] mb-1">
+            <label className="block text-xs font-semibold text-[#1F150C] mb-1">
               Lokasi Penyimpanan (Rak/Laci)
             </label>
             <input
@@ -468,7 +468,7 @@ export default function PartsInventoryPage() {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#435663]/15">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#412D15]/15">
             <button
               type="button"
               onClick={() => setIsAddOpen(false)}
@@ -496,7 +496,7 @@ export default function PartsInventoryPage() {
       >
         <form onSubmit={handleUpdateStock} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-[#313647] mb-2">
+            <label className="block text-xs font-semibold text-[#1F150C] mb-2">
               Jumlah Stok Aktual ({adjustPart?.unit})
             </label>
             <div className="flex items-center gap-3">
@@ -530,7 +530,7 @@ export default function PartsInventoryPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#435663]/15">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#412D15]/15">
             <button
               type="button"
               onClick={() => setAdjustPart(null)}

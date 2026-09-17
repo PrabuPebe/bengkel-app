@@ -134,7 +134,7 @@ export default function CustomersPage() {
             className="input-custom w-full h-11 pl-11 pr-4 text-xs"
           />
           <svg
-            className="w-4 h-4 text-[#435663] absolute left-4 top-3.5 pointer-events-none"
+            className="w-4 h-4 text-[#412D15] absolute left-4 top-3.5 pointer-events-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -158,17 +158,17 @@ export default function CustomersPage() {
 
       {/* Customers List / Table */}
       {isLoading ? (
-        <div className="p-20 text-center text-[#435663] text-sm card-floating">
-          <div className="w-8 h-8 border-2 border-[#A3B087] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <div className="p-20 text-center text-[#412D15] text-sm card-floating">
+          <div className="w-8 h-8 border-2 border-[#412D15] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           Memuat master pelanggan PitCare Auto...
         </div>
       ) : customers.length === 0 ? (
         <div className="p-16 text-center card-floating">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFF8D4] border border-[#435663]/20 flex items-center justify-center text-2xl mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#E1DCC9] border border-[#412D15]/20 flex items-center justify-center text-2xl mx-auto mb-4">
             👥
           </div>
-          <p className="text-base font-bold text-[#313647] mb-1">Tidak ditemukan data pelanggan</p>
-          <p className="text-xs text-[#435663] mb-6 max-w-sm mx-auto">
+          <p className="text-base font-bold text-[#1F150C] mb-1">Tidak ditemukan data pelanggan</p>
+          <p className="text-xs text-[#412D15] mb-6 max-w-sm mx-auto">
             {searchQuery ? "Coba gunakan kata kunci pencarian lain." : "Belum ada data pelanggan yang terdaftar."}
           </p>
           <button
@@ -186,29 +186,29 @@ export default function CustomersPage() {
               key={cust.id}
               className="card-floating p-6"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#435663]/15">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#412D15]/15">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#313647] text-[#A3B087] border border-[#435663]/40 flex items-center justify-center font-black text-sm shrink-0 shadow-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-[#1F150C] text-[#412D15] border border-[#412D15]/40 flex items-center justify-center font-black text-sm shrink-0 shadow-xs">
                     {cust.name.substring(0, 2).toUpperCase()}
                   </div>
                   <div>
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <h2 className="text-base font-bold text-[#313647] tracking-tight">{cust.name}</h2>
+                      <h2 className="text-base font-bold text-[#1F150C] tracking-tight">{cust.name}</h2>
                       <span className="badge-custom badge-steel">
                         {cust.vehicles.length} Kendaraan
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#435663] mt-1.5 font-medium">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#412D15] mt-1.5 font-medium">
                       <a
                         href={`https://wa.me/${cust.phone.replace(/^0/, "62")}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[#313647] font-bold hover:underline transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[#1F150C] font-bold hover:underline transition-colors"
                       >
                         <span>📱 {cust.phone}</span>
                       </a>
                       {cust.address && (
-                        <span className="text-[#435663] truncate max-w-md">
+                        <span className="text-[#412D15] truncate max-w-md">
                           📍 {cust.address}
                         </span>
                       )}
@@ -224,7 +224,7 @@ export default function CustomersPage() {
                       setSelectedCustomerName(cust.name);
                       setFormError("");
                     }}
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#313647] bg-[#FFF8D4] border border-[#A3B087]/50 hover:bg-[#FFF8D4]/80 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#1F150C] bg-[#E1DCC9] border border-[#412D15]/50 hover:bg-[#E1DCC9]/80 transition-colors cursor-pointer"
                   >
                     + Tambah Kendaraan
                   </button>
@@ -232,7 +232,7 @@ export default function CustomersPage() {
                     type="button"
                     onClick={() => handleDeleteCustomer(cust.id, cust.name)}
                     disabled={isPending}
-                    className="p-2 rounded-xl text-[#435663] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                    className="p-2 rounded-xl text-[#412D15] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                     title="Hapus Pelanggan"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -244,32 +244,32 @@ export default function CustomersPage() {
 
               {/* Daftar Kendaraan Pelanggan */}
               <div className="mt-4">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[#435663] mb-2.5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#412D15] mb-2.5">
                   Unit Kendaraan Terdaftar
                 </p>
                 {cust.vehicles.length === 0 ? (
-                  <p className="text-xs text-[#435663] italic">Belum ada armada kendaraan yang ditautkan.</p>
+                  <p className="text-xs text-[#412D15] italic">Belum ada armada kendaraan yang ditautkan.</p>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {cust.vehicles.map((veh) => (
                       <div
                         key={veh.id}
-                        className="p-3.5 rounded-xl bg-[#FFF8D4]/40 border border-[#435663]/15 flex items-center justify-between"
+                        className="p-3.5 rounded-xl bg-[#E1DCC9]/40 border border-[#412D15]/15 flex items-center justify-between"
                       >
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#313647] text-[#FFF8D4] tracking-wider">
+                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#1F150C] text-[#E1DCC9] tracking-wider">
                               {veh.plateNumber}
                             </span>
                             {veh.year && (
-                              <span className="text-[11px] text-[#435663]">({veh.year})</span>
+                              <span className="text-[11px] text-[#412D15]">({veh.year})</span>
                             )}
                           </div>
-                          <p className="text-xs font-bold text-[#313647] mt-1.5">
+                          <p className="text-xs font-bold text-[#1F150C] mt-1.5">
                             {veh.brand} {veh.model}
                           </p>
                           {veh.notes && (
-                            <p className="text-[10px] text-[#435663] mt-0.5 truncate max-w-[200px]">
+                            <p className="text-[10px] text-[#412D15] mt-0.5 truncate max-w-[200px]">
                               {veh.notes}
                             </p>
                           )}
@@ -300,11 +300,11 @@ export default function CustomersPage() {
           )}
 
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-[#313647] uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-[#1F150C] uppercase tracking-wider">
               1. Informasi Pelanggan
             </h3>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Nama Pelanggan *
               </label>
               <input
@@ -316,7 +316,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Nomor WhatsApp (Aktif) *
               </label>
               <input
@@ -328,7 +328,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Alamat (Opsional)
               </label>
               <input
@@ -340,13 +340,13 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          <div className="space-y-3 pt-3 border-t border-[#435663]/15">
-            <h3 className="text-xs font-bold text-[#313647] uppercase tracking-wider">
+          <div className="space-y-3 pt-3 border-t border-[#412D15]/15">
+            <h3 className="text-xs font-bold text-[#1F150C] uppercase tracking-wider">
               2. Kendaraan Pertama (Opsional)
             </h3>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#313647] mb-1">
+                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                   Nomor Polisi (Plat No)
                 </label>
                 <input
@@ -357,7 +357,7 @@ export default function CustomersPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#313647] mb-1">
+                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                   Tahun Pembuatan
                 </label>
                 <input
@@ -370,7 +370,7 @@ export default function CustomersPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#313647] mb-1">
+                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                   Merk Kendaraan
                 </label>
                 <input
@@ -381,7 +381,7 @@ export default function CustomersPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#313647] mb-1">
+                <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                   Tipe / Model
                 </label>
                 <input
@@ -394,7 +394,7 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#435663]/15">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#412D15]/15">
             <button
               type="button"
               onClick={() => setIsAddCustomerOpen(false)}
@@ -430,7 +430,7 @@ export default function CustomersPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Nomor Polisi (Plat No) *
               </label>
               <input
@@ -442,7 +442,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Tahun Pembuatan
               </label>
               <input
@@ -456,7 +456,7 @@ export default function CustomersPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Merk Kendaraan *
               </label>
               <input
@@ -468,7 +468,7 @@ export default function CustomersPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1">
                 Tipe / Model *
               </label>
               <input
@@ -482,7 +482,7 @@ export default function CustomersPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#313647] mb-1">
+            <label className="block text-xs font-semibold text-[#1F150C] mb-1">
               Catatan Khusus Kendaraan (Opsional)
             </label>
             <input
@@ -493,7 +493,7 @@ export default function CustomersPage() {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#435663]/15">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#412D15]/15">
             <button
               type="button"
               onClick={() => setSelectedCustomerId(null)}

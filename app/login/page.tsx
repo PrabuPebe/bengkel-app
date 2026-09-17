@@ -38,30 +38,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF8D4] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#E1DCC9] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Decorative ambient subtle blobs */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#A3B087]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#435663]/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#412D15]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#1F150C]/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md">
         {/* Logo + Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-[#313647] shadow-xl shadow-[#313647]/20 mb-4 border border-[#435663]/40">
-            <span className="text-xl font-black text-[#A3B087] tracking-wider">PA</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-[#1F150C] shadow-xl shadow-[#000000]/20 mb-4 border border-[#412D15]/40">
+            <span className="text-xl font-black text-[#E1DCC9] tracking-wider">PA</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-[#313647] tracking-tight">
+          <h1 className="text-2xl font-extrabold text-[#1F150C] tracking-tight">
             PitCare Auto
           </h1>
-          <p className="text-sm font-semibold text-[#435663] mt-1">
+          <p className="text-sm font-semibold text-[#412D15] mt-1">
             Sistem Manajemen Bengkel Modern
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-3xl border border-[#435663]/20 shadow-xl shadow-[#313647]/10 p-8">
+        <div className="bg-white rounded-3xl border border-[#412D15]/20 shadow-xl shadow-[#000000]/10 p-8">
           <div className="mb-6">
-            <h2 className="text-lg font-bold text-[#313647]">Masuk ke Dashboard</h2>
-            <p className="text-sm text-[#435663] mt-1">
+            <h2 className="text-lg font-bold text-[#1F150C]">Masuk ke Dashboard</h2>
+            <p className="text-sm text-[#412D15] mt-1">
               Masukkan kredensial akun bengkel Anda
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">
                 Email Akun
               </label>
               <input
@@ -91,7 +91,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">
                 Password
               </label>
               <input
@@ -111,7 +111,7 @@ export default function LoginPage() {
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-[#313647]/30 border-t-[#313647] rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-[#E1DCC9]/40 border-t-[#E1DCC9] rounded-full animate-spin" />
                   Memverifikasi...
                 </span>
               ) : (
@@ -121,24 +121,24 @@ export default function LoginPage() {
           </form>
 
           {/* Demo credentials */}
-          <div className="mt-6 pt-5 border-t border-[#435663]/15">
-            <p className="text-xs text-center text-[#435663] mb-3 font-semibold">
+          <div className="mt-6 pt-5 border-t border-[#412D15]/15">
+            <p className="text-xs text-center text-[#412D15] mb-3 font-semibold">
               Akun Demo PitCare Auto
             </p>
             <button
               type="button"
               onClick={fillDemo}
-              className="w-full p-3 rounded-xl bg-[#FFF8D4]/50 hover:bg-[#FFF8D4] border border-[#A3B087]/40 transition-all cursor-pointer text-left group"
+              className="w-full p-3 rounded-xl bg-[#E1DCC9]/50 hover:bg-[#E1DCC9] border border-[#412D15]/30 transition-all cursor-pointer text-left group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#313647] text-[#A3B087] flex items-center justify-center text-xs font-bold">
+                <div className="w-8 h-8 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-xs font-bold">
                   PJ
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-[#313647]">Pak Joko — Admin Bengkel</p>
-                  <p className="text-[11px] text-[#435663]">admin22@gmail.com · password: mamang22</p>
+                  <p className="text-xs font-bold text-[#1F150C]">Pak Joko — Admin Bengkel</p>
+                  <p className="text-[11px] text-[#412D15]">admin22@gmail.com · password: mamang22</p>
                 </div>
-                <span className="ml-auto text-[10px] font-bold text-[#313647] bg-[#A3B087] px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="ml-auto text-[10px] font-bold text-[#E1DCC9] bg-[#412D15] px-2.5 py-0.5 rounded-full shadow-xs">
                   Isi Otomatis
                 </span>
               </div>
@@ -147,7 +147,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-[11px] text-[#435663] mt-6 font-medium">
+        <p className="text-center text-[11px] text-[#412D15] mt-6 font-medium">
           © {new Date().getFullYear()} PitCare Auto — Platform Manajemen Bengkel Modern
         </p>
       </div>

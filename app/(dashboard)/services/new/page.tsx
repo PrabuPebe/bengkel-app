@@ -141,8 +141,8 @@ export default function NewServiceOrderPage() {
 
   if (isLoading) {
     return (
-      <div className="p-20 text-center text-[#435663] text-xs card-floating">
-        <div className="w-8 h-8 border-2 border-[#A3B087] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+      <div className="p-20 text-center text-[#412D15] text-xs card-floating">
+        <div className="w-8 h-8 border-2 border-[#412D15] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
         Memuat formulir penerimaan unit PitCare Auto...
       </div>
     );
@@ -162,10 +162,10 @@ export default function NewServiceOrderPage() {
           </svg>
         </Link>
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-[#313647] tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-[#1F150C] tracking-tight">
             Penerimaan Unit & SPK Baru
           </h1>
-          <p className="text-xs text-[#435663] mt-0.5">
+          <p className="text-xs text-[#412D15] mt-0.5">
             Catat data masuk unit kendaraan, keluhan pelanggan, dan tugaskan teknisi pit.
           </p>
         </div>
@@ -183,19 +183,19 @@ export default function NewServiceOrderPage() {
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Section 1: Pelanggan & Kendaraan */}
         <div className="card-floating p-6 sm:p-7">
-          <div className="flex items-center justify-between mb-5 pb-4 border-b border-[#435663]/15">
-            <h2 className="text-sm font-bold text-[#313647] flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#313647] text-[#FFF8D4] flex items-center justify-center text-[11px] font-black">1</span>
+          <div className="flex items-center justify-between mb-5 pb-4 border-b border-[#412D15]/15">
+            <h2 className="text-sm font-bold text-[#1F150C] flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-[11px] font-black">1</span>
               Identitas Pemilik & Unit Kendaraan
             </h2>
-            <Link href="/customers" target="_blank" className="text-xs text-[#313647] hover:underline font-bold transition-colors">
+            <Link href="/customers" target="_blank" className="text-xs text-[#1F150C] hover:underline font-bold transition-colors">
               + Daftar Pelanggan Baru ↗
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">Nama Pelanggan *</label>
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">Nama Pelanggan *</label>
               <select
                 value={selectedCustomerId}
                 onChange={(e) => handleCustomerChange(e.target.value)}
@@ -212,7 +212,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">Kendaraan yang Diservis *</label>
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">Kendaraan yang Diservis *</label>
               <select
                 value={selectedVehicleId}
                 onChange={(e) => setSelectedVehicleId(e.target.value)}
@@ -233,7 +233,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">KM Spidometer Masuk</label>
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">KM Spidometer Masuk</label>
               <input
                 type="number"
                 value={currentKm}
@@ -244,7 +244,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">Teknisi Penanggung Jawab</label>
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">Teknisi Penanggung Jawab</label>
               <select
                 value={selectedMechanicId}
                 onChange={(e) => setSelectedMechanicId(e.target.value)}
@@ -262,14 +262,14 @@ export default function NewServiceOrderPage() {
 
         {/* Section 2: Keluhan */}
         <div className="card-floating p-6 sm:p-7">
-          <h2 className="text-sm font-bold text-[#313647] mb-5 pb-4 border-b border-[#435663]/15 flex items-center gap-2.5">
-            <span className="w-6 h-6 rounded-full bg-[#313647] text-[#FFF8D4] flex items-center justify-center text-[11px] font-black">2</span>
+          <h2 className="text-sm font-bold text-[#1F150C] mb-5 pb-4 border-b border-[#412D15]/15 flex items-center gap-2.5">
+            <span className="w-6 h-6 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-[11px] font-black">2</span>
             Keluhan Masuk & Catatan Kondisi Fisik
           </h2>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">Keluhan Utama Kendaraan *</label>
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">Keluhan Utama Kendaraan *</label>
               <textarea
                 value={complaints}
                 onChange={(e) => setComplaints(e.target.value)}
@@ -281,7 +281,7 @@ export default function NewServiceOrderPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#313647] mb-1.5">Catatan / Permintaan Khusus (Opsional)</label>
+              <label className="block text-xs font-semibold text-[#1F150C] mb-1.5">Catatan / Permintaan Khusus (Opsional)</label>
               <input
                 type="text"
                 value={notes}
@@ -295,15 +295,15 @@ export default function NewServiceOrderPage() {
 
         {/* Section 3: Tindakan & Sparepart */}
         <div className="card-floating p-6 sm:p-7">
-          <h2 className="text-sm font-bold text-[#313647] mb-5 pb-4 border-b border-[#435663]/15 flex items-center gap-2.5">
-            <span className="w-6 h-6 rounded-full bg-[#313647] text-[#FFF8D4] flex items-center justify-center text-[11px] font-black">3</span>
+          <h2 className="text-sm font-bold text-[#1F150C] mb-5 pb-4 border-b border-[#412D15]/15 flex items-center gap-2.5">
+            <span className="w-6 h-6 rounded-full bg-[#1F150C] text-[#E1DCC9] flex items-center justify-center text-[11px] font-black">3</span>
             Tindakan Jasa & Estimasi Suku Cadang Awal
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Jasa */}
             <div>
-              <p className="text-xs font-bold text-[#313647] mb-2">Pilih Paket Tindakan Jasa:</p>
+              <p className="text-xs font-bold text-[#1F150C] mb-2">Pilih Paket Tindakan Jasa:</p>
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {availableServices.map((srv) => {
                   const isChecked = selectedServiceIds.includes(srv.id);
@@ -313,8 +313,8 @@ export default function NewServiceOrderPage() {
                       onClick={() => toggleService(srv.id)}
                       className={`p-3 rounded-xl border cursor-pointer transition-all duration-200 flex items-center justify-between ${
                         isChecked
-                          ? "bg-[#FFF8D4] border-[#A3B087] shadow-xs"
-                          : "bg-white border-[#435663]/20 hover:border-[#435663]/40"
+                          ? "bg-[#E1DCC9] border-[#412D15] shadow-xs"
+                          : "bg-white border-[#412D15]/20 hover:border-[#412D15]/40"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
@@ -322,14 +322,14 @@ export default function NewServiceOrderPage() {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => {}}
-                          className="rounded border-[#435663]/40 text-[#313647] focus:ring-0"
+                          className="rounded border-[#412D15]/40 text-[#1F150C] focus:ring-0"
                         />
                         <div>
-                          <p className="text-xs font-bold text-[#313647]">{srv.name}</p>
-                          <p className="text-[10px] text-[#435663]">{srv.code} • ~{srv.duration || 30} mnt</p>
+                          <p className="text-xs font-bold text-[#1F150C]">{srv.name}</p>
+                          <p className="text-[10px] text-[#412D15]">{srv.code} • ~{srv.duration || 30} mnt</p>
                         </div>
                       </div>
-                      <span className="text-xs font-black text-[#313647] font-mono">{formatRupiah(srv.price)}</span>
+                      <span className="text-xs font-black text-[#1F150C] font-mono">{formatRupiah(srv.price)}</span>
                     </div>
                   );
                 })}
@@ -338,28 +338,28 @@ export default function NewServiceOrderPage() {
 
             {/* Suku Cadang */}
             <div>
-              <p className="text-xs font-bold text-[#313647] mb-2">Pilih Suku Cadang:</p>
+              <p className="text-xs font-bold text-[#1F150C] mb-2">Pilih Suku Cadang:</p>
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {availableParts.map((part) => {
                   const inOrder = selectedParts.find((p) => p.partId === part.id);
                   return (
-                    <div key={part.id} className="p-3 rounded-xl bg-white border border-[#435663]/20 flex items-center justify-between">
+                    <div key={part.id} className="p-3 rounded-xl bg-white border border-[#412D15]/20 flex items-center justify-between">
                       <div className="min-w-0 flex-1 mr-2">
-                        <p className="text-xs font-bold text-[#313647] truncate">{part.name}</p>
-                        <p className="text-[10px] text-[#435663]">
+                        <p className="text-xs font-bold text-[#1F150C] truncate">{part.name}</p>
+                        <p className="text-[10px] text-[#412D15]">
                           Stok:{" "}
-                          <span className={part.stock <= part.minStock ? "text-amber-700 font-bold" : "text-[#435663]"}>
+                          <span className={part.stock <= part.minStock ? "text-amber-700 font-bold" : "text-[#412D15]"}>
                             {part.stock} {part.unit}
                           </span>
                         </p>
                       </div>
                       <div className="flex items-center gap-2.5 shrink-0">
-                        <span className="text-xs font-black text-[#313647] font-mono">{formatRupiah(part.sellPrice)}</span>
+                        <span className="text-xs font-black text-[#1F150C] font-mono">{formatRupiah(part.sellPrice)}</span>
                         {inOrder ? (
-                          <div className="flex items-center gap-1 bg-[#FFF8D4] border border-[#A3B087]/50 rounded-lg px-2.5 py-1">
+                          <div className="flex items-center gap-1 bg-[#E1DCC9] border border-[#412D15]/50 rounded-lg px-2.5 py-1">
                             <button type="button" onClick={() => updatePartQty(part.id, -1)} className="text-xs font-bold text-rose-600 px-0.5 cursor-pointer">-</button>
-                            <span className="text-xs font-bold font-mono text-[#313647] min-w-4 text-center">{inOrder.qty}</span>
-                            <button type="button" onClick={() => updatePartQty(part.id, 1)} className="text-xs font-bold text-[#313647] px-0.5 cursor-pointer">+</button>
+                            <span className="text-xs font-bold font-mono text-[#1F150C] min-w-4 text-center">{inOrder.qty}</span>
+                            <button type="button" onClick={() => updatePartQty(part.id, 1)} className="text-xs font-bold text-[#1F150C] px-0.5 cursor-pointer">+</button>
                           </div>
                         ) : (
                           <button
@@ -380,15 +380,15 @@ export default function NewServiceOrderPage() {
           </div>
 
           {/* Running total estimate */}
-          <div className="mt-5 p-4 rounded-xl bg-[#FFF8D4] border border-[#A3B087]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="text-xs text-[#435663] flex items-center gap-4 font-medium">
-              <span>Jasa ({selectedServiceIds.length}): <strong className="text-[#313647] font-mono">{formatRupiah(totalServiceEst)}</strong></span>
+          <div className="mt-5 p-4 rounded-xl bg-[#E1DCC9] border border-[#412D15]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="text-xs text-[#412D15] flex items-center gap-4 font-medium">
+              <span>Jasa ({selectedServiceIds.length}): <strong className="text-[#1F150C] font-mono">{formatRupiah(totalServiceEst)}</strong></span>
               <span>•</span>
-              <span>Sparepart ({selectedParts.reduce((acc, p) => acc + p.qty, 0)} pcs): <strong className="text-[#313647] font-mono">{formatRupiah(totalPartsEst)}</strong></span>
+              <span>Sparepart ({selectedParts.reduce((acc, p) => acc + p.qty, 0)} pcs): <strong className="text-[#1F150C] font-mono">{formatRupiah(totalPartsEst)}</strong></span>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-[11px] font-bold text-[#435663] uppercase tracking-wider">Estimasi Awal:</span>
-              <span className="text-xl font-black text-[#313647] font-mono">{formatRupiah(grandTotalEst)}</span>
+              <span className="text-[11px] font-bold text-[#412D15] uppercase tracking-wider">Estimasi Awal:</span>
+              <span className="text-xl font-black text-[#1F150C] font-mono">{formatRupiah(grandTotalEst)}</span>
             </div>
           </div>
         </div>

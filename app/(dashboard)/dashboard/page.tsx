@@ -64,7 +64,7 @@ export default async function DashboardOverviewPage() {
           </div>
           <Link
             href="/inventory/parts"
-            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#313647] hover:bg-[#252a37] transition-all shrink-0 text-center cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-[#E1DCC9] bg-[#1F150C] hover:bg-[#000000] transition-all shrink-0 text-center cursor-pointer"
           >
             Kelola Stok →
           </Link>
@@ -75,14 +75,14 @@ export default async function DashboardOverviewPage() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#A3B087] animate-pulse" />
-            <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#313647]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#412D15] animate-pulse" />
+            <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#1F150C]">
               Operasional Servis & Kasir Real-time
             </h2>
           </div>
           <Link
             href="/services"
-            className="text-xs font-bold text-[#435663] hover:text-[#313647] hover:underline transition-colors"
+            className="text-xs font-bold text-[#412D15] hover:text-[#1F150C] hover:underline transition-colors"
           >
             Lihat Semua SPK ↗
           </Link>
@@ -95,18 +95,18 @@ export default async function DashboardOverviewPage() {
             className="card-floating p-5 block group cursor-pointer"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold text-[#435663]">Antrian Pit</span>
+              <span className="text-xs font-bold text-[#412D15]">Antrian Pit</span>
               <div className="w-10 h-10 rounded-xl stat-icon-cream flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                <svg className="w-5 h-5 text-[#313647]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#1F150C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
             <div className="flex items-baseline justify-between">
-              <p className="text-3xl font-black font-mono text-[#313647]">{stats.activeQueueCount}</p>
+              <p className="text-3xl font-black font-mono text-[#1F150C]">{stats.activeQueueCount}</p>
               <span className="badge-custom badge-cream">Menunggu</span>
             </div>
-            <p className="text-[11px] text-[#435663] mt-2 font-medium">Unit di area registrasi pit</p>
+            <p className="text-[11px] text-[#412D15] mt-2 font-medium">Unit di area registrasi pit</p>
           </Link>
 
           {/* Sedang Dikerjakan */}
@@ -115,18 +115,18 @@ export default async function DashboardOverviewPage() {
             className="card-floating p-5 block group cursor-pointer"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold text-[#435663]">Sedang Dikerjakan</span>
+              <span className="text-xs font-bold text-[#412D15]">Sedang Dikerjakan</span>
               <div className="w-10 h-10 rounded-xl stat-icon-steel flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                <svg className="w-5 h-5 text-[#313647]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#1F150C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 </svg>
               </div>
             </div>
             <div className="flex items-baseline justify-between">
-              <p className="text-3xl font-black font-mono text-[#313647]">{stats.inProgressCount}</p>
+              <p className="text-3xl font-black font-mono text-[#1F150C]">{stats.inProgressCount}</p>
               <span className="badge-custom badge-steel">Aktif Pit</span>
             </div>
-            <p className="text-[11px] text-[#435663] mt-2 font-medium">Dalam penanganan teknisi</p>
+            <p className="text-[11px] text-[#412D15] mt-2 font-medium">Dalam penanganan teknisi</p>
           </Link>
 
           {/* Siap ke Kasir */}
@@ -135,18 +135,18 @@ export default async function DashboardOverviewPage() {
             className="card-floating p-5 block group cursor-pointer"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold text-[#435663]">Siap Ditagih Kasir</span>
+              <span className="text-xs font-bold text-[#412D15]">Siap Ditagih Kasir</span>
               <div className="w-10 h-10 rounded-xl stat-icon-sage flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                <svg className="w-5 h-5 text-[#313647]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#1F150C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
             <div className="flex items-baseline justify-between">
-              <p className="text-3xl font-black font-mono text-[#313647]">{stats.readyForCashierCount}</p>
+              <p className="text-3xl font-black font-mono text-[#1F150C]">{stats.readyForCashierCount}</p>
               <span className="badge-custom badge-sage">Selesai Servis</span>
             </div>
-            <p className="text-[11px] text-[#435663] mt-2 font-medium">Siap proses pembayaran</p>
+            <p className="text-[11px] text-[#412D15] mt-2 font-medium">Siap proses pembayaran</p>
           </Link>
 
           {/* Omzet */}
@@ -155,16 +155,16 @@ export default async function DashboardOverviewPage() {
             className="card-floating p-5 block group cursor-pointer"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold text-[#435663]">Omzet Kasir</span>
+              <span className="text-xs font-bold text-[#412D15]">Omzet Kasir</span>
               <div className="w-10 h-10 rounded-xl stat-icon-charcoal flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                <svg className="w-5 h-5 text-[#313647]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#1F150C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <p className="text-xl font-black font-mono text-[#313647] leading-tight">{formatRupiah(stats.todayRevenue)}</p>
+            <p className="text-xl font-black font-mono text-[#1F150C] leading-tight">{formatRupiah(stats.todayRevenue)}</p>
             <div className="flex items-center justify-between mt-2">
-              <p className="text-[11px] text-[#435663]">{stats.completedOrdersCount} faktur lunas</p>
+              <p className="text-[11px] text-[#412D15]">{stats.completedOrdersCount} faktur lunas</p>
               <span className="badge-custom badge-sage">100% Lunas</span>
             </div>
           </Link>
@@ -173,36 +173,36 @@ export default async function DashboardOverviewPage() {
 
       {/* 2. Master Data Metrics */}
       <div>
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#313647] mb-4">
+        <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#1F150C] mb-4">
           Master Data & Inventaris Gudang
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link href="/customers" className="card-floating p-5 block cursor-pointer">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#435663]">Total Pelanggan</span>
+              <span className="text-xs font-bold text-[#412D15]">Total Pelanggan</span>
               <span className="badge-custom badge-steel">Aktif</span>
             </div>
-            <p className="text-2xl font-extrabold font-mono text-[#313647]">{stats.totalCustomers}</p>
-            <p className="text-[11px] text-[#435663] mt-1">Pemilik terdata di sistem</p>
+            <p className="text-2xl font-extrabold font-mono text-[#1F150C]">{stats.totalCustomers}</p>
+            <p className="text-[11px] text-[#412D15] mt-1">Pemilik terdata di sistem</p>
           </Link>
 
           <Link href="/customers" className="card-floating p-5 block cursor-pointer">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#435663]">Unit Kendaraan</span>
+              <span className="text-xs font-bold text-[#412D15]">Unit Kendaraan</span>
               <span className="badge-custom badge-steel">Terdaftar</span>
             </div>
-            <p className="text-2xl font-extrabold font-mono text-[#313647]">{stats.totalVehicles}</p>
-            <p className="text-[11px] text-[#435663] mt-1">Armada motor & mobil</p>
+            <p className="text-2xl font-extrabold font-mono text-[#1F150C]">{stats.totalVehicles}</p>
+            <p className="text-[11px] text-[#412D15] mt-1">Armada motor & mobil</p>
           </Link>
 
           <Link href="/inventory/services" className="card-floating p-5 block cursor-pointer">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#435663]">Katalog Jasa</span>
+              <span className="text-xs font-bold text-[#412D15]">Katalog Jasa</span>
               <span className="badge-custom badge-cream">Paket</span>
             </div>
-            <p className="text-2xl font-extrabold font-mono text-[#313647]">{stats.totalServices}</p>
-            <p className="text-[11px] text-[#435663] mt-1">Paket tindakan & standar tarif</p>
+            <p className="text-2xl font-extrabold font-mono text-[#1F150C]">{stats.totalServices}</p>
+            <p className="text-[11px] text-[#412D15] mt-1">Paket tindakan & standar tarif</p>
           </Link>
 
           <Link
@@ -212,17 +212,17 @@ export default async function DashboardOverviewPage() {
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className={`text-xs font-bold ${stats.lowStockCount > 0 ? "text-rose-700" : "text-[#435663]"}`}>
+              <span className={`text-xs font-bold ${stats.lowStockCount > 0 ? "text-rose-700" : "text-[#412D15]"}`}>
                 Stok Suku Cadang
               </span>
               {stats.lowStockCount > 0 && (
                 <span className="badge-custom badge-danger animate-pulse">{stats.lowStockCount} Kritis</span>
               )}
             </div>
-            <p className={`text-2xl font-extrabold font-mono ${stats.lowStockCount > 0 ? "text-rose-700" : "text-[#313647]"}`}>
-              {stats.totalParts} <span className="text-sm font-normal text-[#435663]">SKU</span>
+            <p className={`text-2xl font-extrabold font-mono ${stats.lowStockCount > 0 ? "text-rose-700" : "text-[#1F150C]"}`}>
+              {stats.totalParts} <span className="text-sm font-normal text-[#412D15]">SKU</span>
             </p>
-            <p className="text-[11px] text-[#435663] mt-1">
+            <p className="text-[11px] text-[#412D15] mt-1">
               {stats.lowStockCount > 0 ? "Perlu restock segera" : "Semua stok dalam batas aman"}
             </p>
           </Link>
@@ -238,7 +238,7 @@ export default async function DashboardOverviewPage() {
             desc: "Terbitkan SPK baru, perbarui status pengerjaan mekanik, dan kurangi stok suku cadang otomatis.",
             href: "/services",
             label: "Buka Modul Servis",
-            numBg: "bg-[#313647] text-[#FFF8D4]",
+            numBg: "bg-[#1F150C] text-[#E1DCC9]",
           },
           {
             num: "02",
@@ -246,7 +246,7 @@ export default async function DashboardOverviewPage() {
             desc: "Penerimaan pembayaran tunai, transfer, dan QRIS, hitung diskon & kembalian, serta cetak nota struk resmi.",
             href: "/cashier",
             label: "Buka Modul Kasir",
-            numBg: "bg-[#A3B087] text-[#313647]",
+            numBg: "bg-[#412D15] text-[#E1DCC9]",
           },
           {
             num: "03",
@@ -254,7 +254,7 @@ export default async function DashboardOverviewPage() {
             desc: "Database nomor kontak WhatsApp pelanggan dan relasi kepemilikan banyak armada kendaraan.",
             href: "/customers",
             label: "Buka Data Pelanggan",
-            numBg: "bg-[#435663] text-[#FFF8D4]",
+            numBg: "bg-[#000000] text-[#E1DCC9]",
           },
           {
             num: "04",
@@ -262,7 +262,7 @@ export default async function DashboardOverviewPage() {
             desc: "Halaman publik mobile tanpa login bagi pelanggan untuk melacak transparansi servis kendaraannya secara live.",
             href: "/track/trk-vario160-budi",
             label: "Buka Tracking Publik",
-            numBg: "bg-[#FFF8D4] text-[#313647] border border-[#435663]/30",
+            numBg: "bg-[#E1DCC9] text-[#1F150C] border border-[#412D15]/30",
           },
         ].map((mod) => (
           <div key={mod.num} className="card-floating p-5 flex flex-col justify-between">
@@ -270,12 +270,12 @@ export default async function DashboardOverviewPage() {
               <div className={`w-9 h-9 rounded-xl ${mod.numBg} flex items-center justify-center font-black text-xs mb-3 shadow-xs`}>
                 {mod.num}
               </div>
-              <h3 className="text-sm font-bold text-[#313647] mb-1">{mod.title}</h3>
-              <p className="text-xs text-[#435663] leading-relaxed mb-4">{mod.desc}</p>
+              <h3 className="text-sm font-bold text-[#1F150C] mb-1">{mod.title}</h3>
+              <p className="text-xs text-[#412D15] leading-relaxed mb-4">{mod.desc}</p>
             </div>
             <Link
               href={mod.href}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#313647] hover:text-[#435663] hover:translate-x-0.5 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F150C] hover:text-[#412D15] hover:translate-x-0.5 transition-all cursor-pointer"
             >
               {mod.label} <span>→</span>
             </Link>
