@@ -1,4 +1,4 @@
-// Prisma schema for Bengkelku (bengkel-app)
+// Prisma schema for PitCare Auto (pitcare-app)
 // Compatible with PostgreSQL (Supabase / Neon / PgBouncer)
 
 generator client {

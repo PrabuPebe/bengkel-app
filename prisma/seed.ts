@@ -10,12 +10,12 @@ export const initialUsers = [
   },
   {
     name: "Siti Rahma",
-    email: "kasir@bengkelku.local",
+    email: "kasir@pitcare.auto",
     role: "CASHIER" as const,
   },
   {
     name: "Budi Santoso",
-    email: "mekanik@bengkelku.local",
+    email: "mekanik@pitcare.auto",
     role: "MECHANIC" as const,
   },
 ];
@@ -285,7 +285,7 @@ export const initialParts = [
 ];
 
 export async function main() {
-  console.log("Menjalankan database seeder Bengkelku...");
+  console.log("Menjalankan database seeder PitCare Auto...");
 
   // Seed Users
   for (const user of initialUsers) {

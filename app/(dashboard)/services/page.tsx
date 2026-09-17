@@ -31,42 +31,42 @@ function getStatusBadge(status: ServiceStatus) {
   switch (status) {
     case "ANTRIAN":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
           Antrian Pit
         </span>
       );
     case "PENGERJAAN":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-300 border border-blue-500/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
           Sedang Dikerjakan
         </span>
       );
     case "MENUNGGU_PART":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-orange-500/10 text-orange-300 border border-orange-500/30">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200">
           <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
           Menunggu Part
         </span>
       );
     case "SELESAI_PENGERJAAN":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
           Siap ke Kasir
         </span>
       );
     case "SELESAI_PEMBAYARAN":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-300 border border-indigo-500/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
           Faktur Lunas
         </span>
       );
     case "DIBATALKAN":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-300 border border-rose-500/30">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">
           Dibatalkan
         </span>
       );
@@ -144,7 +144,7 @@ export default function ServicesPage() {
         actionButton={
           <Link
             href="/services/new"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 hover:brightness-110 shadow-lg shadow-indigo-600/25 active:scale-95 transition-all duration-300"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 active:scale-95 transition-all cursor-pointer"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -154,10 +154,9 @@ export default function ServicesPage() {
         }
       />
 
-      {/* Filter Tabs & Search Bar */}
-      <div className="space-y-4">
-        {/* Status Filter Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      {/* Filter Tabs & Search */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
           {statusTabs.map((tab) => {
             const isActive = selectedStatus === tab.id;
             return (
@@ -165,17 +164,17 @@ export default function ServicesPage() {
                 key={tab.id}
                 type="button"
                 onClick={() => handleFilterChange(tab.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                   isActive
-                    ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg shadow-indigo-600/25"
-                    : "bg-slate-900/60 backdrop-blur-md text-slate-400 hover:text-white hover:bg-slate-800/80 border border-white/5"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                    : "bg-white text-slate-600 hover:bg-slate-50 border border-slate-200"
                 }`}
               >
                 <span>{tab.label}</span>
                 {typeof tab.count === "number" && (
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
-                      isActive ? "bg-white/20 text-white" : "bg-slate-950 text-slate-400"
+                    className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
+                      isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
                     }`}
                   >
                     {tab.count}
@@ -186,33 +185,24 @@ export default function ServicesPage() {
           })}
         </div>
 
-        {/* Search Input Bar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <form onSubmit={handleSearch} className="flex-1 relative">
             <input
               type="text"
-              placeholder="Cari nomor SPK (WO-...), plat nomor (B 4321 KAZ), nama pelanggan, atau merk kendaraan..."
+              placeholder="Cari nomor SPK, plat nomor, nama pelanggan, atau merk kendaraan..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 pl-11 pr-4 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200"
+              className="w-full h-11 pl-11 pr-4 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
             />
-            <svg
-              className="w-4 h-4 text-slate-500 absolute left-4 top-3.5 pointer-events-none"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+            <svg className="w-4 h-4 text-slate-400 absolute left-4 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </form>
           {searchQuery && (
             <button
               type="button"
-              onClick={() => {
-                setSearchQuery("");
-                loadOrders(selectedStatus, "");
-              }}
-              className="px-4 h-11 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900 border border-white/10 hover:bg-slate-800 transition-colors"
+              onClick={() => { setSearchQuery(""); loadOrders(selectedStatus, ""); }}
+              className="px-4 h-11 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Reset
             </button>
@@ -227,43 +217,43 @@ export default function ServicesPage() {
           Memuat data Work Order PitCare Auto...
         </div>
       ) : orders.length === 0 ? (
-        <div className="p-16 text-center rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10">
-          <p className="text-sm font-bold text-white mb-1">
-            Tidak ada Work Order pada kategori ini
-          </p>
+        <div className="p-16 text-center card">
+          <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+            <svg className="w-7 h-7 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          <p className="text-sm font-bold text-slate-800 mb-1">Tidak ada Work Order</p>
           <p className="text-xs text-slate-400 mb-6 max-w-sm mx-auto">
-            {searchQuery
-              ? "Coba gunakan kata kunci pencarian lain atau pilih tab status lain."
-              : "Belum ada SPK servis yang terdaftar untuk filter ini."}
+            {searchQuery ? "Coba gunakan kata kunci lain atau pilih tab status lain." : "Belum ada SPK yang terdaftar untuk filter ini."}
           </p>
           <Link
             href="/services/new"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all cursor-pointer"
           >
             + Terbitkan SPK Baru
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {orders.map((order) => (
             <div
               key={order.id}
-              className="p-6 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-white/10 hover:border-indigo-500/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/10 shadow-sm"
+              className="card card-hover p-5 sm:p-6"
             >
               {/* Header row */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/5">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-xl bg-slate-950 text-indigo-400 border border-white/5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">
                     {order.orderNumber}
                   </span>
-                  <span className="font-mono text-xs font-black px-2.5 py-1 rounded-xl bg-indigo-500/10 text-white border border-indigo-500/20 tracking-wider">
+                  <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100 tracking-wider">
                     {order.vehicle?.plateNumber || "NO-PLATE"}
                   </span>
-                  <span className="text-xs font-semibold text-slate-200">
+                  <span className="text-xs font-semibold text-slate-700">
                     {order.vehicle ? `${order.vehicle.brand} ${order.vehicle.model}` : "Kendaraan Terhapus"}
                   </span>
                 </div>
-
                 <div className="flex items-center gap-2">
                   {getStatusBadge(order.status)}
                 </div>
@@ -272,85 +262,83 @@ export default function ServicesPage() {
               {/* Body row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 py-4 text-xs">
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
                     Pemilik Kendaraan
                   </p>
-                  <p className="font-bold text-white text-sm">
+                  <p className="font-bold text-slate-900 text-sm">
                     {order.customer?.name || "Pelanggan Terhapus"}
                   </p>
                   <a
                     href={`https://wa.me/${order.customer?.phone?.replace(/^0/, "62")}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-emerald-400 font-medium hover:underline mt-1"
+                    className="inline-flex items-center gap-1 text-emerald-600 font-medium hover:underline mt-1"
                   >
-                    <span>📱 WA: {order.customer?.phone || "-"}</span>
+                    📱 WA: {order.customer?.phone || "-"}
                   </a>
                   {order.currentKm && (
-                    <p className="text-slate-400 mt-1">
-                      KM Masuk: <span className="font-mono font-bold text-slate-200">{order.currentKm.toLocaleString("id-ID")} KM</span>
+                    <p className="text-slate-500 mt-1">
+                      KM Masuk: <span className="font-mono font-bold text-slate-700">{order.currentKm.toLocaleString("id-ID")} KM</span>
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Keluhan & Tindakan Servis
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                    Keluhan & Tindakan
                   </p>
-                  <p className="text-slate-300 line-clamp-2 leading-relaxed">
-                    <span className="text-slate-500 font-medium">Keluhan: </span>
+                  <p className="text-slate-600 line-clamp-2 leading-relaxed">
+                    <span className="text-slate-400 font-medium">Keluhan: </span>
                     &quot;{order.complaints}&quot;
                   </p>
                   {order.diagnosis && (
-                    <p className="text-indigo-300 line-clamp-1 mt-1 leading-relaxed">
-                      <span className="text-slate-500 font-medium">Diagnosis: </span>
+                    <p className="text-indigo-600 line-clamp-1 mt-1 leading-relaxed">
+                      <span className="text-slate-400 font-medium">Diagnosis: </span>
                       {order.diagnosis}
                     </p>
                   )}
                   <p className="text-slate-400 mt-1.5">
-                    Teknisi: <span className="font-semibold text-white">{order.mechanicName || "Belum Ditugaskan"}</span>
+                    Teknisi: <span className="font-semibold text-slate-700">{order.mechanicName || "Belum Ditugaskan"}</span>
                   </p>
                 </div>
 
                 <div className="md:text-right flex flex-col justify-between">
                   <div>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
                       Estimasi / Total Biaya
                     </p>
-                    <p className="text-2xl font-black font-mono text-emerald-400">
+                    <p className="text-2xl font-black font-mono text-emerald-700">
                       {formatRupiah(order.grandTotal)}
                     </p>
                     <p className="text-[11px] font-mono text-slate-400 mt-1">
                       {order.items.length} Jasa • {order.parts.length} Sparepart
                     </p>
                   </div>
-                  <p className="text-[10px] text-slate-500 mt-2">
+                  <p className="text-[10px] text-slate-400 mt-2">
                     Masuk: {formatDate(order.entryDate)}
                   </p>
                 </div>
               </div>
 
-              {/* Bottom footer row */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/5">
-                <div className="flex items-center gap-3 text-[11px] text-slate-400">
+              {/* Footer row */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+                <div className="flex items-center gap-3 text-[11px]">
                   <Link
                     href={`/track/${order.token}`}
                     target="_blank"
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 hover:bg-indigo-500/20 font-semibold transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-100 font-semibold transition-colors text-xs cursor-pointer"
                   >
-                    <span>📱 Live Tracking Pelanggan ↗</span>
+                    📱 Live Tracking Pelanggan ↗
                   </Link>
                   {order.notes && (
-                    <span className="truncate max-w-xs text-slate-500">
-                      • {order.notes}
-                    </span>
+                    <span className="truncate max-w-xs text-slate-400">• {order.notes}</span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <Link
                     href={`/services/${order.id}`}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:text-white bg-slate-950/80 border border-white/10 hover:bg-slate-800 transition-all duration-200"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer"
                   >
                     Detail & Mekanik →
                   </Link>
@@ -358,7 +346,7 @@ export default function ServicesPage() {
                   {order.status === "SELESAI_PENGERJAAN" && (
                     <Link
                       href={`/cashier/${order.id}`}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-600/20 transition-all"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm shadow-emerald-200 transition-all cursor-pointer"
                     >
                       Bayar di Kasir 💳
                     </Link>
@@ -367,7 +355,7 @@ export default function ServicesPage() {
                   {order.status === "SELESAI_PEMBAYARAN" && (
                     <Link
                       href={`/cashier/${order.id}`}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition-all cursor-pointer"
                     >
                       Cetak Faktur 🖨️
                     </Link>

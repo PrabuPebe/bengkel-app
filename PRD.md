@@ -17,7 +17,7 @@
 | **Deskripsi Singkat** | Sistem manajemen operasional bengkel terintegrasi yang mendigitalisasi pencatatan servis, kasir/billing, pelacakan pengerjaan secara transparan bagi pelanggan (*Live Service Tracking*), dan otomatisasi pengingat servis via WhatsApp (*Automated Service Reminder*). |
 | **Tech Stack** | • **Framework:** Next.js 16.3.4 (App Router, Server Components & Actions)<br>• **UI & Core:** React 19.2.8, Tailwind CSS v4 (via `@tailwindcss/postcss`)<br>• **Bahasa:** TypeScript 5 (Strict Mode)<br>• **Autentikasi:** NextAuth.js v4.24.15 (Credentials & Google OAuth Provider)<br>• **Styling Khusus:** Custom Bengkelku Workspace Theme (`app/globals.css`) |
 | **Repository GitHub** | [https://github.com/prabupmb1212-sketch/bengkel-app.git](https://github.com/prabupmb1212-sketch/bengkel-app.git) |
-| **Production URL** | [https://bengkelkuapp.vercel.app](https://bengkelkuapp.vercel.app) |
+| **Production URL** | [https://pitcareauto.vercel.app](https://pitcareauto.vercel.app) |
 | **Akun Demo / Testing**| • **Email:** `admin22@gmail.com`<br>• **Password:** `mamang22` |
 | **Status Saat Ini** | **Milestone 1 Selesai (100%)**: Inisialisasi proyek, halaman kustom login (`app/login/page.tsx`), autentikasi NextAuth, routing redirects, dan deployment otomatis Vercel telah aktif dan berjalan stabil. |
 
@@ -273,7 +273,7 @@ gantt
 - Inisialisasi Next.js 16 App Router dengan TypeScript & Tailwind CSS v4.
 - Implementasi halaman kustom login (`app/login/page.tsx`) dengan desain premium workspace Bengkelku.
 - Integrasi NextAuth.js (Credentials & Google OAuth Provider).
-- Setup CI/CD dan deployment stabil di Vercel (`https://bengkelkuapp.vercel.app`).
+- Setup CI/CD dan deployment stabil di Vercel (`https://pitcareauto.vercel.app`).
 
 ### Milestone 2: Skema Database & Manajemen Master Data (*ESTIMASI: MINGGU 1*)
 - Penetapan skema database relasional (Tabel `Users`, `Customers`, `Vehicles`, `ServicesCatalog`, `PartsInventory`).
