@@ -129,61 +129,91 @@ export function Sidebar({ user }: SidebarProps) {
         />
       )}
 
-      {/* Dark Pitstop #0F172A Sidebar */}
+      {/* Sidebar Premium v2 */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-40 w-72 bg-[#0F172A]/95 backdrop-blur-xl border-r border-slate-800/80 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-2xl ${
+        className={`fixed top-0 bottom-0 left-0 z-40 w-72 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-2xl shadow-black/60 ${
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{
+          background: "linear-gradient(180deg, #0c1526 0%, #0F172A 40%, #0a1120 100%)",
+          borderRight: "1px solid rgba(30, 41, 59, 0.8)",
+        }}
       >
+        {/* Ambient radial glow top */}
+        <div
+          className="absolute top-0 left-0 right-0 h-48 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,210,255,0.07) 0%, transparent 70%)",
+          }}
+        />
+
         {/* Brand Header */}
-        <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
+        <div className="relative p-5 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(30,41,59,0.7)" }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] text-slate-950 shadow-lg shadow-[#00D2FF]/25 border border-cyan-400/40 flex items-center justify-center font-black text-sm tracking-wider">
-              BK
+            <div className="relative">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] text-slate-950 shadow-lg shadow-[#00D2FF]/20 flex items-center justify-center font-black text-sm tracking-wider">
+                BK
+              </div>
+              <div
+                className="absolute -inset-0.5 rounded-xl opacity-40 pointer-events-none"
+                style={{
+                  background: "linear-gradient(135deg, #00D2FF, #2563EB)",
+                  filter: "blur(5px)",
+                  zIndex: -1,
+                }}
+              />
             </div>
             <div>
               <h1 className="text-base font-extrabold text-white tracking-tight leading-none flex items-center gap-1.5">
                 <span>Bengkelku</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/10 text-[#00D2FF] border border-cyan-500/30">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/10 text-[#00D2FF] border border-cyan-500/25">
                   PRO
                 </span>
               </h1>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mt-0.5">
                 High-Tech Pitstop
               </p>
             </div>
           </div>
-
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[10px] font-bold text-[#00D2FF]">
+          <span className="pill-live">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse" />
             Live
           </span>
         </div>
 
         {/* Nav links */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-6">
-          {navLinks.map((group) => (
+        <nav className="relative flex-1 overflow-y-auto py-4 px-3 space-y-5">
+          {navLinks.map((group, gi) => (
             <div key={group.group}>
-              <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+              {gi > 0 && (
+                <div className="neon-line mb-4 opacity-30" />
+              )}
+              <p className="px-3 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-600 mb-2">
                 {group.group}
               </p>
-              <ul className="space-y-1.5">
+              <ul className="space-y-0.5">
                 {group.items.map((item) => {
                   const isActive = pathname === item.href;
-
                   return (
                     <li key={item.name}>
                       <Link
                         href={item.href}
                         onClick={() => setIsOpenMobile(false)}
-                        className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                        className={`relative flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                           isActive
-                            ? "bg-gradient-to-r from-cyan-500/15 to-blue-600/10 text-[#00D2FF] border border-[#00D2FF]/35 shadow-[0_0_15px_rgba(0,210,255,0.12)] font-bold"
-                            : "text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent"
+                            ? "bg-gradient-to-r from-cyan-500/12 to-blue-600/8 text-[#00D2FF] font-bold"
+                            : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                         }`}
+                        style={isActive ? { boxShadow: "0 0 0 1px rgba(0,210,255,0.18)" } : {}}
                       >
+                        {isActive && (
+                          <span
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full"
+                            style={{ background: "linear-gradient(180deg, #00D2FF, #2563EB)" }}
+                          />
+                        )}
                         <div className="flex items-center gap-3">
-                          <span className={isActive ? "text-[#00D2FF]" : "text-slate-400"}>
+                          <span className={`transition-colors ${isActive ? "text-[#00D2FF]" : "text-slate-500"}`}>
                             {item.icon}
                           </span>
                           <span>{item.name}</span>
@@ -209,28 +239,24 @@ export function Sidebar({ user }: SidebarProps) {
         </nav>
 
         {/* User profile footer */}
-        <div className="p-4 border-t border-slate-800/80 bg-[#0B0F17]/90">
+        <div className="relative p-4" style={{ borderTop: "1px solid rgba(30,41,59,0.7)", background: "rgba(11,15,23,0.6)" }}>
+          <div className="neon-line absolute top-0 left-4 right-4 opacity-25" />
           <div className="flex items-center gap-3 mb-3 px-1">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 flex items-center justify-center font-bold text-xs shadow-md">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 flex items-center justify-center font-bold text-xs shadow-md shadow-cyan-900/40">
               {(user?.name || "BK").substring(0, 2).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-white truncate">
-                {user?.name || "Mekanik Kepala"}
-              </p>
-              <p className="text-[10px] text-slate-400 truncate font-mono">
-                {user?.email || "admin@bengkelku.app"}
-              </p>
+              <p className="text-xs font-bold text-white truncate">{user?.name || "Mekanik Kepala"}</p>
+              <p className="text-[10px] text-slate-500 truncate font-mono">{user?.email || "admin@bengkelku.app"}</p>
             </div>
-            <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-amber-500/15 text-[#F59E0B] border border-amber-500/40">
+            <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-amber-500/12 text-[#F59E0B] border border-amber-500/30">
               {user?.role || "ADMIN"}
             </span>
           </div>
-
           <button
             type="button"
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-400 bg-rose-500/8 hover:bg-rose-500/15 border border-rose-500/25 hover:border-rose-500/45 transition-all cursor-pointer"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

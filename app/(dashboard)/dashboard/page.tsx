@@ -96,6 +96,8 @@ export default async function DashboardOverviewPage() {
             href="/services"
             className="card-pitstop p-5 block group cursor-pointer"
           >
+            {/* Amber bottom accent bar */}
+            <div className="absolute bottom-0 left-4 w-10 h-0.5 rounded-full bg-amber-500/60 group-hover:w-16 transition-all duration-300" />
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold text-slate-400">Antrian Pit</span>
               <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-[#F59E0B] border border-amber-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
@@ -108,7 +110,7 @@ export default async function DashboardOverviewPage() {
               <p className="text-3xl font-black font-mono text-white">{stats.activeQueueCount}</p>
               <span className="badge-custom badge-antrian">Menunggu</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-2 font-medium">Unit di area registrasi pit</p>
+            <p className="text-[11px] text-slate-500 mt-2 font-medium">Unit di area registrasi pit</p>
           </Link>
 
           {/* Sedang Dikerjakan */}
@@ -116,6 +118,8 @@ export default async function DashboardOverviewPage() {
             href="/services"
             className="card-pitstop p-5 block group cursor-pointer"
           >
+            {/* Sky bottom accent bar */}
+            <div className="absolute bottom-0 left-4 w-10 h-0.5 rounded-full bg-sky-500/60 group-hover:w-16 transition-all duration-300" />
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold text-slate-400">Sedang Dikerjakan</span>
               <div className="w-10 h-10 rounded-xl bg-sky-500/15 text-[#0284C7] border border-sky-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
@@ -128,7 +132,7 @@ export default async function DashboardOverviewPage() {
               <p className="text-3xl font-black font-mono text-[#00D2FF]">{stats.inProgressCount}</p>
               <span className="badge-custom badge-pengerjaan">Aktif Pit</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-2 font-medium">Dalam penanganan teknisi</p>
+            <p className="text-[11px] text-slate-500 mt-2 font-medium">Dalam penanganan teknisi</p>
           </Link>
 
           {/* Siap ke Kasir */}
@@ -136,6 +140,8 @@ export default async function DashboardOverviewPage() {
             href="/cashier"
             className="card-pitstop p-5 block group cursor-pointer"
           >
+            {/* Emerald bottom accent bar */}
+            <div className="absolute bottom-0 left-4 w-10 h-0.5 rounded-full bg-emerald-500/60 group-hover:w-16 transition-all duration-300" />
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold text-slate-400">Siap Ditagih Kasir</span>
               <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-[#10B981] border border-emerald-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
@@ -148,17 +154,20 @@ export default async function DashboardOverviewPage() {
               <p className="text-3xl font-black font-mono text-[#10B981]">{stats.readyForCashierCount}</p>
               <span className="badge-custom badge-selesai-pengerjaan">Selesai Servis</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-2 font-medium">Menunggu pembayaran faktur</p>
+            <p className="text-[11px] text-slate-500 mt-2 font-medium">Menunggu pembayaran faktur</p>
           </Link>
 
-          {/* Omzet */}
+          {/* Omzet — special neon card */}
           <Link
             href="/cashier"
-            className="card-pitstop p-5 block group cursor-pointer border-cyan-500/30"
+            className="card-pitstop p-5 block group cursor-pointer"
+            style={{ boxShadow: "0 4px 24px -4px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,210,255,0.12), 0 0 20px -4px rgba(0,210,255,0.08)" }}
           >
+            {/* Cyan neon bottom accent bar */}
+            <div className="absolute bottom-0 left-4 w-12 h-0.5 rounded-full group-hover:w-20 transition-all duration-300" style={{ background: "linear-gradient(90deg, #00D2FF, #2563EB)" }} />
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold text-slate-400">Omzet Kasir</span>
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/15 text-[#00D2FF] border border-cyan-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200 shadow-[0_0_10px_rgba(0,210,255,0.15)]">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/15 text-[#00D2FF] border border-cyan-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200 shadow-[0_0_12px_rgba(0,210,255,0.18)]">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -166,12 +175,13 @@ export default async function DashboardOverviewPage() {
             </div>
             <p className="text-xl font-black font-mono text-white leading-tight">{formatRupiah(stats.todayRevenue)}</p>
             <div className="flex items-center justify-between mt-2">
-              <p className="text-[11px] text-slate-400 font-mono">{stats.completedOrdersCount} faktur lunas</p>
+              <p className="text-[11px] text-slate-500 font-mono">{stats.completedOrdersCount} faktur lunas</p>
               <span className="badge-custom badge-selesai-pembayaran">100% Lunas</span>
             </div>
           </Link>
         </div>
       </div>
+
 
       {/* 2. Master Data Metrics */}
       <div>
