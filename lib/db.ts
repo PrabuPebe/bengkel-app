@@ -8,6 +8,7 @@ import {
   ServiceOrderPart,
   ServiceStatus,
   PaymentMethod,
+  PaymentStatus,
 } from "./types/database";
 import { prisma } from "./prisma";
 
@@ -17,6 +18,133 @@ const isRealDatabase = Boolean(
   !process.env.DATABASE_URL.includes("your-project") &&
   !process.env.DATABASE_URL.includes("your-password")
 );
+
+// Mappers Prisma Decimal -> Number & Safe Interface Types
+function mapPrismaCustomer(c: any): Customer {
+  return {
+    id: c.id,
+    name: c.name,
+    phone: c.phone,
+    address: c.address ?? null,
+    notes: c.notes ?? null,
+    createdAt: c.createdAt,
+    updatedAt: c.updatedAt,
+    vehicles: (c.vehicles || []).map((v: any) => ({
+      id: v.id,
+      customerId: v.customerId,
+      plateNumber: v.plateNumber,
+      brand: v.brand,
+      model: v.model,
+      year: v.year ?? null,
+      engineNo: v.engineNo ?? null,
+      frameNo: v.frameNo ?? null,
+      notes: v.notes ?? null,
+      createdAt: v.createdAt,
+      updatedAt: v.updatedAt,
+    })),
+  };
+}
+
+function mapPrismaService(s: any): ServicesCatalog {
+  return {
+    id: s.id,
+    code: s.code,
+    name: s.name,
+    description: s.description ?? null,
+    duration: s.duration ?? null,
+    price: Number(s.price),
+    isActive: s.isActive ?? true,
+    createdAt: s.createdAt,
+    updatedAt: s.updatedAt,
+  };
+}
+
+function mapPrismaPart(p: any): PartsInventory {
+  const stock = p.stock ?? 0;
+  const minStock = p.minStock ?? 5;
+  return {
+    id: p.id,
+    sku: p.sku,
+    name: p.name,
+    category: p.category ?? "Lain-lain",
+    stock,
+    minStock,
+    costPrice: Number(p.costPrice),
+    sellPrice: Number(p.sellPrice),
+    unit: p.unit ?? "PCS",
+    location: p.location ?? null,
+    isLowStock: stock <= minStock,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+  };
+}
+
+function mapPrismaOrder(o: any): ServiceOrder {
+  return {
+    id: o.id,
+    orderNumber: o.orderNumber,
+    token: o.token,
+    customerId: o.customerId,
+    customer: o.customer ? mapPrismaCustomer(o.customer) : undefined,
+    vehicleId: o.vehicleId,
+    vehicle: o.vehicle
+      ? {
+          id: o.vehicle.id,
+          customerId: o.vehicle.customerId,
+          plateNumber: o.vehicle.plateNumber,
+          brand: o.vehicle.brand,
+          model: o.vehicle.model,
+          year: o.vehicle.year ?? null,
+          engineNo: o.vehicle.engineNo ?? null,
+          frameNo: o.vehicle.frameNo ?? null,
+          notes: o.vehicle.notes ?? null,
+          createdAt: o.vehicle.createdAt,
+          updatedAt: o.vehicle.updatedAt,
+        }
+      : undefined,
+    mechanicId: o.mechanicId ?? null,
+    mechanicName: o.mechanic?.name ?? null,
+    createdById: o.createdById ?? null,
+    currentKm: o.currentKm ?? null,
+    complaints: o.complaints,
+    diagnosis: o.diagnosis ?? null,
+    status: o.status as ServiceStatus,
+    paymentStatus: o.paymentStatus as PaymentStatus,
+    paymentMethod: (o.paymentMethod as PaymentMethod) ?? null,
+    totalServices: Number(o.totalServices),
+    totalParts: Number(o.totalParts),
+    discount: Number(o.discount),
+    grandTotal: Number(o.grandTotal),
+    paidAmount: Number(o.paidAmount),
+    changeAmount: Number(o.changeAmount),
+    notes: o.notes ?? null,
+    entryDate: o.entryDate,
+    completedDate: o.completedDate ?? null,
+    paidDate: o.paymentStatus === "PAID" ? (o.completedDate || o.updatedAt) : null,
+    items: (o.items || []).map((item: any) => ({
+      id: item.id,
+      orderId: item.orderId,
+      serviceId: item.serviceId,
+      serviceName: item.serviceName,
+      price: Number(item.price),
+      qty: item.qty,
+      subtotal: Number(item.subtotal),
+    })),
+    parts: (o.parts || []).map((partItem: any) => ({
+      id: partItem.id,
+      orderId: partItem.orderId,
+      partId: partItem.partId,
+      partName: partItem.partName,
+      costPrice: Number(partItem.costPrice),
+      sellPrice: Number(partItem.sellPrice),
+      qty: partItem.qty,
+      subtotal: Number(partItem.subtotal),
+    })),
+    createdAt: o.createdAt,
+    updatedAt: o.updatedAt,
+  };
+}
+
 const memoryCustomers: Customer[] = [
   {
     id: "cust-1",
@@ -596,21 +724,38 @@ export const db = {
       if (isRealDatabase) {
         try {
           const rows = await prisma.customer.findMany({
-            include: { vehicles: true },
+            include: {
+              vehicles: {
+                orderBy: { createdAt: "desc" },
+              },
+            },
             where: query && query.trim()
               ? {
                   OR: [
-                    { name: { contains: query, mode: "insensitive" } },
-                    { phone: { contains: query, mode: "insensitive" } },
+                    { name: { contains: query.trim(), mode: "insensitive" } },
+                    { phone: { contains: query.trim(), mode: "insensitive" } },
+                    { address: { contains: query.trim(), mode: "insensitive" } },
+                    {
+                      vehicles: {
+                        some: {
+                          OR: [
+                            { plateNumber: { contains: query.trim(), mode: "insensitive" } },
+                            { model: { contains: query.trim(), mode: "insensitive" } },
+                            { brand: { contains: query.trim(), mode: "insensitive" } },
+                          ],
+                        },
+                      },
+                    },
                   ],
                 }
               : undefined,
             orderBy: { createdAt: "desc" },
           });
           if (rows.length > 0) {
-            return rows as unknown as Customer[];
+            return rows.map(mapPrismaCustomer);
           }
-        } catch {
+        } catch (err) {
+          console.error("Error prisma.customer.findMany:", err);
           // fallback to in-memory store
         }
       }
@@ -639,6 +784,41 @@ export const db = {
         year?: number;
       };
     }): Promise<Customer> {
+      if (isRealDatabase) {
+        try {
+          const created = await prisma.customer.create({
+            data: {
+              name: data.name.trim(),
+              phone: data.phone.trim(),
+              address: data.address?.trim() || null,
+              notes: data.notes?.trim() || null,
+              vehicles: data.initialVehicle?.plateNumber
+                ? {
+                    create: [
+                      {
+                        plateNumber: data.initialVehicle.plateNumber.toUpperCase().trim(),
+                        brand: data.initialVehicle.brand.trim(),
+                        model: data.initialVehicle.model.trim(),
+                        year: data.initialVehicle.year || new Date().getFullYear(),
+                      },
+                    ],
+                  }
+                : undefined,
+            },
+            include: {
+              vehicles: true,
+            },
+          });
+
+          const mapped = mapPrismaCustomer(created);
+          memoryCustomers.unshift(mapped);
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.customer.create:", err);
+        }
+      }
+
+      // Fallback in-memory
       const newCustId = `cust-${Date.now()}`;
       const newVehicles: Vehicle[] = [];
 
@@ -668,6 +848,31 @@ export const db = {
     },
 
     async delete(id: string): Promise<boolean> {
+      if (isRealDatabase) {
+        try {
+          // Bersihkan relasi order terlebih dahulu jika ada agar terhindar dari FK error
+          await prisma.serviceOrderItem.deleteMany({
+            where: { order: { customerId: id } },
+          });
+          await prisma.serviceOrderPart.deleteMany({
+            where: { order: { customerId: id } },
+          });
+          await prisma.serviceOrder.deleteMany({
+            where: { customerId: id },
+          });
+          await prisma.customer.delete({
+            where: { id },
+          });
+          const index = memoryCustomers.findIndex((c) => c.id === id);
+          if (index !== -1) {
+            memoryCustomers.splice(index, 1);
+          }
+          return true;
+        } catch (err) {
+          console.error("Error prisma.customer.delete:", err);
+        }
+      }
+
       const index = memoryCustomers.findIndex((c) => c.id === id);
       if (index !== -1) {
         memoryCustomers.splice(index, 1);
@@ -685,6 +890,43 @@ export const db = {
       year?: number;
       notes?: string;
     }): Promise<Vehicle | null> {
+      if (isRealDatabase) {
+        try {
+          const created = await prisma.vehicle.create({
+            data: {
+              customerId,
+              plateNumber: data.plateNumber.toUpperCase().trim(),
+              brand: data.brand.trim(),
+              model: data.model.trim(),
+              year: data.year || null,
+              notes: data.notes?.trim() || null,
+            },
+          });
+
+          const mapped: Vehicle = {
+            id: created.id,
+            customerId: created.customerId,
+            plateNumber: created.plateNumber,
+            brand: created.brand,
+            model: created.model,
+            year: created.year ?? null,
+            engineNo: created.engineNo ?? null,
+            frameNo: created.frameNo ?? null,
+            notes: created.notes ?? null,
+            createdAt: created.createdAt,
+            updatedAt: created.updatedAt,
+          };
+
+          const cust = memoryCustomers.find((c) => c.id === customerId);
+          if (cust) {
+            cust.vehicles.push(mapped);
+          }
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.vehicle.create:", err);
+        }
+      }
+
       const customer = memoryCustomers.find((c) => c.id === customerId);
       if (!customer) return null;
 
@@ -706,6 +948,28 @@ export const db = {
   // === SERVICES CATALOG ===
   servicesCatalog: {
     async findMany(query?: string): Promise<ServicesCatalog[]> {
+      if (isRealDatabase) {
+        try {
+          const rows = await prisma.servicesCatalog.findMany({
+            where: query && query.trim()
+              ? {
+                  OR: [
+                    { name: { contains: query.trim(), mode: "insensitive" } },
+                    { code: { contains: query.trim(), mode: "insensitive" } },
+                    { description: { contains: query.trim(), mode: "insensitive" } },
+                  ],
+                }
+              : undefined,
+            orderBy: { createdAt: "desc" },
+          });
+          if (rows.length > 0) {
+            return rows.map(mapPrismaService);
+          }
+        } catch (err) {
+          console.error("Error prisma.servicesCatalog.findMany:", err);
+        }
+      }
+
       let results = [...memoryServices];
       if (query && query.trim()) {
         const q = query.toLowerCase().trim();
@@ -723,6 +987,27 @@ export const db = {
       duration?: number;
       price: number;
     }): Promise<ServicesCatalog> {
+      if (isRealDatabase) {
+        try {
+          const created = await prisma.servicesCatalog.create({
+            data: {
+              code: data.code.toUpperCase().trim(),
+              name: data.name.trim(),
+              description: data.description?.trim() || null,
+              duration: data.duration || 30,
+              price: data.price,
+              isActive: true,
+            },
+          });
+
+          const mapped = mapPrismaService(created);
+          memoryServices.unshift(mapped);
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.servicesCatalog.create:", err);
+        }
+      }
+
       const newService: ServicesCatalog = {
         id: `srv-${Date.now()}`,
         code: data.code.toUpperCase().trim(),
@@ -739,6 +1024,22 @@ export const db = {
     },
 
     async delete(id: string): Promise<boolean> {
+      if (isRealDatabase) {
+        try {
+          await prisma.serviceOrderItem.deleteMany({
+            where: { serviceId: id },
+          });
+          await prisma.servicesCatalog.delete({
+            where: { id },
+          });
+          const index = memoryServices.findIndex((s) => s.id === id);
+          if (index !== -1) memoryServices.splice(index, 1);
+          return true;
+        } catch (err) {
+          console.error("Error prisma.servicesCatalog.delete:", err);
+        }
+      }
+
       const index = memoryServices.findIndex((s) => s.id === id);
       if (index !== -1) {
         memoryServices.splice(index, 1);
@@ -751,6 +1052,33 @@ export const db = {
   // === PARTS INVENTORY ===
   partsInventory: {
     async findMany(query?: string, category?: string): Promise<PartsInventory[]> {
+      if (isRealDatabase) {
+        try {
+          const where: any = {};
+          if (query && query.trim()) {
+            where.OR = [
+              { name: { contains: query.trim(), mode: "insensitive" } },
+              { sku: { contains: query.trim(), mode: "insensitive" } },
+              { category: { contains: query.trim(), mode: "insensitive" } },
+            ];
+          }
+          if (category && category !== "all") {
+            where.category = category;
+          }
+
+          const rows = await prisma.partsInventory.findMany({
+            where: Object.keys(where).length > 0 ? where : undefined,
+            orderBy: { createdAt: "desc" },
+          });
+
+          if (rows.length > 0) {
+            return rows.map(mapPrismaPart);
+          }
+        } catch (err) {
+          console.error("Error prisma.partsInventory.findMany:", err);
+        }
+      }
+
       let results = memoryParts.map((part) => ({
         ...part,
         isLowStock: part.stock <= part.minStock,
@@ -784,6 +1112,30 @@ export const db = {
       unit: string;
       location?: string;
     }): Promise<PartsInventory> {
+      if (isRealDatabase) {
+        try {
+          const created = await prisma.partsInventory.create({
+            data: {
+              sku: data.sku.toUpperCase().trim(),
+              name: data.name.trim(),
+              category: data.category?.trim() || "Lain-lain",
+              stock: data.stock,
+              minStock: data.minStock,
+              costPrice: data.costPrice,
+              sellPrice: data.sellPrice,
+              unit: data.unit || "PCS",
+              location: data.location?.trim() || null,
+            },
+          });
+
+          const mapped = mapPrismaPart(created);
+          memoryParts.unshift(mapped);
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.partsInventory.create:", err);
+        }
+      }
+
       const newPart: PartsInventory = {
         id: `part-${Date.now()}`,
         sku: data.sku.toUpperCase().trim(),
@@ -804,6 +1156,26 @@ export const db = {
     },
 
     async updateStock(id: string, newStock: number): Promise<PartsInventory | null> {
+      if (isRealDatabase) {
+        try {
+          const updated = await prisma.partsInventory.update({
+            where: { id },
+            data: { stock: newStock },
+          });
+
+          const mapped = mapPrismaPart(updated);
+          const mem = memoryParts.find((p) => p.id === id);
+          if (mem) {
+            mem.stock = newStock;
+            mem.isLowStock = newStock <= mem.minStock;
+          }
+
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.partsInventory.updateStock:", err);
+        }
+      }
+
       const part = memoryParts.find((p) => p.id === id);
       if (!part) return null;
       part.stock = newStock;
@@ -814,6 +1186,22 @@ export const db = {
     },
 
     async delete(id: string): Promise<boolean> {
+      if (isRealDatabase) {
+        try {
+          await prisma.serviceOrderPart.deleteMany({
+            where: { partId: id },
+          });
+          await prisma.partsInventory.delete({
+            where: { id },
+          });
+          const index = memoryParts.findIndex((p) => p.id === id);
+          if (index !== -1) memoryParts.splice(index, 1);
+          return true;
+        } catch (err) {
+          console.error("Error prisma.partsInventory.delete:", err);
+        }
+      }
+
       const index = memoryParts.findIndex((p) => p.id === id);
       if (index !== -1) {
         memoryParts.splice(index, 1);
@@ -826,6 +1214,42 @@ export const db = {
   // === SERVICE ORDERS (WORK ORDERS & BILLING) ===
   serviceOrder: {
     async findMany(filters?: { status?: string; query?: string }): Promise<ServiceOrder[]> {
+      if (isRealDatabase) {
+        try {
+          const dbOrders = await prisma.serviceOrder.findMany({
+            include: {
+              customer: { include: { vehicles: true } },
+              vehicle: true,
+              mechanic: true,
+              items: true,
+              parts: true,
+            },
+            where: filters?.status && filters.status !== "ALL"
+              ? { status: filters.status as any }
+              : undefined,
+            orderBy: { entryDate: "desc" },
+          });
+
+          if (dbOrders.length > 0) {
+            let mapped = dbOrders.map(mapPrismaOrder);
+            if (filters?.query && filters.query.trim()) {
+              const q = filters.query.toLowerCase().trim();
+              mapped = mapped.filter(
+                (o) =>
+                  o.orderNumber.toLowerCase().includes(q) ||
+                  o.customer?.name.toLowerCase().includes(q) ||
+                  o.customer?.phone.toLowerCase().includes(q) ||
+                  o.vehicle?.plateNumber.toLowerCase().includes(q) ||
+                  o.vehicle?.model.toLowerCase().includes(q)
+              );
+            }
+            return mapped;
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.findMany:", err);
+        }
+      }
+
       let results = memoryServiceOrders.map((order) => {
         const customer = memoryCustomers.find((c) => c.id === order.customerId);
         const vehicle = customer?.vehicles.find((v) => v.id === order.vehicleId);
@@ -856,6 +1280,28 @@ export const db = {
     },
 
     async findById(id: string): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const order = await prisma.serviceOrder.findFirst({
+            where: {
+              OR: [{ id }, { orderNumber: id }, { token: id }],
+            },
+            include: {
+              customer: { include: { vehicles: true } },
+              vehicle: true,
+              mechanic: true,
+              items: true,
+              parts: true,
+            },
+          });
+          if (order) {
+            return mapPrismaOrder(order);
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.findById:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === id || o.orderNumber === id || o.token === id);
       if (!order) return null;
       const customer = memoryCustomers.find((c) => c.id === order.customerId);
@@ -868,6 +1314,28 @@ export const db = {
     },
 
     async findByToken(token: string): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const order = await prisma.serviceOrder.findFirst({
+            where: {
+              OR: [{ token }, { id: token }, { orderNumber: token }],
+            },
+            include: {
+              customer: { include: { vehicles: true } },
+              vehicle: true,
+              mechanic: true,
+              items: true,
+              parts: true,
+            },
+          });
+          if (order) {
+            return mapPrismaOrder(order);
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.findByToken:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.token === token || o.id === token || o.orderNumber === token);
       if (!order) return null;
       const customer = memoryCustomers.find((c) => c.id === order.customerId);
@@ -896,6 +1364,7 @@ export const db = {
       const token = `trk-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
       const orderId = `ord-${Date.now()}`;
 
+      // In-memory prep
       const items: ServiceOrderItem[] = [];
       let totalServices = 0;
       if (data.initialServiceIds && data.initialServiceIds.length > 0) {
@@ -970,6 +1439,31 @@ export const db = {
     },
 
     async updateStatus(id: string, status: ServiceStatus, diagnosis?: string): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const updated = await prisma.serviceOrder.update({
+            where: { id },
+            data: {
+              status: status as any,
+              diagnosis: diagnosis !== undefined ? (diagnosis.trim() || null) : undefined,
+              completedDate: status === "SELESAI_PENGERJAAN" ? new Date() : undefined,
+            },
+            include: {
+              customer: { include: { vehicles: true } },
+              vehicle: true,
+              mechanic: true,
+              items: true,
+              parts: true,
+            },
+          });
+          if (updated) {
+            return mapPrismaOrder(updated);
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.updateStatus:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === id);
       if (!order) return null;
       order.status = status;
@@ -1056,6 +1550,46 @@ export const db = {
       discount?: number;
       paidAmount: number;
     }): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const currentOrder = await prisma.serviceOrder.findUnique({
+            where: { id: orderId },
+          });
+
+          if (currentOrder) {
+            const discount = data.discount || 0;
+            const grandTotal = Math.max(0, Number(currentOrder.totalServices) + Number(currentOrder.totalParts) - discount);
+            const paidAmount = data.paidAmount;
+            const changeAmount = Math.max(0, paidAmount - grandTotal);
+
+            const updated = await prisma.serviceOrder.update({
+              where: { id: orderId },
+              data: {
+                discount,
+                grandTotal,
+                paidAmount,
+                changeAmount,
+                paymentMethod: data.paymentMethod as any,
+                paymentStatus: "PAID",
+                status: "SELESAI_PEMBAYARAN",
+                completedDate: currentOrder.completedDate ?? new Date(),
+              },
+              include: {
+                customer: { include: { vehicles: true } },
+                vehicle: true,
+                mechanic: true,
+                items: true,
+                parts: true,
+              },
+            });
+
+            return mapPrismaOrder(updated);
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.checkoutBilling:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === orderId);
       if (!order) return null;
 
@@ -1082,6 +1616,90 @@ export const db = {
 
   // === DASHBOARD STATS ===
   async getStats() {
+    if (isRealDatabase) {
+      try {
+        const [
+          totalCustomers,
+          totalVehicles,
+          totalServices,
+          allParts,
+        ] = await Promise.all([
+          prisma.customer.count(),
+          prisma.vehicle.count(),
+          prisma.servicesCatalog.count(),
+          prisma.partsInventory.findMany({
+            select: { id: true, name: true, stock: true, minStock: true, unit: true },
+          }),
+        ]);
+
+        const lowStockItems = allParts
+          .filter((p) => p.stock <= p.minStock)
+          .map((p) => ({
+            id: p.id,
+            name: p.name,
+            stock: p.stock,
+            unit: p.unit,
+          }));
+
+        // Service order stats: if there are DB orders, use DB stats, otherwise fallback to memory orders
+        const dbOrderCount = await prisma.serviceOrder.count();
+        let activeQueueCount = 0;
+        let inProgressCount = 0;
+        let readyForCashierCount = 0;
+        let completedOrdersCount = 0;
+        let todayRevenue = 0;
+
+        if (dbOrderCount > 0) {
+          const [
+            qCount,
+            pCount,
+            rCount,
+            cCount,
+            paidOrders,
+          ] = await Promise.all([
+            prisma.serviceOrder.count({ where: { status: "ANTRIAN" } }),
+            prisma.serviceOrder.count({ where: { status: "PENGERJAAN" } }),
+            prisma.serviceOrder.count({ where: { status: "SELESAI_PENGERJAAN" } }),
+            prisma.serviceOrder.count({ where: { status: "SELESAI_PEMBAYARAN" } }),
+            prisma.serviceOrder.findMany({
+              where: { paymentStatus: "PAID" },
+              select: { grandTotal: true },
+            }),
+          ]);
+          activeQueueCount = qCount;
+          inProgressCount = pCount;
+          readyForCashierCount = rCount;
+          completedOrdersCount = cCount;
+          todayRevenue = paidOrders.reduce((acc, o) => acc + Number(o.grandTotal), 0);
+        } else {
+          activeQueueCount = memoryServiceOrders.filter((o) => o.status === "ANTRIAN").length;
+          inProgressCount = memoryServiceOrders.filter((o) => o.status === "PENGERJAAN").length;
+          readyForCashierCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PENGERJAAN").length;
+          completedOrdersCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PEMBAYARAN").length;
+          todayRevenue = memoryServiceOrders
+            .filter((o) => o.paymentStatus === "PAID")
+            .reduce((acc, o) => acc + o.grandTotal, 0);
+        }
+
+        return {
+          totalCustomers,
+          totalVehicles,
+          totalServices,
+          totalParts: allParts.length,
+          lowStockCount: lowStockItems.length,
+          lowStockItems,
+          activeQueueCount,
+          inProgressCount,
+          readyForCashierCount,
+          completedOrdersCount,
+          todayRevenue,
+        };
+      } catch (err) {
+        console.error("Error prisma.getStats:", err);
+      }
+    }
+
+    // Memory fallback
     const totalCustomers = memoryCustomers.length;
     const totalVehicles = memoryCustomers.reduce((acc, c) => acc + c.vehicles.length, 0);
     const totalServices = memoryServices.length;
