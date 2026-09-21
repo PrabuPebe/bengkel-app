@@ -13,19 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bengkelku.app"),
-  title: "Bengkelku — Sistem Manajemen Bengkel Modern",
+  metadataBase: new URL("https://pitcare.auto"),
+  title: "PitCare Auto — Sistem Manajemen Bengkel Modern",
   description:
-    "Sistem operasional otomotif modern berstandar High-Tech Pitstop: Work Order Servis, Billing Kasir POS, Manajemen Suku Cadang, dan Live Service Tracking Bengkelku.",
+    "Sistem operasional otomotif modern berstandar High-Tech Pitstop: Work Order Servis, Billing Kasir POS, Manajemen Suku Cadang, dan Live Service Tracking PitCare Auto.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Bengkelku — Sistem Manajemen Bengkel Modern",
+    title: "PitCare Auto — Sistem Manajemen Bengkel Modern",
     description:
-      "Platform terintegrasi operasional otomotif Bengkelku: Work Order Servis, Kasir POS, Manajemen Inventaris Suku Cadang, dan Live Tracking Publik.",
-    url: "https://bengkelku.app",
-    siteName: "Bengkelku",
+      "Platform terintegrasi operasional otomotif PitCare Auto: Work Order Servis, Kasir POS, Manajemen Inventaris Suku Cadang, dan Live Tracking Publik.",
+    url: "https://pitcare.auto",
+    siteName: "PitCare Auto",
     locale: "id_ID",
     type: "website",
   },

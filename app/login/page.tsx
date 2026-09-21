@@ -63,16 +63,16 @@ export default function LoginPage() {
         {/* Logo + Brand */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] text-slate-950 shadow-2xl mb-4 border border-cyan-400/30 relative">
-            <span className="text-2xl font-black tracking-wider relative z-10">BK</span>
+            <span className="text-2xl font-black tracking-wider relative z-10">PA</span>
             <div
               className="absolute -inset-1 rounded-2xl opacity-30 pointer-events-none"
               style={{ background: "linear-gradient(135deg, #00D2FF, #2563EB)", filter: "blur(8px)", zIndex: 0 }}
             />
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight flex items-center justify-center gap-2 gradient-text">
-            <span>Bengkelku</span>
+            <span>PitCare Auto</span>
             <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-[#00D2FF] border border-cyan-500/25">
-              PITSTOP
+              PRO
             </span>
           </h1>
           <p className="text-sm font-medium text-slate-500 mt-1">
@@ -195,7 +195,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-[11px] text-slate-600 mt-6 font-medium">
-          © {new Date().getFullYear()} Bengkelku — Sistem Manajemen Bengkel Modern
+          © {new Date().getFullYear()} PitCare Auto — Modern Workshop Suite & Management System
         </p>
       </div>
     </div>

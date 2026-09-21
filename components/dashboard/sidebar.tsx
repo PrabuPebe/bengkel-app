@@ -129,7 +129,7 @@ export function Sidebar({ user }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar Premium v2 */}
+      {/* Sidebar Premium v2 — PitCare Auto */}
       <aside
         className={`fixed top-0 bottom-0 left-0 z-40 w-72 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-2xl shadow-black/60 ${
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
@@ -152,7 +152,7 @@ export function Sidebar({ user }: SidebarProps) {
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] text-slate-950 shadow-lg shadow-[#00D2FF]/20 flex items-center justify-center font-black text-sm tracking-wider">
-                BK
+                PA
               </div>
               <div
                 className="absolute -inset-0.5 rounded-xl opacity-40 pointer-events-none"
@@ -165,13 +165,13 @@ export function Sidebar({ user }: SidebarProps) {
             </div>
             <div>
               <h1 className="text-base font-extrabold text-white tracking-tight leading-none flex items-center gap-1.5">
-                <span>Bengkelku</span>
+                <span>PitCare Auto</span>
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/10 text-[#00D2FF] border border-cyan-500/25">
                   PRO
                 </span>
               </h1>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mt-0.5">
-                High-Tech Pitstop
+                Modern Workshop Suite
               </p>
             </div>
           </div>
@@ -243,11 +243,11 @@ export function Sidebar({ user }: SidebarProps) {
           <div className="neon-line absolute top-0 left-4 right-4 opacity-25" />
           <div className="flex items-center gap-3 mb-3 px-1">
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 flex items-center justify-center font-bold text-xs shadow-md shadow-cyan-900/40">
-              {(user?.name || "BK").substring(0, 2).toUpperCase()}
+              {(user?.name || "PA").substring(0, 2).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-white truncate">{user?.name || "Mekanik Kepala"}</p>
-              <p className="text-[10px] text-slate-500 truncate font-mono">{user?.email || "admin@bengkelku.app"}</p>
+              <p className="text-[10px] text-slate-500 truncate font-mono">{user?.email || "admin@pitcare.auto"}</p>
             </div>
             <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-amber-500/12 text-[#F59E0B] border border-amber-500/30">
               {user?.role || "ADMIN"}
