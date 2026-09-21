@@ -1114,9 +1114,35 @@ export const db = {
     }): Promise<PartsInventory> {
       if (isRealDatabase) {
         try {
+          const upperSku = data.sku.toUpperCase().trim();
+          // Cek apakah SKU sudah ada di database Supabase
+          const existing = await prisma.partsInventory.findUnique({
+            where: { sku: upperSku },
+          });
+
+          if (existing) {
+            // Jika SKU sudah terdaftar, tambahkan stoknya secara otomatis
+            const updated = await prisma.partsInventory.update({
+              where: { id: existing.id },
+              data: {
+                stock: existing.stock + data.stock,
+                costPrice: data.costPrice || existing.costPrice,
+                sellPrice: data.sellPrice || existing.sellPrice,
+                location: data.location?.trim() || existing.location,
+              },
+            });
+            const mapped = mapPrismaPart(updated);
+            const mem = memoryParts.find((p) => p.sku === upperSku);
+            if (mem) {
+              mem.stock = mapped.stock;
+              mem.isLowStock = mapped.isLowStock;
+            }
+            return mapped;
+          }
+
           const created = await prisma.partsInventory.create({
             data: {
-              sku: data.sku.toUpperCase().trim(),
+              sku: upperSku,
               name: data.name.trim(),
               category: data.category?.trim() || "Lain-lain",
               stock: data.stock,
@@ -1158,19 +1184,36 @@ export const db = {
     async updateStock(id: string, newStock: number): Promise<PartsInventory | null> {
       if (isRealDatabase) {
         try {
-          const updated = await prisma.partsInventory.update({
+          // 1. Cari item di Prisma berdasarkan ID
+          let target = await prisma.partsInventory.findUnique({
             where: { id },
-            data: { stock: newStock },
           });
 
-          const mapped = mapPrismaPart(updated);
-          const mem = memoryParts.find((p) => p.id === id);
-          if (mem) {
-            mem.stock = newStock;
-            mem.isLowStock = newStock <= mem.minStock;
+          // 2. Jika ID tidak ditemukan (misal client lama mengirim ID mock 'part-5' atau 'part-6')
+          if (!target) {
+            const mem = memoryParts.find((p) => p.id === id);
+            if (mem?.sku) {
+              target = await prisma.partsInventory.findUnique({
+                where: { sku: mem.sku },
+              });
+            }
           }
 
-          return mapped;
+          if (target) {
+            const updated = await prisma.partsInventory.update({
+              where: { id: target.id },
+              data: { stock: newStock },
+            });
+
+            const mapped = mapPrismaPart(updated);
+            const mem = memoryParts.find((p) => p.id === id || p.sku === mapped.sku);
+            if (mem) {
+              mem.stock = newStock;
+              mem.isLowStock = newStock <= mem.minStock;
+            }
+
+            return mapped;
+          }
         } catch (err) {
           console.error("Error prisma.partsInventory.updateStock:", err);
         }
