@@ -1,11 +1,12 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-# BENGKELKU (bengkel-app)
+# PITCARE AUTO (`pitcare-auto`)
+### *Enterprise Workshop Suite & Client Experience System*
 
 > **Dokumen Spesifikasi Produk & Arsitektur Sistem**  
-> **Versi:** 1.0.0  
-> **Status:** Approved / Active Baseline  
-> **Terakhir Diperbarui:** 13 September 2026  
-> **Penulis:** Senior Product Manager & Software Architect  
+> **Versi:** 2.0.0 (Enterprise Production-Grade Release)  
+> **Status:** Approved / Active Production Baseline  
+> **Terakhir Diperbarui:** 22 September 2026  
+> **Penulis:** Principal Software Architect & Lead Full-Stack Engineer  
 
 ---
 
@@ -13,13 +14,14 @@
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| **Nama Aplikasi** | **Bengkelku** (`bengkel-app`) |
-| **Deskripsi Singkat** | Sistem manajemen operasional bengkel terintegrasi yang mendigitalisasi pencatatan servis, kasir/billing, pelacakan pengerjaan secara transparan bagi pelanggan (*Live Service Tracking*), dan otomatisasi pengingat servis via WhatsApp (*Automated Service Reminder*). |
-| **Tech Stack** | • **Framework:** Next.js 16.3.4 (App Router, Server Components & Actions)<br>• **UI & Core:** React 19.2.8, Tailwind CSS v4 (via `@tailwindcss/postcss`)<br>• **Bahasa:** TypeScript 5 (Strict Mode)<br>• **Autentikasi:** NextAuth.js v4.24.15 (Credentials & Google OAuth Provider)<br>• **Styling Khusus:** Custom Bengkelku Workspace Theme (`app/globals.css`) |
-| **Repository GitHub** | [https://github.com/prabupmb1212-sketch/bengkel-app.git](https://github.com/prabupmb1212-sketch/bengkel-app.git) |
+| **Nama Aplikasi** | **PitCare Auto** (`pitcare-auto` / `bengkel-app`) |
+| **Tagline** | *Enterprise Workshop Suite & Client Experience System* |
+| **Deskripsi Singkat** | Sistem ekosistem manajemen operasional bengkel terintegrasi berskala enterprise. Mencakup digitalisasi penerimaan unit (SPK), alur mekanik dengan pemotongan stok suku cadang fisik otomatis di PostgreSQL Supabase, sistem kasir/billing POS dengan struk thermal siap cetak, sistem autentikasi ganda (*Dual-Portal: Internal Staff vs Customer Portal*), serta *Customer Portal* mandiri berfitur *Predictive Part Lifespan Tracker*. |
+| **Tech Stack** | • **Framework:** Next.js 16.3.4 (App Router, Server Components & Server Actions)<br>• **UI & Styling:** React 19.2.8, Tailwind CSS v4 (`app/globals.css`), Pure Inline SVG Icons (Zero external UI/icon libraries)<br>• **Database & ORM:** PostgreSQL Supabase via Prisma ORM (Transaction-safe Real Database Connection Pooler)<br>• **Bahasa:** TypeScript 5 (Strict Mode, 0 type errors)<br>• **Autentikasi & Keamanan:** Dual-Login Architecture (NextAuth.js v4.24.15 untuk Staf Internal + Session Cookie terenkripsi untuk Pelanggan Portal)<br>• **Proteksi Akses:** Next.js `middleware.ts` berbasis token sesi |
+| **Repository GitHub** | [https://github.com/PrabuPebe/bengkel-app.git](https://github.com/PrabuPebe/bengkel-app.git) |
 | **Production URL** | [https://pitcareauto.vercel.app](https://pitcareauto.vercel.app) |
-| **Akun Demo / Testing**| • **Email:** `admin22@gmail.com`<br>• **Password:** `mamang22` |
-| **Status Saat Ini** | **Milestone 1 Selesai (100%)**: Inisialisasi proyek, halaman kustom login (`app/login/page.tsx`), autentikasi NextAuth, routing redirects, dan deployment otomatis Vercel telah aktif dan berjalan stabil. |
+| **Akun Demo / Testing**| • **Staf Internal:** `admin22@gmail.com` / `mamang22` (atau registrasi akun staf baru di tab Staf)<br>• **Pelanggan Portal:** No. WhatsApp `081234567890` & No. Polisi `B 1234 XYZ` (atau registrasi pelanggan baru di tab Pelanggan) |
+| **Status Saat Ini** | **Milestone 1, 2, & 3 Selesai (100%)**: Seluruh fondasi database PostgreSQL Supabase, CRUD master data, Work Order (SPK) dengan pemotongan stok otomatis real-time, Kasir POS dengan cetak struk thermal, Dual-Login, Customer Portal mandiri dengan pelacak usia suku cadang, dan proteksi middleware telah aktif dan teruji lolos kompilasi produksi. |
 
 ---
 
@@ -31,7 +33,7 @@ Operasional bengkel kendaraan konvensional (khususnya skala UMKM dan menengah) m
 flowchart LR
     A["Stiker Kertas Spidometer Rusak/Hilang"] -->|Pelanggan Lupa Servis| P1["1. Penurunan Retensi Pelanggan"]
     B["Pelanggan Cemas & Curiga Biaya Membengkak"] -->|Komunikasi Manual Tersumbat| P2["2. Defisit Transparansi & Kepercayaan"]
-    C["Buku Bon Servis Manual Tercecer/Hilang"] -->|Mekanik Buta Riwayat Kendaraan| P3["3. Fragmentasi Riwayat Servis"]
+    C["Buku Bon Servis Manual Tercecer/Hilang"] -->|Mekanik Buta Riwayat Kendaraan| P3["3. Fragmentasi Riwayat Servis & Stok Bocor"]
 ```
 
 ### 1. Masalah Retensi Pelanggan (*Customer Retention Gap*)
@@ -45,44 +47,49 @@ Saat pelanggan menitipkan kendaraannya di bengkel, timbul kecemasan emosional:
 - Kekhawatiran penggantian suku cadang sepihak atau biaya perbaikan yang membengkak tanpa persetujuan awal (*hidden cost*).
 - Pelanggan terpaksa bolak-balik menelepon atau mengirim chat manual yang mengganggu konsentrasi mekanik dan kasir.
 
-### 3. Masalah Arsip & Riwayat Servis (*Fragmented Service History & Diagnosis Inefficiency*)
-Pencatatan nota manual pada lembaran kertas nota atau buku besar menyebabkan riwayat kerusakan kendaraan sebelumnya mudah hilang:
+### 3. Masalah Arsip, Riwayat Servis, & Kebocoran Stok (*Fragmented History & Stock Leakage*)
+Pencatatan nota manual pada lembaran kertas nota atau buku besar menyebabkan riwayat kerusakan kendaraan sebelumnya mudah hilang dan stok gudang tidak akurat:
 - Mekanik kesulitan mendiagnosis riwayat penggantian komponen terdahulu (misal: kapan terakhir ganti oli gardan, kampas rem, atau *timing belt*).
-- Riwayat keluhan pelanggan yang berulang tidak terekam, sehingga solusi mekanik sering kali bersifat coba-coba (*trial & error*) yang memakan waktu dan menurunkan reputasi bengkel.
+- Riwayat keluhan pelanggan yang berulang tidak terekam, sehingga solusi mekanik sering kali bersifat coba-coba (*trial & error*).
+- Suku cadang keluar dari gudang tanpa pencatatan otomatis, menyebabkan selisih inventaris fisik dan pembukuan (*stock discrepancy*).
 
 ---
 
 ## 3. Value Proposition
 
-> **"Aplikasi bengkel-app tidak hanya membantu mencatat transaksi servis dan suku cadang secara efisien, tetapi juga mempertahankan loyalitas pelanggan melalui pengingat servis otomatis via WhatsApp dan pelacakan progres perbaikan yang transparan."**
+> **"PitCare Auto mentransformasi bengkel konvensional menjadi ekosistem digital enterprise yang efisien, transparan, dan akuntabel. Kami menyatukan otomasi back-office (SPK, stok real-time, POS kasir) dengan Customer Portal mandiri yang menyajikan riwayat servis transparan dan pelacak prediktif penggantian suku cadang."**
 
-Dengan memadukan fungsi pencatatan internal (back-office) dan jembatan komunikasi digital langsung ke pelanggan (customer-facing tanpa beban instalasi aplikasi), `bengkel-app` mentransformasi bengkel konvensional menjadi entitas modern yang profesional, tepercaya, dan memiliki retensi pelanggan tinggi.
+Dengan memadukan fungsi internal bengkel (back-office) dan jembatan digital langsung ke pelanggan (customer portal tanpa perlu instalasi aplikasi native), PitCare Auto menghadirkan standar baru profesionalisme bengkel modern yang meningkatkan kepuasan pelanggan dan akurasi keuangan.
 
 ---
 
 ## 4. User Personas & Role-Based Access Control (RBAC)
 
-Aplikasi dirancang untuk melayani 4 profil pengguna dengan hak akses spesifik:
+Aplikasi melayani 5 profil pengguna dengan hierarki hak akses terisolasi:
 
 ### Persona Profil
-1. **Owner / Admin Bengkel (Pak Joko):** Pemilik bengkel yang membutuhkan visibilitas penuh terhadap operasional, kas masuk, data pelanggan, stok suku cadang, dan analitik retensi.
-2. **Kasir / Front Desk (Siti):** Petugas meja depan yang menerima pelanggan, mencetak estimasi/faktur pembayaran, mengelola pembayaran tunai/transfer, dan mengirimkan notifikasi via WhatsApp.
-3. **Mekanik / Teknisi (Budi):** Teknisi pengerjaan fisik kendaraan yang memeriksa keluhan, mencatat kebutuhan suku cadang riil, dan memperbarui status pengerjaan pengerjaan unit secara aktual.
-4. **Pelanggan Publik (Rian):** Pemilik kendaraan yang ingin memantau status kendaraannya secara santai dan transparan melalui smartphone tanpa perlu repot membuat akun atau login.
+1. **Owner / Workshop Administrator (Pak Joko):** Pemilik bengkel yang membutuhkan visibilitas menyeluruh terhadap omset harian, analitik performa bengkel, data pelanggan, kontrol inventaris suku cadang, dan audit transaksi.
+2. **Kasir / Front Desk (Siti):** Petugas meja depan yang melayani pendaftaran masuk unit, memproses pembayaran kasir POS, menghitung diskon dan kembalian, serta mencetak struk faktur/thermal.
+3. **Mekanik / Teknisi (Budi):** Teknisi pengerjaan fisik kendaraan yang menginspeksi keluhan, menambahkan suku cadang dan jasa riil ke SPK (yang otomatis memotong stok gudang secara fisik), dan memperbarui tahapan progres pengerjaan unit.
+4. **Pelanggan Terdaftar Portal (Rian - Pelanggan Aktif):** Pemilik kendaraan yang masuk melalui tab Pelanggan di halaman login menggunakan No. WhatsApp dan No. Polisi. Memiliki akses ke *Customer Portal* pribadi (`/portal`) untuk melihat armada kendaraannya, status garansi, riwayat faktur transparan, indikator kesehatan suku cadang (*Predictive Lifespan Tracker*), dan pemesanan servis via WhatsApp.
+5. **Pelanggan Tamu / Publik (Tamu - Tracking Cepat):** Pelanggan yang ingin memeriksa status pengerjaan spesifik unitnya secara instan via smartphone dengan memindai QR Code atau membuka tautan token acak (`/track/[token]`) tanpa perlu login.
 
 ### Matriks Hak Akses (RBAC Matrix)
 
-| Fitur / Modul | Owner / Admin | Kasir | Mekanik | Pelanggan Publik |
-| :--- | :---: | :---: | :---: | :---: |
-| **Login Dashboard Internal** | Ya (Full) | Ya (Terbatas) | Ya (Terbatas) | Tidak |
-| **Kelola Master Data (Suku Cadang/Jasa/Harga)** | Penuh (CRUD) | Baca Saja | Baca Saja | Tidak Ada Akses |
-| **Kelola Data Pelanggan & Kendaraan** | Penuh (CRUD) | Penuh (CRUD) | Baca Saja | Tidak Ada Akses |
-| **Buat & Edit Work Order (SPK)** | Penuh (CRUD) | Penuh (CRUD) | Update Pengerjaan | Tidak Ada Akses |
-| **Update Status Pengerjaan (*Progress*)** | Ya | Ya | Ya | Baca Saja (via Token) |
-| **Billing, Invoice, & Terima Pembayaran** | Ya | Ya | Tidak | Akses Faktur Digital |
-| **Akses Live Service Tracking via Token/QR** | Ya | Ya | Ya | **Ya (Tanpa Login)** |
-| **Trigger Kirim Reminder WhatsApp** | Ya | Ya | Tidak | Tidak |
-| **Konfigurasi Akun & Pengaturan Sistem** | Ya | Tidak | Tidak | Tidak |
+| Fitur / Modul | Owner / Admin | Kasir | Mekanik | Pelanggan Portal (`/portal`) | Pelanggan Publik (`/track`) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Login Dashboard Internal Staf** | Ya (Full) | Ya (Terbatas) | Ya (Terbatas) | Tidak | Tidak |
+| **Login Customer Portal (`/portal`)** | Ya | Tidak | Tidak | **Ya (WA + Plat)** | Tidak |
+| **Kelola Master Data (Suku Cadang/Jasa)** | Penuh (CRUD) | Baca Saja | Baca Saja | Tidak Ada Akses | Tidak Ada Akses |
+| **Kelola Data Pelanggan & Kendaraan** | Penuh (CRUD) | Penuh (CRUD) | Baca Saja | Profil Sendiri | Tidak Ada Akses |
+| **Buat & Edit Work Order (SPK)** | Penuh (CRUD) | Penuh (CRUD) | Update Pengerjaan | Tidak Ada Akses | Tidak Ada Akses |
+| **Pemakaian Part (Potong Stok Supabase)** | Otomatis | Otomatis | **Otomatis Real-Time** | Tidak Ada Akses | Tidak Ada Akses |
+| **Billing, Invoice, & Kasir POS** | Ya | **Ya (Penuh)** | Tidak | Akses Riwayat Faktur | Tidak Ada Akses |
+| **Cetak Struk Kasir Thermal / A4** | Ya | **Ya** | Tidak | Cetak Faktur Digital | Tidak Ada Akses |
+| **Predictive Part Lifespan Tracker** | Ya (Analitik) | Ya | Ya | **Ya (Interaktif)** | Tidak |
+| **Akses Live Service Tracking via Token/QR** | Ya | Ya | Ya | Terintegrasi | **Ya (Tanpa Login)** |
+| **Trigger Kirim Reminder WhatsApp** | Ya | Ya | Tidak | Tombol Booking WA | Tidak |
+| **Registrasi Akun Baru (Staf & Pelanggan)**| Ya | Ya | Tidak | **Ya (Self-Service)** | Tidak |
 
 ---
 
@@ -90,163 +97,170 @@ Aplikasi dirancang untuk melayani 4 profil pengguna dengan hak akses spesifik:
 
 ```mermaid
 graph TD
-    subgraph MustHave["1. Must-Have (Fitur Inti)"]
-        M1["Autentikasi NextAuth (Selesai)"]
-        M2["Master Data Pelanggan & Kendaraan"]
-        M3["Katalog Jasa & Sparepart"]
-        M4["Work Order Servis (SPK)"]
-        M5["Kasir & Billing Pembayaran"]
-        M6["Log Riwayat Servis per No. Polisi"]
+    subgraph MustHave["1. Must-Have (Fitur Inti - SELESAI 100%)"]
+        M1["Dual-Login & Registrasi (Staf & Pelanggan)"]
+        M2["Master Data Supabase (Pelanggan, Kendaraan, Inventori, Jasa)"]
+        M3["Work Order SPK & Pemotongan Stok Fisik Real-Time"]
+        M4["Kasir POS, Kalkulasi Kembalian, & Cetak Struk Thermal"]
+        M5["Customer Portal (/portal) & Predictive Lifespan Tracker"]
+        M6["Proteksi Multi-Tier Sesi Middleware"]
     end
 
     subgraph ShouldHave["2. Should-Have (Fitur Unggulan)"]
         S1["Automated WhatsApp Service Reminder (60-90 Hari)"]
-        S2["Live Service Tracking (Token / QR Code Tanpa Login)"]
+        S2["Live Service Tracking Publik (/track/[token])"]
     end
 
-    subgraph CouldHave["3. Could-Have (Fase Lanjutan)"]
-        C1["Preventive Maintenance Alert (Kalkulasi Odometer/KM)"]
-        C2["Laporan Keuangan & Performa Mekanik"]
+    subgraph CouldHave["3. Could-Have (Fase Skripsi / Enterprise Plus)"]
+        C1["AI-Assisted Diagnostic Advisor berbasis Keluhan Suara Mesin"]
+        C2["Multi-Branch Sync & Centralized Accounting Gateway"]
     end
 
     MustHave --> ShouldHave
     ShouldHave --> CouldHave
 ```
 
-### 5.1. Fitur Inti (Must-Have)
-1. **Autentikasi Pengguna & Keamanan Sesi (*Status: Selesai*)**
-   - Halaman login kustom Bengkelku (`app/login/page.tsx`).
-   - Autentikasi ganda via Credentials (Email/Password) dan Google OAuth.
-   - Proteksi rute berbasis sesi NextAuth.
-2. **Master Data Pelanggan & Kendaraan**
-   - Data Pelanggan: Nama, No. WhatsApp aktif, Alamat, Catatan Khusus.
-   - Data Kendaraan: Nomor Polisi (Plat No unik), Merk, Model/Tipe, Tahun Pembuatan, Nomor Rangka/Mesin (opsional).
-   - Relasi 1 Pelanggan dapat memiliki lebih dari 1 kendaraan (*1-to-Many*).
-3. **Katalog Jasa Servis & Sparepart (Inventaris)**
-   - Jasa Servis: Kode jasa, nama tindakan (misal: "Ganti Oli Mesin", "Tune Up Injeksi", "Bongkar CVT"), tarif jasa.
-   - Suku Cadang (*Sparepart*): Kode part/SKU, nama part, stok saat ini, stok minimum peringatan (*low stock warning*), harga beli (HPP), dan harga jual.
-4. **Pencatatan Servis (Work Order / Surat Perintah Kerja)**
-   - Registrasi pendaftaran masuk: Tanggal/jam, odometer saat masuk, keluhan awal pelanggan, nama mekanik yang ditugaskan.
-   - Rincian estimasi pengerjaan: Daftar jasa yang dipilih dan suku cadang yang digunakan.
-   - Status pengerjaan bertahap:
-     - `ANTRIAN` (Menunggu giliran pengerjaan)
-     - `PENGERJAAN` (Sedang ditangani oleh mekanik)
-     - `MENUNGGU_PART` (Tertunda karena menunggu suku cadang/konfirmasi)
-     - `SELESAI_PENGERJAAN` (Selesai dites, siap pembayaran)
-     - `SELESAI_PEMBAYARAN` (Faktur lunas, unit diserahkan ke pelanggan)
-5. **Kasir & Billing Pembayaran (Invoice/Nota)**
-   - Kalkulasi otomatis: Total Biaya Jasa + Total Biaya Sparepart - Diskon = Total Tagihan.
-   - Metode pembayaran: Tunai (*Cash*) dan Transfer Manual (BCA/Mandiri/QRIS statis).
-   - Input jumlah bayar & hitung kembalian secara presisi.
-   - Cetak nota kasir (format struk thermal 58mm/80mm atau format cetak PDF invoice).
-6. **Log Riwayat Servis per Nomor Polisi (*Service History Log*)**
-   - Fitur pencarian cepat berdasarkan Plat Nomor (contoh: `B 1234 XYZ`).
-   - Rekam jejak seluruh tanggal kunjungan sebelumnya, kilometer masa lampau, daftar part yang pernah diganti, dan catatan mekanik terdahulu.
+### 5.1. Fitur Inti (Must-Have) — *Status: Selesai (100%)*
+
+1. **Dual-Login & Dual-Registration Portal (`app/login/page.tsx`)**
+   - **Tab Staf Internal:** Autentikasi karyawan via NextAuth Credentials (Email/Password) dan Google OAuth. Tersedia modal formulir registrasi staf baru (`registerStaffAction`) langsung ke tabel `users` Supabase.
+   - **Tab Pelanggan Bengkel:** Login cepat tanpa beban password dengan memasukkan No. WhatsApp dan Nomor Polisi kendaraan.
+   - **Registrasi Pelanggan Mandiri:** Formulir self-service untuk mendaftarkan nama, nomor WhatsApp, nomor polisi, merk, dan tipe kendaraan langsung tersimpan fisik ke tabel `customers` dan `vehicles`.
+   - **Proteksi Rute Multi-Tier (`middleware.ts`):** Mengamankan rute back-office (`/dashboard/*`, `/services/*`, `/cashier/*`, `/customers/*`, `/inventory/*`) hanya untuk staf terautentikasi, sementara `/login`, `/portal/*`, dan `/track/*` tetap dapat diakses sesuai izin sesi.
+
+2. **Master Data PostgreSQL Supabase via Prisma ORM (`lib/db.ts`)**
+   - Pelanggan & Kendaraan: Operasi CRUD langsung fisik ke database. Relasi 1 Pelanggan memiliki banyak kendaraan (*1-to-Many*).
+   - Katalog Jasa Servis: Pengelolaan nama tindakan, estimasi durasi pengerjaan, dan tarif jasa.
+   - Inventaris Suku Cadang: Pengelolaan SKU, nama part, stok fisik aktual, ambang batas peringatan stok menipis (*low stock threshold*), HPP, dan harga jual.
+
+3. **Alur Pengerjaan Servis (Work Order / SPK) & Pemotongan Stok Real-Time**
+   - Formulir pendaftaran unit baru: Input keluhan pelanggan, odometer masuk, pilihan mekanik, estimasi jasa & suku cadang.
+   - Stepper status pengerjaan: `ANTRIAN` → `PENGERJAAN` → `MENUNGGU_PART` → `SELESAI_PENGERJAAN`.
+   - **Atomic Stock Deduction:** Setiap penambahan suku cadang ke dalam SPK oleh teknisi langsung memotong jumlah stok fisik di tabel `parts_inventory` PostgreSQL Supabase secara atomik dalam transaksi Prisma. Pembatalan/penghapusan part otomatis mengembalikan stok (*refund stock*).
+
+4. **Kasir POS & Billing Pembayaran (`app/(dashboard)/cashier/page.tsx`)**
+   - Daftar antrian unit berstatus `SELESAI_PENGERJAAN`.
+   - Kalkulasi otomatis: Total Jasa + Total Suku Cadang - Diskon = Total Tagihan Bersih.
+   - Perhitungan nominal bayar dan kembalian secara presisi (mencegah input pembayaran kurang).
+   - Update status transaksi menjadi `SELESAI_PEMBAYARAN` / `PAID`.
+   - **Print-Ready Thermal Receipt Modal:** Dilengkapi tombol cetak struk nota kasir format thermal 58mm/80mm dan faktur A4 lengkap dengan rincian biaya, identitas kendaraan, dan ucapan terima kasih.
+
+5. **Customer Portal Mandiri & Predictive Part Lifespan Tracker (`app/portal/page.tsx`)**
+   - **Welcome Header & Vehicle Fleet Badges:** Menampilkan identitas pelanggan terverifikasi dan armada kendaraan yang dimiliki.
+   - **Predictive Part Lifespan Tracker:** Algoritma pemantauan usia pakai suku cadang kritis berdasarkan odometer kendaraan:
+     - Oli Mesin (*Engine Oil*): Siklus 3.000 KM (Indikator Hijau/Kuning/Merah jika butuh ganti segera).
+     - Busi (*Spark Plug*): Siklus 8.000 KM.
+     - V-Belt / Drive Belt: Siklus 24.000 KM.
+   - **Riwayat Faktur Transparan:** Rekap seluruh invoice pengerjaan masa lampau lengkap dengan status lunas, rincian biaya jasa & part, dan nama mekanik.
+   - **WhatsApp Booking Quick Trigger:** Tombol langsung terhubung ke nomor admin bengkel dengan format pesan reservasi otomatis.
 
 ---
 
-## 5.2. Fitur Bernilai Tambah (Should-Have)
+### 5.2. Fitur Bernilai Tambah (Should-Have) — *Milestone 4*
+
 1. **Automated WhatsApp Service Reminder**
    - Logika Interval Cerdas: Sistem menandai kendaraan yang telah melewati interval waktu **60 hingga 90 hari** sejak tanggal servis terakhir atau tanggal ganti oli.
    - Tombol Aksi Sekali Klik: Kasir/Admin dapat menekan tombol "Kirim Pengingat WA" dari daftar kendaraan jatuh tempo.
    - Template Pesan Otomatis (Deep Link `https://wa.me/{nomor}`):
-     > *"Halo Bpk/Ibu [Nama Pelanggan], kami dari Bengkelku menginformasikan bahwa kendaraan [Merk/Model] dengan plat nomor [Plat Nomor] sudah memasuki waktu servis berkala/ganti oli (terakhir servis tanggal [Tanggal Servis]). Yuk rawat performa kendaraan Anda kembali di bengkel kami. Balas pesan ini untuk reservasi waktu. Terima kasih!"*
-2. **Live Service Tracking (Pelacakan Transparan Tanpa Login)**
+     > *"Halo Bpk/Ibu [Nama Pelanggan], kami dari PitCare Auto menginformasikan bahwa kendaraan [Merk/Model] dengan plat nomor [Plat Nomor] sudah memasuki waktu servis berkala/ganti oli (terakhir servis tanggal [Tanggal Servis]). Yuk rawat performa kendaraan Anda kembali di bengkel kami. Balas pesan ini untuk reservasi waktu. Terima kasih!"*
+
+2. **Live Service Tracking (Pelacakan Transparan Publik via Token / QR Code)**
    - Halaman publik ringan (`/track/[token]`) yang aman dengan token URL acak (UUID/NanoID).
-   - Akses Mudah: Dicantumkan berupa link pendek atau QR Code pada lembar tanda terima/struk masuk.
-   - Pelanggan dapat memantau:
-     - Status kendaraan secara *real-time* (Antrian → Dikerjakan → Selesai).
-     - Rincian suku cadang & jasa yang dikerjakan beserta nominal biaya transparan.
-     - Estimasi waktu selesai dan informasi kontak langsung ke bengkel.
+   - Akses Tanpa Beban Login: Dicantumkan berupa link pendek atau QR Code pada lembar tanda terima/struk masuk.
+   - Pelanggan dapat memantau status kendaraan secara *real-time* (Antrian → Dikerjakan → Selesai), rincian suku cadang & jasa yang dikerjakan beserta nominal biaya transparan, serta estimasi waktu selesai.
 
 ---
 
-## 5.3. Fitur Masa Depan (Could-Have)
-1. **Preventive Maintenance Alert Berbasis Kilometer**
-   - Estimasi laju kilometer harian kendaraan berdasarkan delta kilometer antar-servis sebelumnya.
-   - Rekomendasi servis preventif (contoh: Peringatan otomatis penggantian vanbelt/timing belt setiap kelipatan 24.000 KM).
-2. **Laporan Pendapatan & Kinerja Mekanik**
-   - Laporan omset harian/bulanan (pendapatan jasa vs penjualan sparepart).
-   - Rekap komisi pengerjaan per mekanik.
+### 5.3. Fitur Masa Depan (Could-Have) — *Fase Skripsi Lanjutan*
+
+1. **AI Diagnostic Engine**: Rekomendasi otomatis komponen yang wajib diperiksa berdasarkan analisis keluhan teks pelanggan dan rekam jejak odometer.
+2. **Multi-Cabang & Sinkronisasi Gudang**: Integrasi transfer stok antar-cabang bengkel dan konsolidasi laporan laba-rugi multi-outlet.
 
 ---
 
 ## 6. Batasan Ruang Lingkup (Scope Boundaries)
 
-Untuk menjaga ketepatan waktu pengiriman dan stabilitas sistem, batas ruang lingkup ditetapkan secara tegas:
-
 ```
 ┌───────────────────────────────────────────────┬───────────────────────────────────────────────┐
 │                   IN-SCOPE                    │                 OUT-OF-SCOPE                  │
 ├───────────────────────────────────────────────┼───────────────────────────────────────────────┤
-│ • Arsitektur Monolitik Next.js App Router     │ • Integrasi Hardware OBD-II Scanner           │
-│ • Database Relasional (Pelanggan/Servis/Part) │ • Inventori Multi-Cabang & Multi-Gudang       │
-│ • Pelacakan Publik via Unique Token (/track)  │ • Payment Gateway Otomatis (Midtrans/Xendit)  │
-│ • Kasir Manual (Tunai / Transfer Manual)      │ • Modul Akuntansi Pajak Kompleks (e-Faktur)   │
-│ • Trigger Reminder via WhatsApp Deep Link     │ • Aplikasi Mobile Native (iOS / Android APK)  │
-│ • Cetak Nota Struk Web/PDF                    │ • Integrasi GPS Tracking Posisi Kendaraan     │
+│ • Arsitektur Monolitik Next.js 16 App Router  │ • Integrasi Hardware Scanner Fisik OBD-II     │
+│ • Database Relasional PostgreSQL Supabase     │ • Modul Pajak Korporat Kompleks (e-Faktur DJP)│
+│ • Pemotongan Stok Atomik via Prisma TX        │ • Integrasi Payment Gateway Otomatis          │
+│ • Dual-Login: Staf Internal & Customer Portal │ • Aplikasi Mobile Native (iOS / Android APK)  │
+│ • Customer Portal (/portal) & Lifespan Tracker│ • Integrasi GPS Tracking Posisi Real-time     │
+│ • Cetak Struk Kasir Thermal (58/80mm) & A4    │ • Multi-Gudang Kompleks Antar-Pulau           │
+│ • Live Service Tracking Publik (/track/[token])│                                              │
+│ • Pengingat Servis Otomatis WhatsApp Deep Link│                                              │
 └───────────────────────────────────────────────┴───────────────────────────────────────────────┘
 ```
 
 ---
 
-## 7. Arsitektur Folder yang Direncanakan
+## 7. Arsitektur Folder Aktual (Production-Grade)
 
-Struktur folder direncanakan secara modular berbasis Next.js App Router, **dengan mempertahankan integritas modul login dan CSS yang sudah aktif di production**:
+Struktur folder aktual yang telah teruji lolos kompilasi produksi Next.js 16:
 
 ```text
 bengkel-app/
 ├── app/
-│   ├── (auth)/
-│   │   └── login/
-│   │       └── page.tsx              # [STABIL] Halaman login kustom Bengkelku (TETAP DIPERTAHANKAN)
 │   ├── (dashboard)/
-│   │   ├── layout.tsx                # Shell Dashboard (Sidebar, Header Nav, Session Provider)
+│   │   ├── layout.tsx                # Layout shell dashboard staf (Header, Navigasi, User Profile)
 │   │   ├── dashboard/
-│   │   │   └── page.tsx              # Overview metrik servis, antrian hari ini, quick stats
+│   │   │   └── page.tsx              # Overview metrik operasional, antrian aktif, pendapatan, quick stats
 │   │   ├── services/
-│   │   │   ├── page.tsx              # Daftar Work Order (Antrian, Dikerjakan, Selesai)
-│   │   │   ├── new/page.tsx          # Form penerimaan servis baru (Input SPK)
-│   │   │   └── [id]/page.tsx         # Detail pengerjaan servis & update status mekanik
+│   │   │   ├── page.tsx              # Daftar SPK (Antrian, Pengerjaan, Menunggu Part, Selesai)
+│   │   │   ├── new/page.tsx          # Formulir penerimaan servis unit baru (Input SPK)
+│   │   │   └── [id]/page.tsx         # Stepper mekanik, tambah part (potong stok real), update status
 │   │   ├── customers/
 │   │   │   ├── page.tsx              # Manajemen master data pelanggan & kendaraan
-│   │   │   └── [id]/page.tsx         # Detail riwayat servis per pelanggan & nomor polisi
+│   │   │   └── [id]/page.tsx         # Riwayat servis per pelanggan & nomor polisi
 │   │   ├── inventory/
-│   │   │   ├── parts/page.tsx        # Katalog & stok sparepart (Peringatan stok menipis)
-│   │   │   └── services/page.tsx     # Master data jasa servis & tarif
+│   │   │   ├── parts/page.tsx        # Katalog suku cadang, update stok, peringatan stok menipis
+│   │   │   └── services/page.tsx     # Master katalog tindakan jasa servis & tarif
 │   │   ├── cashier/
-│   │   │   ├── page.tsx              # Antrian kasir & pembayaran faktur
-│   │   │   └── [id]/invoice.tsx      # Tampilan cetak nota / faktur kasir
+│   │   │   └── page.tsx              # Antrian kasir, kalkulasi POS, bayar, & cetak struk thermal
 │   │   └── reminders/
-│   │       └── page.tsx              # Daftar kendaraan jatuh tempo (60-90 hari) & tombol kirim WA
+│   │       └── page.tsx              # Daftar kendaraan jatuh tempo servis & trigger pengingat WhatsApp
+│   ├── login/
+│   │   └── page.tsx                  # Dual-Portal Login (Tab Staf + Registrasi & Tab Pelanggan + Registrasi)
+│   ├── portal/
+│   │   └── page.tsx                  # Customer Portal mandiri (Fleet badges, Part Lifespan Tracker, Faktur)
 │   ├── track/
 │   │   └── [token]/
-│   │       └── page.tsx              # [PUBLIK] Live Service Tracking tanpa login bagi pelanggan
+│   │       └── page.tsx              # Live Service Tracking publik tanpa login
 │   ├── api/
-│   │   ├── auth/
-│   │   │   └── [...nextauth]/
-│   │   │       └── route.ts          # [STABIL] API Handler NextAuth
-│   │   └── reminders/
-│   │       └── whatsapp/route.ts     # Endpoint pembantu pembentukan payload/URL WhatsApp
+│   │   └── auth/
+│   │       └── [...nextauth]/
+│   │           └── route.ts          # API Handler autentikasi NextAuth
 │   ├── favicon.ico
-│   ├── globals.css                   # [STABIL] Styling tema Bengkelku & utilitas Tailwind v4
-│   ├── layout.tsx                    # [STABIL] Root Layout utama
-│   └── page.tsx                      # Root Page (mengarah ke dashboard/login)
+│   ├── globals.css                   # Tema warna PitCare Auto & integrasi Tailwind CSS v4
+│   ├── layout.tsx                    # Root Layout aplikasi
+│   └── page.tsx                      # Landing page redirector (otomatis ke dashboard atau login)
 ├── components/
-│   ├── ui/                           # Komponen UI atomik (Button, Input, Modal, Badge, Table)
-│   ├── dashboard/                    # Komponen navigasi (Sidebar, Topbar, StatusBadge)
-│   ├── services/                     # Komponen antrian servis, dialog tambah part/jasa
-│   └── tracking/                     # Komponen visual timeline pengerjaan live tracking
+│   ├── dashboard/                    # Komponen modular shell staf (Sidebar, Topbar, StatusBadge)
+│   ├── ui/                           # Komponen UI atomik
+│   └── providers.tsx                 # Client SessionProvider NextAuth
 ├── lib/
-│   ├── auth.ts                       # Konfigurasi NextAuth terpusat (authOptions)
-│   ├── db.ts                         # Client koneksi database
-│   ├── whatsapp.ts                   # Utilitas format nomor telepon & template pesan WA
-│   └── utils.ts                      # Helper format mata uang (Rupiah), format tanggal lokal ID
-├── middleware.ts                     # Proteksi rute internal (/dashboard/*) tanpa mengunci /track/*
-├── PRD.md                            # [DOKUMEN INI] Single Source of Truth Spesifikasi Produk
-├── next.config.ts                    # Konfigurasi Next.js
-├── package.json                      # Dependensi proyek
-└── tsconfig.json                     # Konfigurasi TypeScript
+│   ├── actions/
+│   │   ├── auth.ts                   # Server Action registrasi staf baru
+│   │   └── customer-portal.ts        # Server Action login & registrasi pelanggan portal
+│   ├── auth.ts                       # Konfigurasi NextAuth terpusat (Credentials & Google Provider)
+│   ├── db.ts                         # Prisma ORM client & transaksi PostgreSQL Supabase real-time
+│   ├── utils.ts                      # Formatter mata uang Rupiah & format tanggal Indonesia
+│   └── whatsapp.ts                   # Builder link WhatsApp Deep Link & template pesan
+├── prisma/
+│   └── schema.prisma                 # Skema data relasional PostgreSQL Supabase
+├── docs/
+│   ├── PRD.md                        # [DOKUMEN INI] Single Source of Truth Spesifikasi Produk PitCare Auto
+│   └── logbook/
+│       ├── 01-log-milestone-1-auth.md
+│       ├── 02-log-milestone-2-database.md
+│       └── 03-log-milestone-3-enterprise-flow.md
+├── middleware.ts                     # Proteksi rute internal berbasis sesi NextAuth & Portal cookie
+├── next.config.ts                    # Konfigurasi Next.js 16
+├── package.json                      # Dependensi proyek (Zero external icon/UI library)
+└── tsconfig.json                     # Konfigurasi TypeScript 5 (Strict Mode)
 ```
 
 ---
@@ -255,40 +269,50 @@ bengkel-app/
 
 ```mermaid
 gantt
-    title Roadmap Pengembangan Bengkelku
+    title Roadmap Pengembangan PitCare Auto Enterprise
     dateFormat  YYYY-MM-DD
     section Milestone 1
-    Setup Proyek, Login, & Vercel Auto-deploy :done, m1, 2026-09-01, 2026-09-13
+    Fondasi Proyek, NextAuth, & Vercel Deploy :done, m1, 2026-09-01, 2026-09-13
     section Milestone 2
-    Skema Database & Master Data Pelanggan/Part :active, m2, 2026-09-14, 2026-09-20
+    Skema Supabase, Prisma, & Master Data CRUD :done, m2, 2026-09-14, 2026-09-19
     section Milestone 3
-    Work Order Servis & Kasir Billing :m3, 2026-09-21, 2026-09-28
+    SPK Stok Real-Time, POS Kasir, Dual-Login, Portal :done, m3, 2026-09-20, 2026-09-22
     section Milestone 4
-    Live Tracking Token & WA Automation :m4, 2026-09-29, 2026-10-05
+    Live Tracking Token & WA Automation :active, m4, 2026-09-23, 2026-09-28
     section Milestone 5
-    Pengujian UAT, Optimasi, & Skripsi :m5, 2026-10-06, 2026-10-15
+    Pengujian UAT End-to-End, Audit, & Sidang Skripsi :m5, 2026-09-29, 2026-10-08
 ```
 
-### Milestone 1: Fondasi Proyek, Autentikasi, & Baseline Deployment (*STATUS: COMPLETED - 100%*)
-- Inisialisasi Next.js 16 App Router dengan TypeScript & Tailwind CSS v4.
-- Implementasi halaman kustom login (`app/login/page.tsx`) dengan desain premium workspace Bengkelku.
+### Milestone 1: Fondasi Proyek, Autentikasi Staf, & Deployment Baseline (*STATUS: SELESAI - 100%*)
+- Setup Next.js 16 App Router dengan TypeScript 5 dan Tailwind CSS v4.
+- Implementasi halaman kustom login dengan desain premium PitCare Auto.
 - Integrasi NextAuth.js (Credentials & Google OAuth Provider).
-- Setup CI/CD dan deployment stabil di Vercel (`https://pitcareauto.vercel.app`).
+- Setup CI/CD dan deployment otomatis stabil di Vercel (`https://pitcareauto.vercel.app`).
 
-### Milestone 2: Skema Database & Manajemen Master Data (*ESTIMASI: MINGGU 1*)
-- Penetapan skema database relasional (Tabel `Users`, `Customers`, `Vehicles`, `ServicesCatalog`, `PartsInventory`).
-- Setup data access layer & ORM yang sesuai.
-- Implementasi CRUD Master Pelanggan & Kendaraan (1 Pelanggan dapat memiliki banyak kendaraan).
+### Milestone 2: Skema PostgreSQL Supabase & Master Data CRUD (*STATUS: SELESAI - 100%*)
+- Pembuatan skema data relasional di Prisma ORM (`users`, `customers`, `vehicles`, `parts_inventory`, `services_catalog`, `service_orders`, `order_items`).
+- Koneksi ke PostgreSQL Supabase Connection Pooler (`DIRECT_URL` & `DATABASE_URL`).
+- Implementasi CRUD Master Pelanggan & Multi-Kendaraan.
 - Implementasi CRUD Katalog Jasa Servis & Inventaris Suku Cadang (dengan indikator stok minimum).
 
-### Milestone 3: Alur Pengerjaan Servis (Work Order) & Kasir/Billing (*ESTIMASI: MINGGU 2*)
-- Form pendaftaran kendaraan masuk: catat keluhan, kilometer, mekanik penanggung jawab.
-- Modul pengerjaan servis: penambahan pemakaian suku cadang dan jasa teknisi secara dinamis.
-- Manajemen status pengerjaan: `ANTRIAN` → `PENGERJAAN` → `MENUNGGU_PART` → `SELESAI_PENGERJAAN`.
-- Modul Kasir & Pembayaran: hitung total jasa & part, kalkulasi kembalian, update status menjadi `SELESAI_PEMBAYARAN`.
-- Template faktur & struk pembayaran (siap cetak).
+### Milestone 3: Enterprise Flow — SPK Real-Time, POS Kasir, Dual-Login, & Customer Portal (*STATUS: SELESAI - 100%*)
+- **Dual-Login & Registrasi:**
+  - Tab login Staf Internal + formulir registrasi karyawan baru.
+  - Tab login Pelanggan Mandiri (No. WhatsApp & No. Polisi) + formulir registrasi pelanggan baru.
+- **Work Order (SPK) & Pemotongan Stok Fisik:**
+  - Form pendaftaran unit masuk (keluhan, odometer, mekanik).
+  - Penambahan sparepart oleh mekanik secara otomatis memotong stok fisik di tabel `parts_inventory` PostgreSQL Supabase secara atomik via Prisma Transactions.
+- **Kasir POS & Billing Pembayaran:**
+  - Penghitungan tagihan jasa + sparepart, diskon, dan kembalian tunai/transfer.
+  - Modal cetak nota struk kasir thermal (58mm/80mm) dan faktur A4.
+- **Customer Portal Mandiri (`/portal`):**
+  - Dashboard khusus pelanggan dengan welcome badge armada kendaraan.
+  - *Predictive Part Lifespan Tracker* (Oli Mesin 3.000 KM, Busi 8.000 KM, V-Belt 24.000 KM).
+  - Rekap riwayat faktur transparan & tombol booking via WhatsApp.
+- **Proteksi Rute Multi-Tier:**
+  - Pemasangan `middleware.ts` untuk mengamankan modul back-office staf tanpa menghalangi `/portal`, `/login`, dan `/track/*`.
 
-### Milestone 4: Fitur Unggulan — Live Service Tracking & WA Automation (*ESTIMASI: MINGGU 3*)
+### Milestone 4: Fitur Unggulan — Live Service Tracking & WA Automation (*STATUS: AKTIF / TAHAP BERIKUTNYA*)
 - **Live Service Tracking**:
   - Generator token acak unik (NanoID/UUID) pada setiap Work Order.
   - Halaman publik `/track/[token]` yang responsif untuk smartphone pelanggan tanpa perlu login.
@@ -297,13 +321,12 @@ gantt
   - Filter analitik kendaraan yang telah melewati masa servis 60–90 hari.
   - Tombol aksi trigger link `wa.me` dengan format pesan personal otomatis untuk reservasi kembali.
 
-### Milestone 5: Pengujian (UAT), Hardening, & Finalisasi Skripsi (*ESTIMASI: MINGGU 4*)
-- Pemasangan `middleware.ts` untuk proteksi rute dashboard internal tanpa mengganggu halaman login dan tracking publik.
+### Milestone 5: Pengujian (UAT), Hardening Keamanan, & Sidang Tugas Akhir (*STATUS: AKAN DATANG*)
 - User Acceptance Testing (UAT) simulasi alur end-to-end (Pendaftaran → Pengerjaan → Live Tracking → Kasir → Reminder).
-- Optimasi performa LCP/INP & audit aksesibilitas.
-- Penyusunan dokumentasi teknis & lampiran hasil pengujian untuk skripsi/laporan akhir.
+- Optimasi performa LCP/INP & audit aksesibilitas (WCAG 2.2).
+- Penyusunan dokumentasi teknis & lampiran hasil pengujian untuk skripsi/sidang tugas akhir.
 
 ---
 
 > **Persetujuan & Kebijakan Perubahan:**  
-> Segala modifikasi terhadap spesifikasi di atas harus melalui peninjauan ulang Product Manager dan tidak boleh merusak modul yang telah dideklarasikan stabil pada Milestone 1.
+> Segala perubahan pada dokumen PRD ini telah diselaraskan secara resmi dengan kode sumber aktif (*Single Source of Truth*) pada repositori [https://github.com/PrabuPebe/bengkel-app.git](https://github.com/PrabuPebe/bengkel-app.git).
