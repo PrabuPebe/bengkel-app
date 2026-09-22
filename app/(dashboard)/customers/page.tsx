@@ -105,7 +105,7 @@ export default function CustomersPage() {
     <div className="space-y-6">
       <Header
         title="Master Pelanggan & Armada Kendaraan"
-        subtitle="Kelola database pelanggan Bengkelku dan riwayat armada kendaraan roda dua maupun roda empat berstandar Pitstop."
+        subtitle="Kelola database pelanggan PitCare Auto dan riwayat armada kendaraan roda dua maupun roda empat berstandar Pitstop."
         actionButton={
           <button
             type="button"
@@ -160,7 +160,7 @@ export default function CustomersPage() {
       {isLoading ? (
         <div className="p-20 text-center text-slate-400 text-sm card-pitstop">
           <div className="w-8 h-8 border-2 border-[#00D2FF] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat master pelanggan Bengkelku...
+          Memuat master pelanggan PitCare Auto...
         </div>
       ) : customers.length === 0 ? (
         <div className="p-16 text-center card-pitstop">
@@ -290,7 +290,7 @@ export default function CustomersPage() {
         isOpen={isAddCustomerOpen}
         onClose={() => setIsAddCustomerOpen(false)}
         title="Daftarkan Pelanggan & Kendaraan Baru"
-        description="Masukkan data pemilik dan armada kendaraan pertamanya untuk dicatat ke database Bengkelku."
+        description="Masukkan data pemilik dan armada kendaraan pertamanya untuk dicatat ke database PitCare Auto."
       >
         <form onSubmit={handleCreateCustomer} className="space-y-4">
           {formError && (

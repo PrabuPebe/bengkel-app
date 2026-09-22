@@ -91,7 +91,7 @@ export default function ServicesCatalogPage() {
     <div className="space-y-6">
       <Header
         title="Katalog Jasa & Tarif Servis"
-        subtitle="Daftar tindakan perbaikan, tune up, penggantian pelumas, dan tarif jasa pengerjaan teknisi Bengkelku Pitstop."
+        subtitle="Daftar tindakan perbaikan, tune up, penggantian pelumas, dan tarif jasa pengerjaan teknisi PitCare Auto Pitstop."
         actionButton={
           <button
             type="button"
@@ -146,7 +146,7 @@ export default function ServicesCatalogPage() {
       {isLoading ? (
         <div className="p-20 text-center text-slate-400 text-sm card-pitstop">
           <div className="w-8 h-8 border-2 border-[#00D2FF] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat katalog jasa servis Bengkelku...
+          Memuat katalog jasa servis PitCare Auto...
         </div>
       ) : services.length === 0 ? (
         <div className="p-16 text-center card-pitstop">
@@ -155,7 +155,7 @@ export default function ServicesCatalogPage() {
           </div>
           <p className="text-base font-bold text-white mb-1">Katalog jasa masih kosong</p>
           <p className="text-xs text-slate-400 mb-6 max-w-sm mx-auto">
-            {searchQuery ? "Tidak ada jasa yang sesuai kata kunci." : "Tambahkan paket servis pertama untuk Bengkelku."}
+            {searchQuery ? "Tidak ada jasa yang sesuai kata kunci." : "Tambahkan paket servis pertama untuk PitCare Auto."}
           </p>
           <button
             type="button"
@@ -226,7 +226,7 @@ export default function ServicesCatalogPage() {
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         title="Tambah Paket Jasa Servis"
-        description="Daftarkan paket pekerjaan teknisi beserta standar tarif pengerjaannya di Bengkelku."
+        description="Daftarkan paket pekerjaan teknisi beserta standar tarif pengerjaannya di PitCare Auto."
       >
         <form onSubmit={handleCreateService} className="space-y-4">
           {formError && (

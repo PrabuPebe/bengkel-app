@@ -214,7 +214,7 @@ export default function ServicesPage() {
       {isLoading ? (
         <div className="p-20 text-center text-slate-400 text-xs card-pitstop">
           <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat data Work Order Bengkelku...
+          Memuat data Work Order PitCare Auto...
         </div>
       ) : orders.length === 0 ? (
         <div className="p-16 text-center card-pitstop">

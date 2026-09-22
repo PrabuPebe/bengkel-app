@@ -1401,6 +1401,113 @@ export const db = {
       initialServiceIds?: string[];
       initialPartIds?: { partId: string; qty: number }[];
     }): Promise<ServiceOrder> {
+      if (isRealDatabase) {
+        try {
+          const totalCount = await prisma.serviceOrder.count();
+          const dateStr = new Date().toISOString().slice(0, 7).replace("-", "");
+          const orderNumber = `WO-${dateStr}-${String(totalCount + 1).padStart(4, "0")}`;
+          const token = `trk-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+
+          // Siapkan jasa awal
+          let totalServices = 0;
+          const itemsData: any[] = [];
+          if (data.initialServiceIds && data.initialServiceIds.length > 0) {
+            const srvs = await prisma.servicesCatalog.findMany({
+              where: { id: { in: data.initialServiceIds } },
+            });
+            for (const s of srvs) {
+              const price = Number(s.price);
+              itemsData.push({
+                serviceId: s.id,
+                serviceName: s.name,
+                price,
+                qty: 1,
+                subtotal: price,
+              });
+              totalServices += price;
+            }
+          }
+
+          // Siapkan suku cadang awal & potong stok
+          let totalParts = 0;
+          const partsData: any[] = [];
+          if (data.initialPartIds && data.initialPartIds.length > 0) {
+            for (const p of data.initialPartIds) {
+              const part = await prisma.partsInventory.findUnique({ where: { id: p.partId } });
+              if (part && part.stock >= p.qty) {
+                const sellPrice = Number(part.sellPrice);
+                const costPrice = Number(part.costPrice);
+                const subtotal = sellPrice * p.qty;
+                partsData.push({
+                  partId: part.id,
+                  partName: part.name,
+                  costPrice,
+                  sellPrice,
+                  qty: p.qty,
+                  subtotal,
+                });
+                totalParts += subtotal;
+              }
+            }
+          }
+
+          const createdOrder = await prisma.$transaction(async (tx) => {
+            // Potong stok suku cadang fisik di Supabase
+            for (const p of partsData) {
+              await tx.partsInventory.update({
+                where: { id: p.partId },
+                data: { stock: { decrement: p.qty } },
+              });
+            }
+
+            // Validasi keberadaan user mekanik
+            let validMechanicId = data.mechanicId;
+            if (validMechanicId) {
+              const mech = await tx.user.findUnique({ where: { id: validMechanicId } });
+              if (!mech) validMechanicId = undefined;
+            }
+
+            return await tx.serviceOrder.create({
+              data: {
+                orderNumber,
+                token,
+                customerId: data.customerId,
+                vehicleId: data.vehicleId,
+                mechanicId: validMechanicId || null,
+                currentKm: data.currentKm || null,
+                complaints: data.complaints.trim(),
+                status: "ANTRIAN",
+                paymentStatus: "PENDING",
+                totalServices,
+                totalParts,
+                discount: 0,
+                grandTotal: totalServices + totalParts,
+                notes: data.notes?.trim() || null,
+                items: {
+                  create: itemsData,
+                },
+                parts: {
+                  create: partsData,
+                },
+              },
+              include: {
+                customer: { include: { vehicles: true } },
+                vehicle: true,
+                mechanic: true,
+                items: true,
+                parts: true,
+              },
+            });
+          });
+
+          const mapped = mapPrismaOrder(createdOrder);
+          memoryServiceOrders.unshift(mapped);
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.create:", err);
+        }
+      }
+
       const count = memoryServiceOrders.length + 1;
       const dateStr = new Date().toISOString().slice(0, 7).replace("-", "");
       const orderNumber = `WO-${dateStr}-${String(count).padStart(4, "0")}`;
@@ -1520,6 +1627,47 @@ export const db = {
     },
 
     async addItem(orderId: string, serviceId: string): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const srv = await prisma.servicesCatalog.findUnique({ where: { id: serviceId } });
+          const currentOrder = await prisma.serviceOrder.findUnique({ where: { id: orderId } });
+          if (srv && currentOrder) {
+            const price = Number(srv.price);
+            await prisma.serviceOrderItem.create({
+              data: {
+                orderId,
+                serviceId: srv.id,
+                serviceName: srv.name,
+                price,
+                qty: 1,
+                subtotal: price,
+              },
+            });
+
+            const newTotalServices = Number(currentOrder.totalServices) + price;
+            const newGrandTotal = Math.max(0, newTotalServices + Number(currentOrder.totalParts) - Number(currentOrder.discount));
+
+            const updated = await prisma.serviceOrder.update({
+              where: { id: orderId },
+              data: {
+                totalServices: newTotalServices,
+                grandTotal: newGrandTotal,
+              },
+              include: {
+                customer: { include: { vehicles: true } },
+                vehicle: true,
+                mechanic: true,
+                items: true,
+                parts: true,
+              },
+            });
+            return mapPrismaOrder(updated);
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.addItem:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === orderId);
       const srv = memoryServices.find((s) => s.id === serviceId);
       if (!order || !srv) return null;
@@ -1540,6 +1688,38 @@ export const db = {
     },
 
     async removeItem(orderId: string, itemId: string): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const item = await prisma.serviceOrderItem.findUnique({ where: { id: itemId } });
+          const currentOrder = await prisma.serviceOrder.findUnique({ where: { id: orderId } });
+          if (item && currentOrder) {
+            const subtotal = Number(item.subtotal);
+            await prisma.serviceOrderItem.delete({ where: { id: itemId } });
+
+            const newTotalServices = Math.max(0, Number(currentOrder.totalServices) - subtotal);
+            const newGrandTotal = Math.max(0, newTotalServices + Number(currentOrder.totalParts) - Number(currentOrder.discount));
+
+            const updated = await prisma.serviceOrder.update({
+              where: { id: orderId },
+              data: {
+                totalServices: newTotalServices,
+                grandTotal: newGrandTotal,
+              },
+              include: {
+                customer: { include: { vehicles: true } },
+                vehicle: true,
+                mechanic: true,
+                items: true,
+                parts: true,
+              },
+            });
+            return mapPrismaOrder(updated);
+          }
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.removeItem:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === orderId);
       if (!order) return null;
       order.items = order.items.filter((i) => i.id !== itemId);
@@ -1549,6 +1729,61 @@ export const db = {
     },
 
     async addPart(orderId: string, partId: string, qty = 1): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const part = await prisma.partsInventory.findUnique({ where: { id: partId } });
+          const currentOrder = await prisma.serviceOrder.findUnique({ where: { id: orderId } });
+          if (!part || !currentOrder || part.stock < qty) return null;
+
+          const sellPrice = Number(part.sellPrice);
+          const costPrice = Number(part.costPrice);
+          const subtotal = sellPrice * qty;
+
+          const updated = await prisma.$transaction(async (tx) => {
+            // Potong stok fisik suku cadang secara nyata di Supabase
+            await tx.partsInventory.update({
+              where: { id: partId },
+              data: { stock: { decrement: qty } },
+            });
+
+            // Tambahkan rincian part ke SPK
+            await tx.serviceOrderPart.create({
+              data: {
+                orderId,
+                partId: part.id,
+                partName: part.name,
+                costPrice,
+                sellPrice,
+                qty,
+                subtotal,
+              },
+            });
+
+            const newTotalParts = Number(currentOrder.totalParts) + subtotal;
+            const newGrandTotal = Math.max(0, Number(currentOrder.totalServices) + newTotalParts - Number(currentOrder.discount));
+
+            return await tx.serviceOrder.update({
+              where: { id: orderId },
+              data: {
+                totalParts: newTotalParts,
+                grandTotal: newGrandTotal,
+              },
+              include: {
+                customer: { include: { vehicles: true } },
+                vehicle: true,
+                mechanic: true,
+                items: true,
+                parts: true,
+              },
+            });
+          });
+
+          return mapPrismaOrder(updated);
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.addPart:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === orderId);
       const part = memoryParts.find((p) => p.id === partId);
       if (!order || !part || part.stock < qty) return null;
@@ -1573,6 +1808,49 @@ export const db = {
     },
 
     async removePart(orderId: string, partItemId: string): Promise<ServiceOrder | null> {
+      if (isRealDatabase) {
+        try {
+          const partItem = await prisma.serviceOrderPart.findUnique({ where: { id: partItemId } });
+          const currentOrder = await prisma.serviceOrder.findUnique({ where: { id: orderId } });
+          if (!partItem || !currentOrder) return null;
+
+          const subtotal = Number(partItem.subtotal);
+
+          const updated = await prisma.$transaction(async (tx) => {
+            // Kembalikan stok fisik suku cadang secara nyata di Supabase
+            await tx.partsInventory.update({
+              where: { id: partItem.partId },
+              data: { stock: { increment: partItem.qty } },
+            });
+
+            // Hapus rincian part dari SPK
+            await tx.serviceOrderPart.delete({ where: { id: partItemId } });
+
+            const newTotalParts = Math.max(0, Number(currentOrder.totalParts) - subtotal);
+            const newGrandTotal = Math.max(0, Number(currentOrder.totalServices) + newTotalParts - Number(currentOrder.discount));
+
+            return await tx.serviceOrder.update({
+              where: { id: orderId },
+              data: {
+                totalParts: newTotalParts,
+                grandTotal: newGrandTotal,
+              },
+              include: {
+                customer: { include: { vehicles: true } },
+                vehicle: true,
+                mechanic: true,
+                items: true,
+                parts: true,
+              },
+            });
+          });
+
+          return mapPrismaOrder(updated);
+        } catch (err) {
+          console.error("Error prisma.serviceOrder.removePart:", err);
+        }
+      }
+
       const order = memoryServiceOrders.find((o) => o.id === orderId);
       if (!order) return null;
       const partItem = order.parts.find((p) => p.id === partItemId);

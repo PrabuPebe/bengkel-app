@@ -68,7 +68,7 @@ export default function CashierBillingDetailPage({
     return (
       <div className="p-24 text-center text-slate-400 text-sm print:hidden card-pitstop">
         <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        Memuat terminal kasir Bengkelku...
+        Memuat terminal kasir PitCare Auto...
       </div>
     );
   }
@@ -81,7 +81,7 @@ export default function CashierBillingDetailPage({
         </div>
         <h2 className="text-base font-bold text-slate-100 mb-2">Faktur Tidak Ditemukan</h2>
         <p className="text-xs text-slate-400 mb-6">
-          Nomor SPK atau ID penagihan yang Anda cari tidak tersedia dalam database Bengkelku.
+          Nomor SPK atau ID penagihan yang Anda cari tidak tersedia dalam database PitCare Auto.
         </p>
         <Link
           href="/cashier"
@@ -258,7 +258,7 @@ export default function CashierBillingDetailPage({
               </div>
               <div>
                 <span>Teknisi Penanggungjawab: </span>
-                <strong className="text-slate-200">{order.mechanicName || "Teknisi Bengkelku"}</strong>
+                <strong className="text-slate-200">{order.mechanicName || "Teknisi PitCare Auto"}</strong>
               </div>
             </div>
           </div>
@@ -396,7 +396,7 @@ export default function CashierBillingDetailPage({
                   {formatRupiah(currentGrandTotal)}
                 </p>
               </div>
-              <span className="text-[11px] font-bold text-cyan-400 font-mono">Bengkelku</span>
+              <span className="text-[11px] font-bold text-cyan-400 font-mono">PitCare Auto</span>
             </div>
 
             {isAlreadyPaid ? (
@@ -537,14 +537,14 @@ export default function CashierBillingDetailPage({
 
       {/* =========================================================
           PRINTABLE OFFICIAL RECEIPT / THERMAL STRUK (Clean Output)
-          Official Bengkelku Workshop Receipt
+          Official PitCare Auto Workshop Receipt
           ========================================================= */}
       <div className="hidden print:block print:max-w-xs print:mx-auto print:font-mono print:text-black print:text-[11px] print:leading-tight">
         {/* Workshop Header */}
         <div className="text-center pb-2 border-b border-dashed border-gray-400">
-          <h2 className="text-base font-black tracking-wider uppercase">BENGKELKU</h2>
-          <p className="text-[10px] font-semibold">Automotive Service & Genuine Spareparts</p>
-          <p className="text-[9px]">Bengkelku — Layanan Otomotif Modern, Cepat & Terpercaya</p>
+          <h2 className="text-base font-black tracking-wider uppercase">PITCARE AUTO</h2>
+          <p className="text-[10px] font-semibold">Enterprise Workshop Suite & Spareparts</p>
+          <p className="text-[9px]">PitCare Auto — Layanan Otomotif Modern, Cepat & Terpercaya</p>
           <p className="text-[9px]">Hotline / WhatsApp: 0812-3456-7890</p>
         </div>
 
@@ -632,7 +632,7 @@ export default function CashierBillingDetailPage({
         {/* Footer Notes */}
         <div className="pt-3 text-center text-[9px] space-y-1">
           <p className="font-bold">*** TERIMA KASIH ATAS KEPERCAYAAN ANDA ***</p>
-          <p>Garansi Servis Resmi Bengkelku: 7 Hari / 500 KM.</p>
+          <p>Garansi Servis Resmi PitCare Auto: 7 Hari / 500 KM.</p>
           <p>Simpan nota ini sebagai bukti garansi & riwayat servis resmi.</p>
         </div>
       </div>

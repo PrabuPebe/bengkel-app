@@ -102,7 +102,7 @@ export default function PublicServiceTrackingPage({
     return (
       <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col items-center justify-center p-6">
         <div className="w-10 h-10 border-3 border-cyan-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-sm font-semibold text-slate-400">Menghubungkan ke Bengkelku Live Tracker...</p>
+        <p className="text-sm font-semibold text-slate-400">Menghubungkan ke PitCare Auto Live Tracker...</p>
       </div>
     );
   }
@@ -115,7 +115,7 @@ export default function PublicServiceTrackingPage({
         </div>
         <h1 className="text-xl font-bold text-slate-100 mb-2">Token Pelacakan Tidak Ditemukan</h1>
         <p className="text-xs text-slate-400 max-w-md mb-6 leading-relaxed">
-          Link pelacakan atau nomor token yang Anda masukkan tidak terdaftar dalam sistem Bengkelku. Pastikan Anda mengklik tautan resmi dari pesan WhatsApp kami.
+          Link pelacakan atau nomor token yang Anda masukkan tidak terdaftar dalam sistem PitCare Auto. Pastikan Anda mengklik tautan resmi dari pesan WhatsApp kami.
         </p>
         <Link
           href="/"
@@ -128,7 +128,7 @@ export default function PublicServiceTrackingPage({
   }
 
   const waMessage = encodeURIComponent(
-    `Halo Bengkelku, saya ingin menanyakan perkembangan servis kendaraan saya:\n- No. SPK: ${order.orderNumber}\n- Plat Nomor: ${order.vehicle?.plateNumber || "-"}\n- Pemilik: ${order.customer?.name || "-"}\nMohon informasinya. Terima kasih!`
+    `Halo PitCare Auto, saya ingin menanyakan perkembangan servis kendaraan saya:\n- No. SPK: ${order.orderNumber}\n- Plat Nomor: ${order.vehicle?.plateNumber || "-"}\n- Pemilik: ${order.customer?.name || "-"}\nMohon informasinya. Terima kasih!`
   );
 
   return (
@@ -137,12 +137,12 @@ export default function PublicServiceTrackingPage({
         {/* Top Branding Header */}
         <div className="flex items-center justify-between pb-6 border-b border-slate-800">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 flex items-center justify-center font-black text-black text-base shadow-lg shadow-cyan-500/20">
-              BK
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-cyan-500/20">
+              PA
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-black tracking-tight text-white">BENGKELKU</h1>
+                <h1 className="text-base font-black tracking-tight text-white">PITCARE AUTO</h1>
                 <span className="badge-selesai-pengerjaan">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Live Tracker
@@ -254,7 +254,7 @@ export default function PublicServiceTrackingPage({
 
           <div className="mt-5 pt-3.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
             <span>
-              Teknisi Ahli: <strong className="text-slate-200">{order.mechanicName || "Teknisi Bengkelku"}</strong>
+              Teknisi Ahli: <strong className="text-slate-200">{order.mechanicName || "Teknisi PitCare Auto"}</strong>
             </span>
             <span className="font-mono">Update Real-time: {lastRefreshed.toLocaleTimeString("id-ID")}</span>
           </div>
@@ -299,7 +299,7 @@ export default function PublicServiceTrackingPage({
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
               Rincian Pekerjaan & Biaya Transparan
             </h3>
-            <span className="text-xs text-cyan-400 font-mono">Bengkelku Guarantee</span>
+            <span className="text-xs text-cyan-400 font-mono">PitCare Auto Guarantee</span>
           </div>
 
           <div className="space-y-4">
@@ -393,7 +393,7 @@ export default function PublicServiceTrackingPage({
         <div className="card-pitstop p-6 sm:p-7 text-center space-y-3">
           <h4 className="text-sm font-bold text-slate-100">Butuh Informasi Tambahan Mengenai Pengerjaan?</h4>
           <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-            Tim teknisi dan service advisor Bengkelku siap memberikan rincian progres atau konsultasi suku cadang.
+            Tim teknisi dan service advisor PitCare Auto siap memberikan rincian progres atau konsultasi suku cadang.
           </p>
           <div className="pt-2">
             <a
@@ -402,17 +402,17 @@ export default function PublicServiceTrackingPage({
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-lg shadow-emerald-600/25 cursor-pointer active:scale-98"
             >
-              <span>📱 Hubungi Tim Bengkelku via WhatsApp</span>
+              <span>📱 Hubungi Tim PitCare Auto via WhatsApp</span>
             </a>
           </div>
           <p className="text-[10px] text-slate-500 pt-2">
-            Garansi servis resmi Bengkelku: 7 hari / 500 KM untuk kenyamanan dan kepuasan berkendara Anda.
+            Garansi servis resmi PitCare Auto: 7 hari / 500 KM untuk kenyamanan dan kepuasan berkendara Anda.
           </p>
         </div>
 
         {/* Footer */}
         <div className="text-center py-6 text-xs text-slate-500 border-t border-slate-800">
-          <p>© {new Date().getFullYear()} Bengkelku — Platform Manajemen & Pelacakan Otomotif Modern</p>
+          <p>© {new Date().getFullYear()} PitCare Auto — Platform Manajemen & Pelacakan Otomotif Modern</p>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
   --background: #0B0F17;
   --foreground: #F8FAFC;
 
-  /* Bengkelku Design Tokens — High-Tech Pitstop */
+  /* PitCare Auto Design Tokens — High-Tech Pitstop */
   --c-obsidian: #0B0F17;
   --c-sidebar: #0F172A;
   --c-card: #131B2E;
@@ -35,7 +35,7 @@ body {
 }
 
 /* ============================================================
-   Bengkelku — High-Tech Pitstop Dark System v2.0
+   PitCare Auto — High-Tech Pitstop Dark System v2.0
    Surfaces: #0B0F17 (Body) | #0F172A (Sidebar) | #131B2E (Cards)
    Accents:  #00D2FF (Hyper Cyan) | #2563EB (Electric) | #F59E0B (Amber)
    ============================================================ */

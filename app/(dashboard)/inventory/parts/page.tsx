@@ -129,7 +129,7 @@ export default function PartsInventoryPage() {
     <div className="space-y-6">
       <Header
         title="Inventaris Suku Cadang (Sparepart)"
-        subtitle="Kelola stok suku cadang Bengkelku, harga modal (HPP), harga jual konsumen, dan kontrol peringatan stok kritis otomatis."
+        subtitle="Kelola stok suku cadang PitCare Auto, harga modal (HPP), harga jual konsumen, dan kontrol peringatan stok kritis otomatis."
         actionButton={
           <button
             type="button"
@@ -187,11 +187,12 @@ export default function PartsInventoryPage() {
           })}
         </div>
 
-        <form onSubmit={handleSearch} className="flex gap-2">
-          <div className="flex-1 relative">
+        {/* Search & Category Filter Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <form onSubmit={handleSearch} className="flex-1 relative">
             <input
               type="text"
-              placeholder="Cari berdasarkan SKU, nama part (contoh: MPX2, Busi, V-Belt), atau lokasi rak..."
+              placeholder="Cari berdasarkan SKU (contoh: OIL-MPX2), nama suku cadang, atau kategori..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="input-custom w-full h-11 pl-11 pr-4 text-xs"
@@ -204,27 +205,28 @@ export default function PartsInventoryPage() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </div>
+          </form>
+
           {searchQuery && (
             <button
               type="button"
               onClick={() => {
                 setSearchQuery("");
-                loadParts("", selectedCategory);
+                loadParts("");
               }}
               className="btn-outline-steel px-4 h-11 text-xs cursor-pointer"
             >
               Reset
             </button>
           )}
-        </form>
+        </div>
       </div>
 
       {/* Parts Table */}
       {isLoading ? (
         <div className="p-20 text-center text-slate-400 text-sm card-pitstop">
           <div className="w-8 h-8 border-2 border-[#00D2FF] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat stok inventaris Bengkelku...
+          Memuat stok inventaris PitCare Auto...
         </div>
       ) : parts.length === 0 ? (
         <div className="p-16 text-center card-pitstop">
@@ -345,7 +347,7 @@ export default function PartsInventoryPage() {
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         title="Daftarkan Suku Cadang Baru"
-        description="Tambahkan item sparepart baru ke inventaris gudang Bengkelku."
+        description="Tambahkan item sparepart baru ke inventaris gudang PitCare Auto."
       >
         <form onSubmit={handleCreatePart} className="space-y-4">
           {formError && (

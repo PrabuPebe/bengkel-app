@@ -66,7 +66,7 @@ export default function CashierPage() {
     <div className="space-y-6">
       <Header
         title="Kasir & Billing Terminal"
-        subtitle="Selesaikan pembayaran faktur servis Bengkelku, berikan diskon, pilih metode bayar, dan cetak nota struk resmi."
+        subtitle="Selesaikan pembayaran faktur servis PitCare Auto, berikan diskon, pilih metode bayar, dan cetak nota struk resmi."
       />
 
       {/* Metric Cards */}
@@ -160,7 +160,7 @@ export default function CashierPage() {
       {isLoading ? (
         <div className="p-20 text-center text-slate-400 text-sm card-pitstop">
           <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat antrean kasir Bengkelku...
+          Memuat antrean kasir PitCare Auto...
         </div>
       ) : displayedOrders.length === 0 ? (
         <div className="p-16 text-center card-pitstop">
