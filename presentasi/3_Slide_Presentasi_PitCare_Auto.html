@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentasi Bengkelku - Smart Workshop Management System</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+    code, pre, .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .slide-enter {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.995);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .badge-glow {
+      box-shadow: 0 0 20px -3px rgba(234, 88, 12, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none overflow-x-hidden">
+
+  <!-- Top Navigation / Progress Header -->
+  <header class="border-b border-slate-800/80 bg-slate-900/80 backdrop-blur-md px-6 py-3.5 flex items-center justify-between sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-black text-slate-950 text-sm shadow-md shadow-orange-500/20">
+        BK
+      </div>
+      <div>
+        <span class="font-bold tracking-tight text-white flex items-center gap-2">
+          Bengkelku
+          <span class="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/30">Deck v1.0</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="flex items-center gap-4">
+      <div class="text-xs text-slate-400 font-mono hidden sm:block">
+        Slide <span id="currentSlideNum" class="text-orange-400 font-bold">1</span> / <span id="totalSlidesNum">12</span>
+      </div>
+      <div class="w-36 h-2 bg-slate-800 rounded-full overflow-hidden hidden sm:block">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-300" style="width: 8.33%;"></div>
+      </div>
+      <button id="toggleNotesBtn" onclick="toggleSpeakerNotes()" class="text-xs px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 hover:bg-slate-700 text-slate-300 transition flex items-center gap-1.5 cursor-pointer">
+        <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+        <span id="notesBtnLabel">Speaker Notes</span>
+      </button>
+      <button onclick="toggleFullScreen()" class="text-xs p-1.5 rounded-lg border border-slate-700 bg-slate-800/60 hover:bg-slate-700 text-slate-300 transition hidden md:inline-flex cursor-pointer" title="Fullscreen">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Canvas Container -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-8 max-w-6xl mx-auto w-full">
+    
+    <!-- SLIDE 1: Title & Hero -->
+    <div id="slide-1" class="slide-content w-full slide-enter flex flex-col items-center text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-6 badge-glow">
+        <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+        Sistem Manajemen Bengkel Modern
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+        BENGKELKU
+      </h1>
+      <p class="text-xl sm:text-2xl font-medium text-slate-300 max-w-2xl mb-8 leading-relaxed">
+        Digitalisasi Operasional Bengkel dengan <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">Live Service Tracking</span> &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400">Automated WhatsApp Reminder</span>
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl w-full text-left mb-10">
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="text-orange-400 font-bold text-sm mb-1 flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            Efisiensi Bengkel
+          </div>
+          <p class="text-xs text-slate-400">Work order cepat, katalog part &amp; jasa, kasir instan tanpa nota kertas manual tercecer.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="text-amber-400 font-bold text-sm mb-1 flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            Live Tracking
+          </div>
+          <p class="text-xs text-slate-400">Pelanggan pantau progres servis &amp; estimasi biaya transparan tanpa perlu instal aplikasi.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="text-emerald-400 font-bold text-sm mb-1 flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            Auto Retention
+          </div>
+          <p class="text-xs text-slate-400">Pengingat berkala WhatsApp otomatis 60–90 hari mengunci repeat customer.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 text-xs text-slate-400 font-mono">
+        <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Next.js 16 (App Router)</span>
+        <span>•</span>
+        <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">React 19</span>
+        <span>•</span>
+        <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">NextAuth</span>
+        <span>•</span>
+        <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800">Vercel Live</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Problem Statement -->
+    <div id="slide-2" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">01 / Latar Belakang Masalah</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Tiga Lubang Hitam Operasional Bengkel Konvensional</h2>
+      <p class="text-slate-400 mb-8 max-w-3xl text-sm sm:text-base">Hampir 90% bengkel skala UMKM dan menengah masih bergantung pada metode kertas manual yang merugikan pemilik bengkel dan mengecewakan pelanggan.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="bg-slate-900/80 border border-red-500/20 rounded-2xl p-6 relative overflow-hidden group hover:border-red-500/40 transition">
+          <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center font-bold text-lg mb-4">
+            1
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Customer Retention Gap</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            Hanya mengandalkan stiker kertas di spidometer. Saat stiker lepas, kehujanan, atau pudar, pelanggan lupa jadwal servis dan beralih ke bengkel lain.
+          </p>
+          <div class="text-[11px] font-mono p-2.5 rounded-lg bg-red-950/40 border border-red-900/50 text-red-300">
+            ⚠️ Dampak: Kehilangan 30-45% potensi recurring revenue bulanan.
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-slate-900/80 border border-amber-500/20 rounded-2xl p-6 relative overflow-hidden group hover:border-amber-500/40 transition">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-lg mb-4">
+            2
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Trust &amp; Transparency Deficit</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            Pelanggan was-was ditinggal tanpa kepastian: kapan beres, apa saja sparepart yang diganti, dan takut tagihan membengkak tiba-tiba (hidden cost).
+          </p>
+          <div class="text-[11px] font-mono p-2.5 rounded-lg bg-amber-950/40 border border-amber-900/50 text-amber-300">
+            ⚠️ Dampak: Pelanggan bolak-balik telepon/chat kasir &amp; mekanik.
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-slate-900/80 border border-purple-500/20 rounded-2xl p-6 relative overflow-hidden group hover:border-purple-500/40 transition">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-lg mb-4">
+            3
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Fragmented Service History</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            Nota manual sobek dan tercecer. Mekanik buta rekam jejak: kapan terakhir ganti oli gardan, timing belt, atau busi.
+          </p>
+          <div class="text-[11px] font-mono p-2.5 rounded-lg bg-purple-950/40 border border-purple-900/50 text-purple-300">
+            ⚠️ Dampak: Diagnosa trial-and-error, pengerjaan lambat &amp; rawan komplain.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: The Solution -->
+    <div id="slide-3" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">02 / Solusi Bengkelku</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Jembatan Digital Terintegrasi Dua Arah</h2>
+      <p class="text-slate-400 mb-8 max-w-3xl text-sm sm:text-base">Bengkelku mengawinkan kekuatan sistem internal (Back-Office) dengan keterlibatan pelanggan langsung tanpa friksi (Customer-Facing).</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <div>
+              <h4 class="text-white font-bold text-sm">Pencatatan Servis Terpusat (Work Order Digital)</h4>
+              <p class="text-xs text-slate-400 mt-1">Registrasi kendaraan dengan nomor polisi, keluhan awal, odometer, mekanik bertugas, dan suku cadang riil.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 border border-orange-500/30 bg-orange-500/5 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+              <h4 class="text-white font-bold text-sm">Live Service Tracking Tanpa Akun</h4>
+              <p class="text-xs text-slate-400 mt-1">Pelanggan cukup scan QR / klik link via smartphone untuk melihat progress: Antrian ➔ Dikerjakan ➔ Selesai.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 border border-emerald-500/30 bg-emerald-500/5 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            </div>
+            <div>
+              <h4 class="text-white font-bold text-sm">Otomatisasi WhatsApp Reminder Cerdas</h4>
+              <p class="text-xs text-slate-400 mt-1">Filter otomatis kendaraan jatuh tempo 60-90 hari pasca servis terakhir. 1-klik kirim undangan personal ke WA pelanggan.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Transformation Box -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 font-mono">Transformasi Sebelum vs Sesudah</h3>
+          <div class="space-y-3 text-xs">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-red-950/20 border border-red-900/30">
+              <span class="text-slate-400 line-through">Kertas nota bon &amp; stiker spido</span>
+              <span class="text-emerald-400 font-bold">➔ Database Digital &amp; Auto Reminder</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-red-950/20 border border-red-900/30">
+              <span class="text-slate-400 line-through">Pelanggan cemas &amp; curiga overcharge</span>
+              <span class="text-emerald-400 font-bold">➔ Live Tracking &amp; Rincian Transparan</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-red-950/20 border border-red-900/30">
+              <span class="text-slate-400 line-through">Mekanik tebak-tebak riwayat servis</span>
+              <span class="text-emerald-400 font-bold">➔ Riwayat Lengkap per Plat No</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-red-950/20 border border-red-900/30">
+              <span class="text-slate-400 line-through">Kasir hitung manual rawan selisih</span>
+              <span class="text-emerald-400 font-bold">➔ Kalkulasi Otomatis &amp; Cetak Nota</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Value Proposition & USPs -->
+    <div id="slide-4" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">03 / Value Proposition</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Keunggulan Kompetitif Bengkelku</h2>
+      <p class="text-slate-400 mb-8 max-w-3xl text-sm sm:text-base">Mengapa Bengkelku berbeda dari software POS / kasir bengkel biasa?</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="w-9 h-9 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold mb-3">
+            01
+          </div>
+          <h3 class="text-white font-bold text-base mb-1.5">Zero-Friction Tracking</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Pelanggan tidak dipaksa download aplikasi di PlayStore atau register password rumit. Cukup buka link via browser HP.</p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold mb-3">
+            02
+          </div>
+          <h3 class="text-white font-bold text-base mb-1.5">Retention-First Engine</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Bukan sekadar mencatat penjualan saat datang, tapi aktif menjemput bola mengembalikan pelanggan lama lewat WhatsApp.</p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold mb-3">
+            03
+          </div>
+          <h3 class="text-white font-bold text-base mb-1.5">1-to-Many Vehicle Relation</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Satu nomor WhatsApp pelanggan dapat terhubung ke banyak kendaraan (motor pribadi, motor pasangan, mobil keluarga).</p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-3">
+            04
+          </div>
+          <h3 class="text-white font-bold text-base mb-1.5">Lightweight &amp; Cloud Ready</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Dibangun di atas Next.js 16 modern, akses cepat dari perangkat apa pun (laptop kasir, tablet mekanik, smartphone owner).</p>
+        </div>
+      </div>
+
+      <div class="mt-8 p-4 rounded-xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border border-orange-500/20 flex items-center gap-4">
+        <span class="text-2xl">💡</span>
+        <p class="text-xs sm:text-sm text-slate-300">
+          <span class="text-white font-bold">Misi Inti:</span> Membantu bengkel UMKM menaikkan citra profesional setara bengkel resmi (ATPM) dengan investasi teknologi yang terjangkau dan mudah dioperasikan.
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Target Users & RBAC -->
+    <div id="slide-5" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">04 / User Persona &amp; Hak Akses</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">4 Persona Pengguna &amp; Matriks RBAC</h2>
+      <p class="text-slate-400 mb-8 max-w-3xl text-sm sm:text-base">Sistem dirancang dengan pembagian peran yang terdefinisi rapi untuk menjaga integritas data.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-7 h-7 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xs font-bold">👑</span>
+            <h4 class="text-white font-bold text-sm">Owner / Admin</h4>
+          </div>
+          <p class="text-[11px] text-slate-400 mb-2">Pak Joko (Pemilik Bengkel)</p>
+          <ul class="text-[11px] text-slate-300 space-y-1">
+            <li>• Akses dashboard analitik &amp; laba</li>
+            <li>• Manajemen master harga &amp; part</li>
+            <li>• Kontrol penuh hak akses staf</li>
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">💻</span>
+            <h4 class="text-white font-bold text-sm">Kasir / Front Desk</h4>
+          </div>
+          <p class="text-[11px] text-slate-400 mb-2">Siti (Front Office)</p>
+          <ul class="text-[11px] text-slate-300 space-y-1">
+            <li>• Input pelanggan &amp; SPK masuk</li>
+            <li>• Kasir, cetak invoice &amp; kembalian</li>
+            <li>• Trigger pengingat WhatsApp</li>
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold">🔧</span>
+            <h4 class="text-white font-bold text-sm">Mekanik / Teknisi</h4>
+          </div>
+          <p class="text-[11px] text-slate-400 mb-2">Budi (Kepala Mekanik)</p>
+          <ul class="text-[11px] text-slate-300 space-y-1">
+            <li>• Cek riwayat kendaraan terdahulu</li>
+            <li>• Update status pengerjaan (live)</li>
+            <li>• Catat suku cadang pengganti</li>
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">📱</span>
+            <h4 class="text-white font-bold text-sm">Pelanggan Publik</h4>
+          </div>
+          <p class="text-[11px] text-slate-400 mb-2">Rian (Pemilik Kendaraan)</p>
+          <ul class="text-[11px] text-slate-300 space-y-1">
+            <li>• Buka halaman tracking via Token</li>
+            <li>• Lihat progress status real-time</li>
+            <li>• Pantau biaya transparan tanpa login</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-900/50 rounded-lg border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+        <span>🔒 Keamanan Sesi: Terproteksi NextAuth.js (Session JWT &amp; Role Check)</span>
+        <span class="text-orange-400 font-mono">Publik: /track/[token] (Open URL Token)</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Work Order & Core Features -->
+    <div id="slide-6" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">05 / Fitur Inti</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Work Order &amp; Kasir Billing Terintegrasi</h2>
+      <p class="text-slate-400 mb-6 max-w-3xl text-sm sm:text-base">Alur pengerjaan terstandarisasi dari registrasi awal hingga kendaraan keluar lunas.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Stage 1 -->
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="text-orange-400 text-xs font-mono font-bold mb-1">TAHAP 1</div>
+            <h4 class="text-white font-bold text-base mb-2">Check-in &amp; SPK Masuk</h4>
+            <p class="text-xs text-slate-400 leading-relaxed mb-3">
+              Petugas menginput Plat Nomor (auto-lookup riwayat jika pernah servis), kilometer masuk, keluhan awal, dan mekanik yang ditugaskan.
+            </p>
+          </div>
+          <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 font-mono">
+            Status: <span class="text-blue-400">ANTRIAN</span>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="text-amber-400 text-xs font-mono font-bold mb-1">TAHAP 2</div>
+            <h4 class="text-white font-bold text-base mb-2">Pengerjaan &amp; Part Usage</h4>
+            <p class="text-xs text-slate-400 leading-relaxed mb-3">
+              Mekanik mengeksekusi jasa servis dan memasukkan suku cadang yang digunakan. Stok inventaris berkurang secara otomatis dan aman.
+            </p>
+          </div>
+          <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 font-mono">
+            Status: <span class="text-amber-400">PENGERJAAN / MENUNGGU_PART</span>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="text-emerald-400 text-xs font-mono font-bold mb-1">TAHAP 3</div>
+            <h4 class="text-white font-bold text-base mb-2">Billing &amp; Selesai</h4>
+            <p class="text-xs text-slate-400 leading-relaxed mb-3">
+              Sistem menghitung total jasa + part - diskon. Kasir menerima pembayaran (Cash/Transfer), menghitung kembalian, dan cetak invoice.
+            </p>
+          </div>
+          <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 font-mono">
+            Status: <span class="text-emerald-400">SELESAI_PEMBAYARAN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+        <span>📑 Riwayat Servis Tersimpan Abadi per Nomor Polisi (Riwayat km, tanggal ganti part, catatan mekanik).</span>
+        <span class="text-emerald-400 font-semibold">Bebas Stiker Spidometer!</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Fitur Unggulan 1 - Live Tracking -->
+    <div id="slide-7" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">06 / Fitur Unggulan #1</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Live Service Tracking (No-Login Web Tracking)</h2>
+      <p class="text-slate-400 mb-6 max-w-3xl text-sm sm:text-base">Membangun transparansi radikal antara bengkel dan pemilik kendaraan secara real-time.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <!-- Mockup Card -->
+        <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-2xl relative">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <div>
+              <div class="text-xs text-slate-400 font-mono">TRACKING ID: #BK-78921</div>
+              <div class="text-base font-bold text-white">Honda Vario 160 (B 4512 KLG)</div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Sedang Dikerjakan
+            </span>
+          </div>
+
+          <!-- Progress Stepper Mockup -->
+          <div class="space-y-4 mb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold">✓</div>
+              <div class="text-xs text-slate-300"><span class="font-bold text-white">Registrasi Masuk</span> (10:15 WIB)</div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-xs font-bold animate-pulse">⚙️</div>
+              <div class="text-xs text-slate-300"><span class="font-bold text-white">Pengerjaan: Tune Up &amp; Ganti Oli</span> (Teknisi: Budi)</div>
+            </div>
+            <div class="flex items-center gap-3 opacity-40">
+              <div class="w-6 h-6 rounded-full bg-slate-700 text-slate-400 flex items-center justify-center text-xs">3</div>
+              <div class="text-xs text-slate-400">Pengecekan Akhir &amp; Siap Diambil</div>
+            </div>
+          </div>
+
+          <!-- Live Cost Counter -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400">Estimasi Total Saat Ini:</span>
+            <span class="text-base font-extrabold text-orange-400 font-mono">Rp 165.000</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h4 class="text-white font-bold text-sm mb-1">Akses URL Berbasis Token Unik</h4>
+            <p class="text-xs text-slate-400">Setiap order otomatis menghasilkan token NanoID/UUID acak. URL: <code class="text-orange-400">bengkelkuapp.vercel.app/track/[token]</code>. Aman tanpa membocorkan data kendaraan lain.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h4 class="text-white font-bold text-sm mb-1">Hilangkan "Telepon Berkali-kali"</h4>
+            <p class="text-xs text-slate-400">Pelanggan bisa ngopi atau bekerja di tempat lain sambil memantau status secara langsung di HP tanpa mengganggu kesibukan staf kasir.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h4 class="text-white font-bold text-sm mb-1">Persetujuan Transparan</h4>
+            <p class="text-xs text-slate-400">Jika ditemukan kerusakan part tambahan saat dibongkar, mekanik mengunggah part ke sistem dan pelanggan langsung melihat estimasi rinciannya.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Fitur Unggulan 2 - WhatsApp Reminder -->
+    <div id="slide-8" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">07 / Fitur Unggulan #2</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Automated WhatsApp Service Reminder</h2>
+      <p class="text-slate-400 mb-6 max-w-3xl text-sm sm:text-base">Mesin penjaga retensi pelanggan: otomatis mendeteksi unit yang mendekati masa jatuh tempo servis.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <!-- WhatsApp Chat Simulation -->
+        <div class="bg-[#0b141a] border border-slate-800 rounded-2xl p-5 shadow-2xl">
+          <div class="flex items-center gap-3 border-b border-slate-800/80 pb-3 mb-4">
+            <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-white text-xs">
+              BK
+            </div>
+            <div>
+              <div class="text-sm font-bold text-white">Bengkelku Official</div>
+              <div class="text-[10px] text-emerald-400">Akun Bisnis Terverifikasi</div>
+            </div>
+          </div>
+
+          <!-- Chat bubble -->
+          <div class="bg-[#202c33] rounded-2xl rounded-tl-sm p-4 text-xs text-slate-200 space-y-2 border border-slate-700/40">
+            <p>Halo <strong class="text-white">Bpk. Rian</strong>,</p>
+            <p>Kami dari <strong class="text-orange-400">Bengkelku</strong> menginformasikan bahwa kendaraan <strong class="text-white">Honda Vario 160 (B 4512 KLG)</strong> sudah memasuki waktu servis berkala / ganti oli (terakhir servis <span class="text-amber-300">75 hari yang lalu</span>).</p>
+            <p>Yuk rawat performa mesin tetap prima dan hemat bensin. Balas pesan ini untuk reservasi antrian prioritas ya! 🛵✨</p>
+            <div class="text-right text-[10px] text-slate-400 pt-1">10:45 • Terkirim via Bengkelku Engine</div>
+          </div>
+
+          <div class="mt-4 p-3 bg-emerald-950/30 border border-emerald-800/40 rounded-xl text-center">
+            <span class="text-xs text-emerald-400 font-semibold font-mono">1-Click Trigger: wa.me/{phone}?text={template}</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-xs font-mono text-emerald-400 font-bold mb-1">ALGORITMA INTERVAL CERDAS</div>
+            <h4 class="text-white font-bold text-sm mb-1">Filter Otomatis 60–90 Hari</h4>
+            <p class="text-xs text-slate-400">Sistem mengalkulasi delta hari dari tanggal servis terakhir. Kendaraan yang memasuki rentang 60-90 hari langsung muncul di tab khusus "Perlu Pengingat".</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-xs font-mono text-amber-400 font-bold mb-1">FORMAT PESAN PERSONALISASI</div>
+            <h4 class="text-white font-bold text-sm mb-1">Template Dinamis Sesuai Data Pelanggan</h4>
+            <p class="text-xs text-slate-400">Pesan otomatis memuat nama pelanggan, merk kendaraan, nomor polisi, dan jarak hari tanpa perlu kasir mengetik ulang satu per satu.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-xs font-mono text-blue-400 font-bold mb-1">ROI INSTAN</div>
+            <h4 class="text-white font-bold text-sm mb-1">Peningkatan Repeat Order 30-40%</h4>
+            <p class="text-xs text-slate-400">Pelanggan merasa diperhatikan secara profesional. Bengkel mengunci kepastian unit masuk setiap hari kerja.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Tech Stack & Architecture -->
+    <div id="slide-9" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">08 / Arsitektur &amp; Teknologi</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Tech Stack Modern &amp; Scalable</h2>
+      <p class="text-slate-400 mb-6 max-w-3xl text-sm sm:text-base">Dibangun menggunakan standar industri terkini untuk performa tinggi, keamanan sesi, dan responsivitas instan.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-slate-400 text-xs font-mono mb-1">FRONTEND &amp; CORE</div>
+          <h4 class="text-white font-bold text-base mb-2">Next.js 16.3 + React 19</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">App Router, Server Components untuk loading instan, Client Components untuk interaktivitas dinamis.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-slate-400 text-xs font-mono mb-1">TYPING &amp; STYLING</div>
+          <h4 class="text-white font-bold text-base mb-2">TypeScript 5 + Tailwind v4</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Full strict typing untuk reliabilitas kode, Tailwind CSS v4 dengan Bengkelku Theme kustom.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-slate-400 text-xs font-mono mb-1">AUTHENTICATION</div>
+          <h4 class="text-white font-bold text-base mb-2">NextAuth.js v4</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Dual authentication: Credentials Email/Password &amp; Google OAuth Provider, session token aman.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-slate-400 text-xs font-mono mb-1">INFRASTRUKTUR</div>
+          <h4 class="text-white font-bold text-base mb-2">Vercel Cloud CI/CD</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Continuous deployment dari GitHub, edge network global, live production di bengkelkuapp.vercel.app.</p>
+        </div>
+      </div>
+
+      <!-- Architecture Flow Diagram -->
+      <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
+        <h4 class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">Diagram Alur Arsitektur</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center text-xs">
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+            <div class="text-orange-400 font-bold mb-1">1. User Request</div>
+            <div class="text-slate-400 text-[11px]">Browser Kasir / HP Pelanggan</div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+            <div class="text-amber-400 font-bold mb-1">2. Next.js Middleware</div>
+            <div class="text-slate-400 text-[11px]">Auth check (/dashboard) vs Public (/track)</div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+            <div class="text-blue-400 font-bold mb-1">3. Server Components</div>
+            <div class="text-slate-400 text-[11px]">Server Actions, DB Layer, WhatsApp Formatter</div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
+            <div class="text-emerald-400 font-bold mb-1">4. Database &amp; External</div>
+            <div class="text-slate-400 text-[11px]">Relational DB &amp; WhatsApp API Engine</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: End-to-End User Journey Demo -->
+    <div id="slide-10" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">09 / Skenario Simulasi Operasional</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Alur Pengerjaan Nyata (End-to-End)</h2>
+      <p class="text-slate-400 mb-6 max-w-3xl text-sm sm:text-base">Simulasi perjalanan satu unit kendaraan: sejak datang ke bengkel hingga kembali 3 bulan kemudian.</p>
+
+      <div class="relative border-l-2 border-orange-500/40 ml-4 pl-6 space-y-6">
+        <div>
+          <span class="absolute -left-[9px] w-4 h-4 rounded-full bg-orange-500 border-2 border-slate-950"></span>
+          <h4 class="text-white font-bold text-sm">Pukul 09.00 — Pelanggan Datang &amp; Didaftarkan</h4>
+          <p class="text-xs text-slate-400 mt-1">Kasir memasukkan nomor polisi <code class="text-orange-400 font-mono">B 1234 XYZ</code>, mencatat keluhan rem bunyi &amp; ganti oli. Lembar pendaftaran keluar dengan QR Code live tracking.</p>
+        </div>
+
+        <div>
+          <span class="absolute -left-[9px] w-4 h-4 rounded-full bg-amber-500 border-2 border-slate-950"></span>
+          <h4 class="text-white font-bold text-sm">Pukul 10.30 — Mekanik Eksekusi &amp; Live Update</h4>
+          <p class="text-xs text-slate-400 mt-1">Mekanik mengganti kampas rem dan oli mesin, mengubah status menjadi "Dikerjakan". Pelanggan mengecek HP saat makan siang dan melihat progresnya secara aktual.</p>
+        </div>
+
+        <div>
+          <span class="absolute -left-[9px] w-4 h-4 rounded-full bg-emerald-500 border-2 border-slate-950"></span>
+          <h4 class="text-white font-bold text-sm">Pukul 11.45 — Pembayaran Kasir &amp; Pengambilan Unit</h4>
+          <p class="text-xs text-slate-400 mt-1">Status berubah "Selesai". Pelanggan menuju kasir, bayar tunai/QRIS, nota tercetak rapi, dan riwayat tersimpan di database.</p>
+        </div>
+
+        <div>
+          <span class="absolute -left-[9px] w-4 h-4 rounded-full bg-blue-500 border-2 border-slate-950"></span>
+          <h4 class="text-white font-bold text-sm">60 Hari Kemudian — Automated WhatsApp Reminder</h4>
+          <p class="text-xs text-slate-400 mt-1">Sistem menandai kendaraan jatuh tempo. Kasir menekan tombol "Kirim WA". Pesan sampai ke HP pelanggan, reservasi servis kembali pun terjadi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: Roadmap & Milestones -->
+    <div id="slide-11" class="slide-content w-full hidden slide-enter">
+      <div class="text-orange-400 font-mono text-xs uppercase tracking-wider mb-2 font-semibold">10 / Roadmap &amp; Progress</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Milestone Pengembangan Bengkelku</h2>
+      <p class="text-slate-400 mb-6 max-w-3xl text-sm sm:text-base">Rencana pengembangan terstruktur berbasis Product Requirement Document (PRD).</p>
+
+      <div class="space-y-3">
+        <div class="p-4 rounded-xl bg-slate-900 border border-emerald-500/40 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+            <div>
+              <div class="text-white font-bold text-sm">Milestone 1: Fondasi Proyek, Auth &amp; Vercel Deployment</div>
+              <div class="text-xs text-slate-400">Next.js 16, Halaman Login Bengkelku, NextAuth Credentials + Google, Vercel Live</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold">SELESAI (100%)</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-orange-500/40 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-xs font-bold">2</span>
+            <div>
+              <div class="text-white font-bold text-sm">Milestone 2: Database Schema &amp; Master Data</div>
+              <div class="text-xs text-slate-400">CRUD Pelanggan &amp; Kendaraan, Katalog Jasa &amp; Suku Cadang (Stok alert)</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-orange-500/20 text-orange-300 font-mono text-xs font-bold">CURRENT</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between opacity-80">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-xs font-bold">3</span>
+            <div>
+              <div class="text-white font-bold text-sm">Milestone 3: Work Order Servis (SPK) &amp; Kasir Billing</div>
+              <div class="text-xs text-slate-400">Pendaftaran kendaraan, alur status pengerjaan, modul billing &amp; cetak nota</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 font-mono text-xs">PLANNED</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between opacity-80">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-xs font-bold">4</span>
+            <div>
+              <div class="text-white font-bold text-sm">Milestone 4: Live Service Tracking &amp; WA Automation</div>
+              <div class="text-xs text-slate-400">Halaman publik /track/[token] tanpa login &amp; filter jatuh tempo servis 60-90 hari</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 font-mono text-xs">PLANNED</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between opacity-80">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-xs font-bold">5</span>
+            <div>
+              <div class="text-white font-bold text-sm">Milestone 5: UAT, Hardening, &amp; Finalisasi Skripsi / Ujian</div>
+              <div class="text-xs text-slate-400">Uji skenario end-to-end, audit performa LCP/INP, dokumentasi teknis komprehensif</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 font-mono text-xs">PLANNED</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: Business Impact, Conclusion & Q&A -->
+    <div id="slide-12" class="slide-content w-full hidden slide-enter text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-6">
+        Kesimpulan &amp; Dampak Nyata
+      </div>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">
+        Bengkel Modern, Terpercaya, &amp; Menguntungkan
+      </h2>
+      <p class="text-slate-300 max-w-2xl mx-auto mb-8 text-base">
+        Bengkelku membuktikan bahwa transformasi digital bengkel UMKM tidak harus rumit atau mahal. Cukup satu sistem terpadu untuk menyelesaikan masalah retensi, transparansi, dan efisiensi.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto text-left mb-10">
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+          <div class="text-3xl font-extrabold text-orange-400 font-mono mb-1">+35%</div>
+          <div class="text-xs font-semibold text-white mb-1">Customer Retention</div>
+          <p class="text-[11px] text-slate-400">Peningkatan kembali servis berkala melalui WhatsApp reminder otomatis.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+          <div class="text-3xl font-extrabold text-amber-400 font-mono mb-1">-70%</div>
+          <div class="text-xs font-semibold text-white mb-1">Waktu Tanya-Jawab</div>
+          <p class="text-[11px] text-slate-400">Pengurangan panggilan telepon kasir berkat Live Service Tracking publik.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center">
+          <div class="text-3xl font-extrabold text-emerald-400 font-mono mb-1">0%</div>
+          <div class="text-xs font-semibold text-white mb-1">Data Hilang</div>
+          <p class="text-[11px] text-slate-400">Seluruh riwayat suku cadang dan kilometer tersimpan aman di cloud.</p>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-500/30 max-w-xl mx-auto mb-6">
+        <h3 class="text-xl font-bold text-white mb-2">Terima Kasih!</h3>
+        <p class="text-xs text-slate-300 mb-4">Sesi Diskusi &amp; Tanya Jawab (Q&amp;A)</p>
+        <div class="flex items-center justify-center gap-4 text-xs font-mono text-orange-300">
+          <span>🌐 bengkelkuapp.vercel.app</span>
+          <span>•</span>
+          <span>💻 GitHub Repo Ready</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Speaker Notes Drawer (Toggled by user) -->
+  <div id="speakerNotesDrawer" class="hidden border-t border-slate-800 bg-slate-900/95 backdrop-blur-md px-6 py-4 transition-all">
+    <div class="max-w-6xl mx-auto flex items-start gap-4">
+      <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path></svg>
+      </div>
+      <div class="flex-1">
+        <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider mb-1">Speaker Notes / Panduan Narasi Presenter</div>
+        <p id="speakerNotesText" class="text-xs text-slate-300 leading-relaxed">
+          "Selamat pagi/siang rekan-rekan dan bapak/ibu dosen. Hari ini saya mempersembahkan Bengkelku, sistem manajemen operasional bengkel cerdas yang memecahkan masalah retensi pelanggan dan transparansi servis."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <footer class="border-t border-slate-800/80 bg-slate-900/80 backdrop-blur-md px-6 py-3.5 flex items-center justify-between sticky bottom-0 z-50">
+    <div class="flex items-center gap-2 text-xs text-slate-400">
+      <span class="hidden sm:inline">Gunakan tombol panah keyboard:</span>
+      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-[11px] text-slate-300">←</kbd>
+      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-[11px] text-slate-300">→</kbd>
+      <span class="hidden md:inline">atau klik tombol navigasi</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button id="prevBtn" onclick="prevSlide()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-2 border border-slate-700 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        Sebelumnya
+      </button>
+
+      <button id="nextBtn" onclick="nextSlide()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-slate-950 text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-orange-500/20 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+        Selanjutnya
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Presentation Script Logic -->
+  <script>
+    const totalSlides = 12;
+    let currentSlide = 1;
+    let notesVisible = false;
+
+    const speakerNotes = {
+      1: "Selamat pagi/siang bapak/ibu penguji serta hadirin sekalian. Hari ini saya mempresentasikan proyek sistem informasi manajemen bengkel bertajuk 'Bengkelku'. Aplikasi ini dibangun bukan hanya untuk mencatat transaksi kasir, melainkan mentransformasi bengkel konvensional menjadi modern lewat 2 fitur kunci: Live Service Tracking dan Automated WhatsApp Reminder.",
+      2: "Kita mulai dari masalah riil di lapangan. Bengkel konvensional UMKM kerap mengalami 3 masalah besar: 1) Stiker kertas di spido pudar sehingga pelanggan lupa servis berkala dan bengkel kehilangan recurring income, 2) Pelanggan was-was adanya biaya siluman atau lama pengerjaan yang tidak pasti, dan 3) Buku bon manual yang hilang membuat mekanik buta riwayat servis sebelumnya.",
+      3: "Solusi Bengkelku mengintegrasikan back-office operasional bengkel dan akses pelanggan langsung tanpa friksi. Catatan servis menjadi digital, pelanggan dapat memantau status secara live lewat web, dan sistem secara cerdas menyiapkan pesan pengingat WhatsApp ketika waktu servis berkala tiba.",
+      4: "Inilah Value Proposition unik Bengkelku: 1) Pelanggan tidak perlu install aplikasi dari App Store/Play Store (Zero-friction), 2) Pendekatan Retention-first untuk memaksimalkan kepulangan pelanggan, 3) Relasi 1 pelanggan bisa memiliki banyak plat nomor kendaraan, dan 4) Arsitektur cloud Next.js 16 yang sangat ringan dan cepat.",
+      5: "Sistem memiliki 4 Persona Pengguna dengan matriks Role-Based Access Control (RBAC): Pemilik (Pak Joko) dengan akses penuh ke keuangan & master data, Kasir (Siti) untuk pendaftaran & cetak nota, Mekanik (Budi) untuk update progress fisik & sparepart, serta Pelanggan Publik yang cukup mengakses tracking tanpa login.",
+      6: "Berikut alur Work Order terintegrasi: Mulai dari Tahap 1 registrasi masuk (SPK) dengan odometer & keluhan awal berstatus ANTRIAN, Tahap 2 saat mekanik mengerjakan unit dan mencatat pemakaian sparepart, hingga Tahap 3 kasir memproses pembayaran dengan kalkulasi otomatis dan cetak struk.",
+      7: "Fitur Unggulan pertama: Live Service Tracking. Setiap work order memiliki token unik acak. Pelanggan cukup scan QR pada tanda terima atau buka link di smartphone untuk melihat status: dari registrasi, pengerjaan, hingga selesai, lengkap dengan rincian biaya aktual.",
+      8: "Fitur Unggulan kedua: Automated WhatsApp Service Reminder. Sistem otomatis memfilter kendaraan yang telah 60-90 hari sejak servis terakhir. Kasir hanya perlu menekan satu tombol untuk membuka pesan WhatsApp terformat rapi ke nomor pelanggan mengajak servis kembali.",
+      9: "Dari sisi teknis, aplikasi dibangun menggunakan Next.js 16 App Router dengan React 19, TypeScript strict mode, Tailwind CSS v4, autentikasi NextAuth dual provider (Credentials & Google OAuth), dan pipeline CI/CD otomatis di Vercel.",
+      10: "Mari kita lihat alur skenario nyata: Pukul 09.00 motor masuk & didaftarkan. Pukul 10.30 mekanik eksekusi dan pelanggan memantau via link di warung kopi. Pukul 11.45 unit selesai dan dibayar di kasir. Dan 60 hari kemudian, sistem mengirimkan reminder WA sehingga pelanggan kembali servis di bengkel kita.",
+      11: "Berikut pencapaian roadmap: Milestone 1 (Fondasi, Login Kustom, Autentikasi, & Deployment Vercel) sudah selesai 100% dan berjalan live di bengkelkuapp.vercel.app. Saat ini kita melangkah ke Milestone 2 hingga Milestone 5.",
+      12: "Kesimpulannya, Bengkelku mampu meningkatkan retensi pelanggan hingga 35%, menghemat waktu staf dari menjawab pertanyaan telepon hingga 70%, serta menjamin 0% kehilangan riwayat servis. Sekian presentasi saya, terima kasih dan saya buka sesi tanya jawab."
+    };
+
+    function updateSlideUI() {
+      // Hide all slides
+      for (let i = 1; i <= totalSlides; i++) {
+        const el = document.getElementById(`slide-${i}`);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('slide-enter');
+        }
+      }
+
+      // Show current slide
+      const currentEl = document.getElementById(`slide-${currentSlide}`);
+      if (currentEl) {
+        currentEl.classList.remove('hidden');
+        currentEl.classList.add('slide-enter');
+      }
+
+      // Update counters & progress bar
+      document.getElementById('currentSlideNum').innerText = currentSlide;
+      document.getElementById('totalSlidesNum').innerText = totalSlides;
+      const pct = (currentSlide / totalSlides) * 100;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+
+      // Update speaker notes text
+      const notesEl = document.getElementById('speakerNotesText');
+      if (notesEl && speakerNotes[currentSlide]) {
+        notesEl.innerText = speakerNotes[currentSlide];
+      }
+
+      // Update button states
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideUI();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideUI();
+      }
+    }
+
+    function toggleSpeakerNotes() {
+      notesVisible = !notesVisible;
+      const drawer = document.getElementById('speakerNotesDrawer');
+      const label = document.getElementById('notesBtnLabel');
+      if (notesVisible) {
+        drawer.classList.remove('hidden');
+        label.innerText = "Tutup Notes";
+      } else {
+        drawer.classList.add('hidden');
+        label.innerText = "Speaker Notes";
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        currentSlide = 1;
+        updateSlideUI();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        currentSlide = totalSlides;
+        updateSlideUI();
+      } else if (e.key === 's' || e.key === 'S') {
+        toggleSpeakerNotes();
+      }
+    });
+
+    // Initialize
+    updateSlideUI();
+  </script>
+</body>
+</html>

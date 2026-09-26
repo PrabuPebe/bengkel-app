@@ -165,6 +165,25 @@ export default function ServiceOrderDetailPage({
     });
   }
 
+  function handleQuickAddPart(partId: string) {
+    if (!order) return;
+    setActionError("");
+    const part = availableParts.find((p) => p.id === partId);
+    if (!part || part.stock < 1) {
+      setActionError(`Stok ${part?.name || "part"} tidak mencukupi!`);
+      return;
+    }
+    startTransition(async () => {
+      const res = await addServiceOrderPartAction(order.id, partId, 1);
+      if (res.success && res.data) {
+        setOrder(res.data);
+        getPartsAction().then(setAvailableParts);
+      } else {
+        setActionError(res.error || "Gagal menambahkan suku cadang rekomendasi.");
+      }
+    });
+  }
+
   function handleCopyTrackingLink() {
     if (!order) return;
     const trackingUrl = `${window.location.origin}/track/${order.token}`;
@@ -217,8 +236,90 @@ export default function ServiceOrderDetailPage({
     return "upcoming";
   };
 
+  // Odometer & Smart Recommendation Calculation for Mechanic
+  const currentKmNum = order.currentKm || 0;
+  const isEditableOrder = order.status !== "SELESAI_PEMBAYARAN" && order.status !== "DIBATALKAN";
+  const recommendedSmartParts = availableParts.filter((p) => {
+    const text = `${order.complaints} ${order.items.map((i) => i.serviceName).join(" ")}`.toLowerCase();
+    const partText = `${p.name} ${p.category}`.toLowerCase();
+    if (currentKmNum >= 24000 && (partText.includes("belt") || partText.includes("oli") || partText.includes("roller"))) return true;
+    if (currentKmNum >= 3000 && (partText.includes("oli") || partText.includes("busi"))) return true;
+    if (text.includes("cvt") && (partText.includes("cvt") || partText.includes("roller") || partText.includes("belt"))) return true;
+    if (text.includes("rem") && (partText.includes("rem") || partText.includes("kampas"))) return true;
+    if (text.includes("oli") && partText.includes("oli")) return true;
+    return false;
+  }).slice(0, 4);
+
   return (
     <div className="max-w-6xl mx-auto space-y-6">
+      {/* ODOMETER LIFESPAN ALERT & SMART RECOMMENDATION PANEL */}
+      {isEditableOrder && (currentKmNum >= 3000 || recommendedSmartParts.length > 0) && (
+        <div
+          className={`p-4 rounded-2xl border ${
+            currentKmNum >= 24000
+              ? "bg-rose-950/35 border-rose-500/50"
+              : "bg-amber-950/30 border-amber-500/40"
+          }`}
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span
+                  className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${
+                    currentKmNum >= 24000 ? "bg-rose-500 text-white" : "bg-amber-400 text-slate-950"
+                  }`}
+                >
+                  {currentKmNum >= 24000 ? "⚠️ Odometer Critical Alert" : "💡 Smart Service Recommendation"}
+                </span>
+                <span className="text-xs sm:text-sm font-extrabold text-white">
+                  {currentKmNum >= 24000
+                    ? `Perhatian: Odometer telah mencapai ${currentKmNum.toLocaleString("id-ID")} KM. Direkomendasikan ganti V-Belt & Oli hari ini!`
+                    : currentKmNum >= 3000
+                    ? `Perhatian: Odometer telah mencapai ${currentKmNum.toLocaleString("id-ID")} KM. Direkomendasikan ganti Oli Mesin & Busi hari ini!`
+                    : "Rekomendasi Suku Cadang Cerdas Berdasarkan Keluhan & Paket Servis"}
+                </span>
+              </div>
+              <p className="text-xs text-slate-300">
+                Klik tombol 1-Klik di bawah untuk langsung memasukkan suku cadang rekomendasi ke rincian SPK ini (otomatis memotong stok gudang):
+              </p>
+            </div>
+          </div>
+
+          {recommendedSmartParts.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-3 pt-3 border-t border-slate-800/80">
+              {recommendedSmartParts.map((rp) => {
+                const inOrder = order.parts.find((op) => op.partId === rp.id);
+                return (
+                  <div
+                    key={rp.id}
+                    className="p-2.5 rounded-xl bg-[#0B0F19]/90 border border-slate-800 flex items-center justify-between gap-2"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-white truncate">{rp.name}</p>
+                      <p className="text-[10px] font-mono text-cyan-400">
+                        {formatRupiah(rp.sellPrice)} • Stok: {rp.stock}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isPending || rp.stock <= 0}
+                      onClick={() => handleQuickAddPart(rp.id)}
+                      className={`px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shrink-0 cursor-pointer transition-all ${
+                        inOrder
+                          ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                          : "bg-amber-400 hover:bg-amber-300 text-slate-950"
+                      }`}
+                    >
+                      {inOrder ? `✓ Ada (${inOrder.qty})` : "+ 1-Klik Pakai"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">

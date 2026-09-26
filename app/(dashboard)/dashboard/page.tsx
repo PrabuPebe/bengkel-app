@@ -359,10 +359,10 @@ export default async function DashboardOverviewPage() {
         </div>
 
         {/* ========================================================
-            KOLOM KANAN (30% — PANEL FINANSIAL & GUDANG)
+            KOLOM KANAN (30% — PANEL FINANSIAL, TOP 5 PART & GUDANG)
             ======================================================== */}
         <div className="lg:col-span-4 space-y-5">
-          {/* A. Kartu Finansial & Omzet Kasir */}
+          {/* A. Kartu Ringkasan Eksekutif: Pendapatan Hari Ini & Total Servis Hari Ini */}
           <div
             className="card-pitstop p-5 border-cyan-500/30 relative overflow-hidden group"
             style={{
@@ -382,21 +382,36 @@ export default async function DashboardOverviewPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-200">Omzet Kasir Hari Ini</h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Penerimaan kasir POS</p>
+                  <h3 className="text-xs font-bold text-slate-200">Pendapatan Hari Ini</h3>
+                  <p className="text-[10px] text-slate-500 font-medium">Realisasi kasir & total servis</p>
                 </div>
               </div>
-              <span className="badge-custom badge-selesai-pembayaran text-[10px]">100% Lunas</span>
+              <span className="badge-custom badge-selesai-pembayaran text-[10px]">Live POS</span>
             </div>
 
             <div className="my-3 relative z-10">
               <p className="text-2xl sm:text-3xl font-black font-mono text-white tracking-tight leading-none">
                 {formatRupiah(stats.todayRevenue)}
               </p>
-              <div className="flex items-center justify-between text-xs text-slate-400 mt-2.5 font-medium">
-                <span className="font-mono text-cyan-400 font-bold">
-                  {stats.completedOrdersCount} transaksi faktur
-                </span>
+
+              {/* Ringkasan Total Servis Hari Ini vs Lunas */}
+              <div className="grid grid-cols-2 gap-2 mt-3.5 pt-3 border-t border-slate-800/90">
+                <div className="p-2.5 rounded-xl bg-[#0B0F19]/90 border border-slate-800">
+                  <p className="text-[10px] text-slate-400 font-semibold">Total Servis Hari Ini</p>
+                  <p className="text-base font-black font-mono text-[#00D2FF] mt-0.5">
+                    {stats.todayServicesCount} Unit
+                  </p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-[#0B0F19]/90 border border-slate-800">
+                  <p className="text-[10px] text-slate-400 font-semibold">Faktur Selesai Lunas</p>
+                  <p className="text-base font-black font-mono text-emerald-400 mt-0.5">
+                    {stats.completedOrdersCount} Nota
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-slate-400 mt-3 font-medium">
+                <span className="text-[11px] text-slate-400">Sinkronisasi Supabase Aktif</span>
                 <Link
                   href="/cashier"
                   className="text-[#00D2FF] hover:underline font-bold text-[11px] flex items-center gap-1"
@@ -408,7 +423,92 @@ export default async function DashboardOverviewPage() {
             </div>
           </div>
 
-          {/* B. Widget Peringatan Stok Kritis (Compact Alert Widget) */}
+          {/* B. WIDGET: TOP 5 SUKU CADANG PALING SERING DIGUNAKAN */}
+          <div className="card-pitstop p-5 space-y-3.5">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xs font-extrabold text-white">
+                    Top 5 Suku Cadang Paling Sering Digunakan
+                  </h3>
+                  <p className="text-[10px] text-slate-400">Statistik pemakaian part terlaris di SPK</p>
+                </div>
+              </div>
+              <Link
+                href="/inventory/parts"
+                className="text-[10px] font-bold text-[#00D2FF] hover:underline shrink-0"
+              >
+                Katalog →
+              </Link>
+            </div>
+
+            <div className="space-y-2.5">
+              {stats.topUsedParts && stats.topUsedParts.map((part, index) => {
+                const maxQty = Math.max(...stats.topUsedParts.map((x) => x.totalQty), 1);
+                const barWidth = Math.max(18, Math.round((part.totalQty / maxQty) * 100));
+                const isLow = part.currentStock <= part.minStock;
+
+                return (
+                  <div
+                    key={part.partId}
+                    className="p-2.5 rounded-xl bg-[#0B0F19]/90 border border-slate-800/90 space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span
+                          className={`w-5 h-5 rounded-md font-mono text-[10px] font-extrabold flex items-center justify-center shrink-0 ${
+                            index === 0
+                              ? "bg-amber-400 text-slate-950"
+                              : index === 1
+                              ? "bg-slate-300 text-slate-950"
+                              : index === 2
+                              ? "bg-amber-700 text-white"
+                              : "bg-slate-800 text-slate-400"
+                          }`}
+                        >
+                          #{index + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-slate-100 truncate">{part.name}</p>
+                          <p className="text-[10px] font-mono text-slate-500">
+                            {part.sku} • {formatRupiah(part.totalRevenue)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-right shrink-0">
+                        <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-[#00D2FF] font-mono text-[11px] font-extrabold">
+                          {part.totalQty}x Pakai
+                        </span>
+                        <p
+                          className={`text-[10px] font-mono mt-0.5 ${
+                            isLow ? "text-rose-400 font-bold" : "text-slate-400"
+                          }`}
+                        >
+                          Stok: {part.currentStock} {part.unit}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Visual Progress Bar */}
+                    <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#00D2FF] to-blue-500"
+                        style={{ width: `${barWidth}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* C. Widget Peringatan Stok Kritis (Compact Alert Widget) */}
           {stats.lowStockCount > 0 ? (
             <div className="p-4.5 rounded-2xl bg-rose-950/30 border border-rose-500/35 shadow-lg shadow-rose-950/20 relative overflow-hidden">
               <div className="flex items-center justify-between mb-3">
