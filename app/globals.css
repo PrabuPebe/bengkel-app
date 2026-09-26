@@ -34,6 +34,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+.font-mono, .tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+button:active:not(:disabled), .btn-cyan:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
 /* ============================================================
    PitCare Auto — High-Tech Pitstop Dark System v2.0
    Surfaces: #0B0F17 (Body) | #0F172A (Sidebar) | #131B2E (Cards)

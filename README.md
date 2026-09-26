@@ -1,47 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PitCare Auto — Enterprise Workshop Suite & Client Experience System
 
-## Getting Started
+**PitCare Auto** adalah Sistem Informasi Manajemen Operasional Servis Bengkel & Portal Pelanggan Terintegrasi berbasis **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, **Prisma ORM**, dan **PostgreSQL Supabase**.
 
-First, run the development server:
+🌐 **Live Production URL:** [https://pitcareauto.vercel.app](https://pitcareauto.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Fitur Utama Sistem
+
+1. **Smart Service-to-Parts Recommendation & Odometer Lifespan Trigger**:
+   - Rekomendasi otomatis komponen berdasarkan pemilihan paket servis (*Servis Rutin Ringan*, *Servis CVT*, *Servis Pengereman*).
+   - Deteksi cerdas interval Odometer (`KM >= 24.000` untuk V-Belt & Oli, `KM >= 3.000` untuk Oli Mesin) disertai tombol **1-Klik Tambah ke SPK**.
+2. **Dual-Portal Authentication (`/login`)**:
+   - **Tab Masuk Staff Bengkel**: Login & registrasi staf internal (*Owner/Admin*, *Mekanik*, *Kasir*) via NextAuth & Supabase.
+   - **Tab Cek Motor Saya (Portal Pelanggan)**: Login cepat tanpa password cukup dengan **Nomor WhatsApp + Nomor Plat Motor** menuju `/portal`.
+3. **Fast / Slow Moving Analytics (Executive Dashboard)**:
+   - Analisis tingkat perputaran pemakaian komponen (*Fast Moving* vs *Slow Moving*) beserta kontribusi omset pada Dashboard Manajer/Owner (`/dashboard`).
+4. **Kasir POS & Cetak Struk Thermal (`/cashier`)**:
+   - Perhitungan tagihan otomatis, diskon, kembalian, dan cetak struk thermal (58mm/80mm) maupun faktur A4.
+5. **Automated WhatsApp Service Reminder (`/reminders`) & Live Service Tracking (`/track/[token]`)**:
+   - Pengingat servis berkala 1-klik via WhatsApp Deep-Link dan pelacakan progres pengerjaan secara *real-time* bagi pelanggan.
+
+---
+
+## 📂 Struktur Folder Proyek (Clean Modular Architecture)
+
+```text
+pitcare-auto/
+├── app/                          # Next.js 16 App Router
+│   ├── (dashboard)/              # Rute Back-Office Internal Staf (Dilindungi Middleware)
+│   │   ├── dashboard/            # Command Center, Omset & Fast/Slow Moving Analytics
+│   │   ├── services/             # Daftar SPK, Form SPK Baru (/new) & Detail Pengerjaan (/[id])
+│   │   ├── cashier/              # Kasir POS & Cetak Struk Thermal
+│   │   ├── customers/            # Master Data Pelanggan & Armada Kendaraan
+│   │   ├── inventory/services/   # Master Katalog Paket & Tindakan Jasa Servis
+│   │   ├── reminders/            # Pengingat Servis Berkala via WhatsApp Deep-Link
+│   │   └── layout.tsx            # Shell Navigasi Sidebar & Topbar Staf
+│   ├── login/                    # Halaman Dual-Portal Login (Staf vs Cek Motor Saya)
+│   ├── portal/                   # Portal Mandiri Pelanggan & Predictive Lifespan Tracker
+│   ├── track/[token]/            # Live Service Tracking Publik Tanpa Login
+│   ├── api/auth/[...nextauth]/   # Endpoint Autentikasi NextAuth.js
+│   ├── globals.css               # Design System Tokens & Tailwind CSS v4
+│   └── layout.tsx                # Root Layout Aplikasi
+├── components/                   # Komponen UI Modular
+│   ├── dashboard/                # Sidebar Navigasi & Header Halaman
+│   └── ui/                       # Modal & Komponen Atomik
+├── lib/                          # Business Logic & Data Access Layer
+│   ├── actions/                  # Next.js Server Actions (Auth, Orders, Customers, Services)
+│   ├── types/                    # Definisi Tipe Data TypeScript Strict
+│   ├── auth.ts                   # Konfigurasi NextAuth.js & Supabase Authorize
+│   ├── db.ts                     # Hybrid Data Layer (Prisma PostgreSQL Supabase)
+│   └── prisma.ts                 # Singleton Prisma Client
+├── prisma/                       # Skema & Seeder Database
+│   ├── schema.prisma             # Skema Tabel Relasional PostgreSQL Supabase
+│   └── seed.ts                   # Data Awal Operasional Bengkel
+└── docs/                         # Dokumentasi Akademik, PRD, Logbook & Materi Presentasi
+    ├── PRD.md                    # Product Requirement Document (v2.0.0)
+    ├── logbook/                  # Logbook Progres Pengembangan Milestone 1–3
+    ├── presentasi/               # Dokumen Laporan Bimbingan & Slide Presentasi
+    └── assets/                   # Diagram Arsitektur & Flowchart SVG PitCare Auto
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-## Login Google
+## 🚀 Cara Menjalankan secara Lokal
 
-Buka [http://localhost:3000/login](http://localhost:3000/login) untuk halaman login. Agar tombol Google berfungsi:
+```bash
+# 1. Install dependensi
+npm install
 
-1. Buat OAuth Client ID tipe **Web application** di Google Cloud Console.
-2. Tambahkan `http://localhost:3000/api/auth/callback/google` sebagai **Authorized redirect URI**.
-3. Isi `GOOGLE_CLIENT_ID` dan `GOOGLE_CLIENT_SECRET` di `.env.local`.
-4. Pastikan `NEXTAUTH_URL` sesuai dengan port yang digunakan aplikasi.
+# 2. Jalankan server development
+npm run dev
 
-Untuk server development yang berjalan di port `3001`, gunakan redirect URI `http://localhost:3001/api/auth/callback/google` dan ubah `NEXTAUTH_URL` ke `http://localhost:3001`.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 3. Verifikasi tipe data TypeScript
+npx tsc --noEmit
+```
