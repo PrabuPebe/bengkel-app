@@ -280,7 +280,7 @@ export default function ServiceOrderDetailPage({
                 </span>
               </div>
               <p className="text-xs text-slate-300">
-                Klik tombol 1-Klik di bawah untuk langsung memasukkan suku cadang rekomendasi ke rincian SPK ini (otomatis memotong stok gudang):
+                Klik tombol 1-Klik di bawah untuk langsung memasukkan komponen rekomendasi ke rincian SPK ini:
               </p>
             </div>
           </div>
@@ -297,12 +297,12 @@ export default function ServiceOrderDetailPage({
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-white truncate">{rp.name}</p>
                       <p className="text-[10px] font-mono text-cyan-400">
-                        {formatRupiah(rp.sellPrice)} • Stok: {rp.stock}
+                        {formatRupiah(rp.sellPrice)} • {rp.category}
                       </p>
                     </div>
                     <button
                       type="button"
-                      disabled={isPending || rp.stock <= 0}
+                      disabled={isPending}
                       onClick={() => handleQuickAddPart(rp.id)}
                       className={`px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shrink-0 cursor-pointer transition-all ${
                         inOrder

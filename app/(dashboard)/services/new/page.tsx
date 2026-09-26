@@ -780,9 +780,7 @@ export default function NewServiceOrderPage() {
                           <p className="text-xs font-bold text-white truncate">{part.name}</p>
                           <p className="text-[11px] font-mono text-cyan-400 font-semibold">
                             {formatRupiah(part.sellPrice)}{" "}
-                            <span className="text-slate-500">
-                              • Stok: {part.stock} {part.unit}
-                            </span>
+                            <span className="text-slate-500">• {part.category}</span>
                           </p>
                         </div>
                         <button
@@ -837,7 +835,7 @@ export default function NewServiceOrderPage() {
                 3
               </span>
               <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                Daftar Lengkap Katalog Jasa & Suku Cadang Gudang
+                Daftar Katalog Jasa Servis & Komponen Pendukung
               </h2>
             </div>
 
@@ -882,7 +880,7 @@ export default function NewServiceOrderPage() {
 
             <div className="pt-3 border-t border-slate-800/80">
               <p className="text-xs font-semibold text-slate-400 mb-2.5">
-                Tambah Suku Cadang Lainnya dari Gudang:
+                Tambah Komponen / Suku Cadang Pendukung Servis:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-60 overflow-y-auto pr-1">
                 {availableParts.map((part) => (
@@ -895,16 +893,13 @@ export default function NewServiceOrderPage() {
                       <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
                         <span className="text-amber-400 font-semibold">{formatRupiah(part.sellPrice)}</span>
                         <span>•</span>
-                        <span className={part.stock <= part.minStock ? "text-rose-400 font-bold" : ""}>
-                          Stok: {part.stock} {part.unit}
-                        </span>
+                        <span>{part.category}</span>
                       </div>
                     </div>
                     <button
                       type="button"
-                      disabled={part.stock <= 0}
                       onClick={() => addPartToOrder(part.id)}
-                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/40 text-xs font-bold transition-all cursor-pointer shrink-0 disabled:opacity-40"
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/40 text-xs font-bold transition-all cursor-pointer shrink-0"
                     >
                       + Tambah
                     </button>

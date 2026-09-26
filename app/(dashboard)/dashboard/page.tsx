@@ -423,7 +423,7 @@ export default async function DashboardOverviewPage() {
             </div>
           </div>
 
-          {/* B. WIDGET: TOP 5 SUKU CADANG PALING SERING DIGUNAKAN */}
+          {/* B. WIDGET: TOP 5 KOMPONEN & SUKU CADANG PALING SERING DIGUNAKAN */}
           <div className="card-pitstop p-5 space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
               <div className="flex items-center gap-2">
@@ -436,14 +436,14 @@ export default async function DashboardOverviewPage() {
                   <h3 className="text-xs font-extrabold text-white">
                     Top 5 Suku Cadang Paling Sering Digunakan
                   </h3>
-                  <p className="text-[10px] text-slate-400">Statistik pemakaian part terlaris di SPK</p>
+                  <p className="text-[10px] text-slate-400">Statistik pemakaian part pada SPK servis</p>
                 </div>
               </div>
               <Link
-                href="/inventory/parts"
+                href="/services"
                 className="text-[10px] font-bold text-[#00D2FF] hover:underline shrink-0"
               >
-                Katalog →
+                Lihat SPK →
               </Link>
             </div>
 
@@ -451,7 +451,6 @@ export default async function DashboardOverviewPage() {
               {stats.topUsedParts && stats.topUsedParts.map((part, index) => {
                 const maxQty = Math.max(...stats.topUsedParts.map((x) => x.totalQty), 1);
                 const barWidth = Math.max(18, Math.round((part.totalQty / maxQty) * 100));
-                const isLow = part.currentStock <= part.minStock;
 
                 return (
                   <div
@@ -476,7 +475,7 @@ export default async function DashboardOverviewPage() {
                         <div className="min-w-0">
                           <p className="text-xs font-bold text-slate-100 truncate">{part.name}</p>
                           <p className="text-[10px] font-mono text-slate-500">
-                            {part.sku} • {formatRupiah(part.totalRevenue)}
+                            {part.category} • {formatRupiah(part.totalRevenue)}
                           </p>
                         </div>
                       </div>
@@ -485,13 +484,6 @@ export default async function DashboardOverviewPage() {
                         <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-[#00D2FF] font-mono text-[11px] font-extrabold">
                           {part.totalQty}x Pakai
                         </span>
-                        <p
-                          className={`text-[10px] font-mono mt-0.5 ${
-                            isLow ? "text-rose-400 font-bold" : "text-slate-400"
-                          }`}
-                        >
-                          Stok: {part.currentStock} {part.unit}
-                        </p>
                       </div>
                     </div>
 
@@ -507,46 +499,6 @@ export default async function DashboardOverviewPage() {
               })}
             </div>
           </div>
-
-          {/* C. Widget Peringatan Stok Kritis (Compact Alert Widget) */}
-          {stats.lowStockCount > 0 ? (
-            <div className="p-4.5 rounded-2xl bg-rose-950/30 border border-rose-500/35 shadow-lg shadow-rose-950/20 relative overflow-hidden">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-                  <h3 className="text-xs font-bold text-rose-200">
-                    Stok Kritis Gudang ({stats.lowStockCount})
-                  </h3>
-                </div>
-                <Link
-                  href="/inventory/parts"
-                  className="text-[10px] font-bold text-rose-400 hover:text-rose-300 hover:underline"
-                >
-                  Buka Gudang Part →
-                </Link>
-              </div>
-              <div className="space-y-2">
-                {stats.lowStockItems.slice(0, 3).map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/20 text-xs"
-                  >
-                    <span className="text-slate-200 font-medium truncate max-w-[170px]">
-                      {item.name}
-                    </span>
-                    <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                      Sisa {item.stock} {item.unit}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/25 text-xs text-emerald-300 flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>Seluruh suku cadang gudang dalam batas aman ({stats.totalParts} SKU).</span>
-            </div>
-          )}
 
           {/* C. Aksi Cepat Staf (Quick Launchpad) */}
           <div className="card-cockpit p-5 space-y-3">
