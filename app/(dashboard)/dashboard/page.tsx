@@ -423,7 +423,7 @@ export default async function DashboardOverviewPage() {
             </div>
           </div>
 
-          {/* B. WIDGET: TOP 5 KOMPONEN & SUKU CADANG PALING SERING DIGUNAKAN */}
+          {/* B. WIDGET: FAST / SLOW MOVING ANALYTICS & TOP 5 SUKU CADANG */}
           <div className="card-pitstop p-5 space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
               <div className="flex items-center gap-2">
@@ -434,23 +434,23 @@ export default async function DashboardOverviewPage() {
                 </div>
                 <div>
                   <h3 className="text-xs font-extrabold text-white">
-                    Top 5 Suku Cadang Paling Sering Digunakan
+                    Fast / Slow Moving Analytics (Top 5 Part)
                   </h3>
-                  <p className="text-[10px] text-slate-400">Statistik pemakaian part pada SPK servis</p>
+                  <p className="text-[10px] text-slate-400">
+                    Analitik perputaran suku cadang level Manajer / Owner
+                  </p>
                 </div>
               </div>
-              <Link
-                href="/services"
-                className="text-[10px] font-bold text-[#00D2FF] hover:underline shrink-0"
-              >
-                Lihat SPK →
-              </Link>
+              <span className="px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-bold shrink-0">
+                Owner Analytics
+              </span>
             </div>
 
             <div className="space-y-2.5">
               {stats.topUsedParts && stats.topUsedParts.map((part, index) => {
                 const maxQty = Math.max(...stats.topUsedParts.map((x) => x.totalQty), 1);
                 const barWidth = Math.max(18, Math.round((part.totalQty / maxQty) * 100));
+                const isFastMoving = index < 3 || part.totalQty >= 4;
 
                 return (
                   <div
@@ -473,9 +473,20 @@ export default async function DashboardOverviewPage() {
                           #{index + 1}
                         </span>
                         <div className="min-w-0">
-                          <p className="text-xs font-bold text-slate-100 truncate">{part.name}</p>
+                          <div className="flex items-center gap-1.5">
+                            <p className="text-xs font-bold text-slate-100 truncate">{part.name}</p>
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase shrink-0 ${
+                                isFastMoving
+                                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                                  : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                              }`}
+                            >
+                              {isFastMoving ? "🔥 Fast Moving" : "⏳ Slow Moving"}
+                            </span>
+                          </div>
                           <p className="text-[10px] font-mono text-slate-500">
-                            {part.category} • {formatRupiah(part.totalRevenue)}
+                            {part.category} • Omset: {formatRupiah(part.totalRevenue)}
                           </p>
                         </div>
                       </div>
@@ -490,13 +501,23 @@ export default async function DashboardOverviewPage() {
                     {/* Visual Progress Bar */}
                     <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#00D2FF] to-blue-500"
+                        className={`h-full rounded-full ${
+                          isFastMoving
+                            ? "bg-gradient-to-r from-emerald-400 to-[#00D2FF]"
+                            : "bg-gradient-to-r from-amber-400 to-orange-500"
+                        }`}
                         style={{ width: `${barWidth}%` }}
                       />
                     </div>
                   </div>
                 );
               })}
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+              💡 <strong className="text-slate-200">Insight Pemilik Bengkel:</strong> Item berlabel{" "}
+              <span className="text-emerald-400 font-bold">Fast Moving</span> menyumbang perputaran kas tertinggi pada SPK harian, sedangkan{" "}
+              <span className="text-amber-300 font-bold">Slow Moving</span> bersifat penggantian berkala jangka panjang.
             </div>
           </div>
 
