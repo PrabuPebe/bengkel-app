@@ -8,11 +8,6 @@ const nextConfig: NextConfig = {
         destination: "/login",
         permanent: false,
       },
-      {
-        source: "/inventory/parts",
-        destination: "/inventory/services",
-        permanent: false,
-      },
     ];
   },
 };

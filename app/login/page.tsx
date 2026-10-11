@@ -38,7 +38,6 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // Handler: Staff Login
   async function handleStaffLogin(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -60,22 +59,21 @@ export default function LoginPage() {
     }
   }
 
-  // Handler: Staff Register
   async function handleStaffRegister(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setSuccessMsg("");
 
     if (!staffName.trim() || staffName.trim().length < 3) {
-      setError("Validasi Gagal: Nama lengkap staf minimal 3 karakter.");
+      setError("Nama lengkap staf minimal 3 karakter.");
       return;
     }
     if (!staffEmail.trim() || !staffEmail.includes("@")) {
-      setError("Validasi Gagal: Masukkan format email staf yang valid.");
+      setError("Masukkan format email staf yang valid.");
       return;
     }
     if (!staffPassword || staffPassword.length < 6) {
-      setError("Validasi Gagal: Password akun staf minimal 6 karakter.");
+      setError("Password akun staf minimal 6 karakter.");
       return;
     }
 
@@ -89,7 +87,7 @@ export default function LoginPage() {
     });
 
     if (res.success) {
-      setSuccessMsg("Akun staf berhasil didaftarkan di Supabase! Silakan masuk.");
+      setSuccessMsg("Akun staf berhasil didaftarkan! Silakan masuk.");
       setStaffMode("login");
       setIsLoading(false);
     } else {
@@ -98,7 +96,6 @@ export default function LoginPage() {
     }
   }
 
-  // Handler: Customer Login
   async function handleCustomerLogin(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -116,7 +113,6 @@ export default function LoginPage() {
     }
   }
 
-  // Handler: Customer Register
   async function handleCustomerRegister(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -141,7 +137,6 @@ export default function LoginPage() {
     }
   }
 
-  // Demo Fills
   function fillStaffAdmin() {
     setStaffEmail("admin22@gmail.com");
     setStaffPassword("mamang22");
@@ -161,62 +156,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center p-4 relative overflow-hidden text-slate-100">
-      {/* Dot grid pattern background */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-
-      {/* Ambient ambient glow orbs */}
-      <div
-        className="absolute top-0 right-0 w-[550px] h-[550px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse, rgba(0,210,255,0.08) 0%, transparent 70%)",
-          transform: "translate(30%, -40%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse, rgba(37,99,235,0.1) 0%, transparent 70%)",
-          transform: "translate(-30%, 40%)",
-        }}
-      />
-
-      <div className="relative z-10 w-full max-w-lg">
+    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 text-slate-900">
+      <div className="w-full max-w-md">
         {/* Brand Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] text-slate-950 shadow-xl shadow-[#00D2FF]/20 mb-3 border border-cyan-400/30 relative">
-            <span className="text-2xl font-black tracking-wider">PA</span>
+          <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 text-white shadow-xs mb-3">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
+              />
+            </svg>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight flex items-center justify-center gap-2">
-            <span className="bg-gradient-to-r from-white via-slate-100 to-cyan-300 bg-clip-text text-transparent">
-              PitCare Auto
-            </span>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-[#00D2FF] border border-cyan-500/30">
-              ENTERPRISE
-            </span>
-          </h1>
-          <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">
-            Enterprise Workshop Suite & Client Experience
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900">PitCare Auto</h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Sistem Manajemen Servis & Riwayat Perawatan Motor
           </p>
         </div>
 
-        {/* Card Container */}
-        <div
-          className="rounded-3xl shadow-2xl shadow-black/80 p-6 md:p-8"
-          style={{
-            background: "linear-gradient(145deg, #131b2e 0%, #0d1322 100%)",
-            border: "1px solid rgba(30,41,59,0.85)",
-            borderTop: "1px solid rgba(0,210,255,0.25)",
-          }}
-        >
-          {/* Dual Login Tabs: [Masuk Staff Bengkel] & [Cek Motor Saya / Portal Pelanggan] */}
-          <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800 mb-6">
+        {/* Linear Pure White Card */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-xs p-6">
+          {/* Dual Portal Tabs */}
+          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-lg bg-slate-100 border border-slate-200 mb-6">
             <button
               type="button"
               onClick={() => {
@@ -224,15 +186,12 @@ export default function LoginPage() {
                 setError("");
                 setSuccessMsg("");
               }}
-              className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-extrabold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === "staff"
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-lg shadow-cyan-500/20"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white text-slate-900 shadow-xs border border-slate-200/80"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
               <span>Masuk Staff Bengkel</span>
             </button>
 
@@ -243,54 +202,44 @@ export default function LoginPage() {
                 setError("");
                 setSuccessMsg("");
               }}
-              className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-extrabold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === "customer"
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-lg shadow-cyan-500/20"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white text-slate-900 shadow-xs border border-slate-200/80"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-              </svg>
               <span>Cek Motor Saya</span>
             </button>
           </div>
 
-          {/* Alert Error / Success */}
+          {/* Alerts */}
           {error && (
-            <div className="mb-5 p-3.5 rounded-xl bg-rose-950/60 border border-rose-500/40 flex items-start gap-2.5">
-              <svg className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="text-xs text-rose-300 font-medium">{error}</p>
+            <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
+              {error}
             </div>
           )}
 
           {successMsg && (
-            <div className="mb-5 p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 flex items-start gap-2.5">
-              <svg className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <p className="text-xs text-emerald-300 font-medium">{successMsg}</p>
+            <div className="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 font-medium">
+              {successMsg}
             </div>
           )}
 
-          {/* ================= TAB 1: STAF BENGKEL ================= */}
+          {/* TAB 1: STAFF BENGKEL */}
           {activeTab === "staff" && (
             <div>
               {staffMode === "login" ? (
                 <div>
-                  <div className="mb-5">
-                    <h2 className="text-base font-bold text-white">Login Staf & Manajemen</h2>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      Masuk untuk mengelola SPK, inventaris, dan billing kasir
+                  <div className="mb-4">
+                    <h2 className="text-sm font-semibold text-slate-900">Masuk Staf & Mekanik</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Kelola antrean servis, rekomendasi suku cadang, dan kasir
                     </p>
                   </div>
 
-                  <form onSubmit={handleStaffLogin} className="space-y-4">
+                  <form onSubmit={handleStaffLogin} className="space-y-3.5">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
                         Email Staf
                       </label>
                       <input
@@ -298,13 +247,13 @@ export default function LoginPage() {
                         value={staffEmail}
                         onChange={(e) => setStaffEmail(e.target.value)}
                         required
-                        placeholder="admin@pitcare.auto"
-                        className="input-custom w-full h-11 px-3.5 text-sm"
+                        placeholder="Contoh: mekanik@pitcare.auto"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
                         Password
                       </label>
                       <input
@@ -313,80 +262,77 @@ export default function LoginPage() {
                         onChange={(e) => setStaffPassword(e.target.value)}
                         required
                         placeholder="••••••••"
-                        className="input-custom w-full h-11 px-3.5 text-sm"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="btn-cyan w-full h-11 text-sm font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                      className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-1"
                     >
-                      {isLoading ? "Memverifikasi Kredensial..." : "Masuk ke Dashboard Operasional →"}
+                      {isLoading ? "Memverifikasi..." : "Masuk ke Dashboard Bengkel →"}
                     </button>
                   </form>
 
-                  <div className="mt-4 text-center">
+                  <div className="mt-3.5 text-center">
                     <button
                       type="button"
                       onClick={() => {
                         setStaffMode("register");
                         setError("");
                       }}
-                      className="text-xs text-[#00D2FF] hover:underline font-semibold cursor-pointer"
+                      className="text-xs text-blue-600 hover:underline font-medium cursor-pointer"
                     >
-                      Belum punya akun staf? Daftar Staf Baru di sini ↗
+                      Belum punya akun staf? Daftar Staf Baru
                     </button>
                   </div>
 
                   {/* Quick Fill Demo Staf */}
-                  <div className="mt-6 pt-5 border-t border-slate-800">
-                    <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500 text-center mb-2.5">
-                      Kredensial Demo Cepat
+                  <div className="mt-5 pt-4 border-t border-slate-100">
+                    <p className="text-[11px] font-medium text-slate-400 text-center mb-2">
+                      Akun Demo Cepat (Klik untuk Isi Otomatis)
                     </p>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
                         onClick={fillStaffAdmin}
-                        className="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 text-left transition-all cursor-pointer"
+                        className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-left transition-colors cursor-pointer"
                       >
-                        <p className="text-xs font-bold text-white">Pak Joko</p>
-                        <p className="text-[10px] text-cyan-400 font-mono">Owner / Admin</p>
+                        <p className="text-xs font-semibold text-slate-900">Pak Joko</p>
+                        <p className="text-[11px] text-slate-500">Pemilik / Admin</p>
                       </button>
                       <button
                         type="button"
                         onClick={fillStaffMechanic}
-                        className="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 text-left transition-all cursor-pointer"
+                        className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-left transition-colors cursor-pointer"
                       >
-                        <p className="text-xs font-bold text-white">Budi Santoso</p>
-                        <p className="text-[10px] text-amber-400 font-mono">Mekanik Kepala</p>
+                        <p className="text-xs font-semibold text-slate-900">Budi Santoso</p>
+                        <p className="text-[11px] text-slate-500">Mekanik Kepala</p>
                       </button>
                     </div>
                   </div>
                 </div>
               ) : (
-                /* Form Daftar Staf Baru */
                 <div>
-                  <div className="mb-5 flex items-center justify-between">
+                  <div className="mb-4 flex items-center justify-between">
                     <div>
-                      <h2 className="text-base font-bold text-white">Registrasi Staf Baru</h2>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        Daftarkan akun staf baru langsung ke tabel Supabase
-                      </p>
+                      <h2 className="text-sm font-semibold text-slate-900">Daftar Staf Baru</h2>
+                      <p className="text-xs text-slate-500 mt-0.5">Buat akun mekanik atau kasir baru</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setStaffMode("login")}
-                      className="text-xs text-slate-400 hover:text-white underline cursor-pointer"
+                      className="text-xs text-slate-500 hover:text-slate-900 underline cursor-pointer"
                     >
-                      Kembali ke Login
+                      Kembali
                     </button>
                   </div>
 
-                  <form onSubmit={handleStaffRegister} className="space-y-3.5">
+                  <form onSubmit={handleStaffRegister} className="space-y-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Nama Lengkap Staf *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Nama Lengkap Staf
                       </label>
                       <input
                         type="text"
@@ -394,13 +340,13 @@ export default function LoginPage() {
                         onChange={(e) => setStaffName(e.target.value)}
                         required
                         placeholder="Contoh: Rian Hidayat"
-                        className="input-custom w-full h-10 px-3 text-sm"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Email Internal *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Email Staf
                       </label>
                       <input
                         type="email"
@@ -408,45 +354,45 @@ export default function LoginPage() {
                         onChange={(e) => setStaffEmail(e.target.value)}
                         required
                         placeholder="rian@pitcare.auto"
-                        className="input-custom w-full h-10 px-3 text-sm"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Password Baru *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Password
                       </label>
                       <input
                         type="password"
                         value={staffPassword}
                         onChange={(e) => setStaffPassword(e.target.value)}
                         required
-                        placeholder="Minimal 4 karakter"
-                        className="input-custom w-full h-10 px-3 text-sm"
+                        placeholder="Minimal 6 karakter"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Peran & Tanggung Jawab *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Peran di Bengkel
                       </label>
                       <select
                         value={staffRole}
                         onChange={(e) => setStaffRole(e.target.value as StaffRole)}
-                        className="input-custom w-full h-10 px-3 text-sm bg-[#0B0F17]"
+                        className="input-dark w-full text-sm"
                       >
-                        <option value="MECHANIC">Mekanik / Teknisi Pitstop</option>
-                        <option value="CASHIER">Kasir / Front Office</option>
-                        <option value="ADMIN">Administrator / Pemilik Bengkel</option>
+                        <option value="MECHANIC">Mekanik / Teknisi</option>
+                        <option value="CASHIER">Kasir</option>
+                        <option value="ADMIN">Pemilik / Admin</option>
                       </select>
                     </div>
 
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="btn-cyan w-full h-11 text-sm font-bold cursor-pointer disabled:opacity-60 mt-2"
+                      className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-2"
                     >
-                      {isLoading ? "Menyimpan ke Supabase..." : "Simpan & Daftarkan Staf →"}
+                      {isLoading ? "Menyimpan..." : "Simpan & Daftarkan Staf"}
                     </button>
                   </form>
                 </div>
@@ -454,117 +400,108 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* ================= TAB 2: PORTAL PELANGGAN ================= */}
+          {/* TAB 2: CEK MOTOR SAYA (PORTAL PELANGGAN) */}
           {activeTab === "customer" && (
             <div>
               {customerMode === "login" ? (
                 <div>
-                  <div className="mb-5">
-                    <h2 className="text-base font-bold text-white">Portal Cek Kendaraan Pelanggan</h2>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      Pantau kesehatan unit, sisa umur oli/part, dan riwayat nota servis Anda
+                  <div className="mb-4">
+                    <h2 className="text-sm font-semibold text-slate-900">Cek Kondisi & Riwayat Motor</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Masukkan nomor WhatsApp & plat nomor untuk melihat status servis dan kesehatan oli
                     </p>
                   </div>
 
-                  <form onSubmit={handleCustomerLogin} className="space-y-4">
+                  <form onSubmit={handleCustomerLogin} className="space-y-3.5">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                        Nomor WhatsApp / HP Aktif *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Nomor WhatsApp / HP
                       </label>
-                      <div className="relative">
-                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-mono text-xs">
-                          WA
-                        </span>
-                        <input
-                          type="tel"
-                          value={customerPhone}
-                          onChange={(e) => setCustomerPhone(e.target.value)}
-                          required
-                          placeholder="081299887766"
-                          className="input-custom w-full h-11 pl-12 pr-3.5 text-sm"
-                        />
-                      </div>
+                      <input
+                        type="tel"
+                        value={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                        required
+                        placeholder="Contoh: 081234567890"
+                        className="input-dark w-full text-sm"
+                      />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                        Nomor Plat Kendaraan *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Nomor Plat Motor
                       </label>
                       <input
                         type="text"
                         value={customerPlate}
                         onChange={(e) => setCustomerPlate(e.target.value.toUpperCase())}
                         required
-                        placeholder="Contoh: B 1234 RFS"
-                        className="input-custom w-full h-11 px-3.5 text-sm font-mono tracking-wider uppercase font-bold"
+                        placeholder="Contoh: AB 1234 XY"
+                        className="input-dark w-full text-sm font-mono uppercase font-semibold"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="btn-cyan w-full h-11 text-sm font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                      className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-1"
                     >
-                      {isLoading ? "Mengecek Database Supabase..." : "Masuk ke Portal Pelanggan →"}
+                      {isLoading ? "Mencari Data Motor..." : "Lihat Riwayat Motor Saya →"}
                     </button>
                   </form>
 
-                  <div className="mt-4 text-center">
+                  <div className="mt-3.5 text-center">
                     <button
                       type="button"
                       onClick={() => {
                         setCustomerMode("register");
                         setError("");
                       }}
-                      className="text-xs text-[#00D2FF] hover:underline font-semibold cursor-pointer"
+                      className="text-xs text-blue-600 hover:underline font-medium cursor-pointer"
                     >
-                      Belum pernah servis? Daftarkan Kendaraan Baru ↗
+                      Belum terdaftar? Daftarkan Motor Baru
                     </button>
                   </div>
 
-                  {/* Demo Pelanggan */}
-                  <div className="mt-6 pt-5 border-t border-slate-800">
-                    <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500 text-center mb-2.5">
-                      Coba Akun Pelanggan Terdaftar
+                  <div className="mt-5 pt-4 border-t border-slate-100">
+                    <p className="text-[11px] font-medium text-slate-400 text-center mb-2">
+                      Contoh Data Pelanggan (Klik untuk Coba)
                     </p>
                     <button
                       type="button"
                       onClick={fillCustomerDemo}
-                      className="w-full p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 text-left transition-all cursor-pointer flex items-center justify-between"
+                      className="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-left transition-colors cursor-pointer flex items-center justify-between"
                     >
                       <div>
-                        <p className="text-xs font-bold text-white">Pak Bambang Santoso</p>
-                        <p className="text-[10px] text-slate-400 font-mono">081234567890 · Plat: B 1234 ABC</p>
+                        <p className="text-xs font-semibold text-slate-900">Pak Bambang Santoso</p>
+                        <p className="text-[11px] text-slate-500 font-mono">
+                          WA: 081234567890 • Plat: B 1234 ABC
+                        </p>
                       </div>
-                      <span className="text-[10px] font-bold text-slate-950 bg-[#00D2FF] px-2 py-0.5 rounded-md">
-                        Isi Cepat
-                      </span>
+                      <span className="text-[11px] font-semibold text-blue-600">Isi Otomatis</span>
                     </button>
                   </div>
                 </div>
               ) : (
-                /* Form Daftar Kendaraan Baru */
                 <div>
-                  <div className="mb-5 flex items-center justify-between">
+                  <div className="mb-4 flex items-center justify-between">
                     <div>
-                      <h2 className="text-base font-bold text-white">Daftarkan Kendaraan Baru</h2>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        Simpan data unit Anda untuk memudahkan booking & monitoring servis
-                      </p>
+                      <h2 className="text-sm font-semibold text-slate-900">Daftarkan Motor Baru</h2>
+                      <p className="text-xs text-slate-500 mt-0.5">Simpan data motor Anda di PitCare Auto</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setCustomerMode("login")}
-                      className="text-xs text-slate-400 hover:text-white underline cursor-pointer"
+                      className="text-xs text-slate-500 hover:text-slate-900 underline cursor-pointer"
                     >
-                      Kembali ke Login
+                      Kembali
                     </button>
                   </div>
 
                   <form onSubmit={handleCustomerRegister} className="space-y-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Nama Pemilik / Pelanggan *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Nama Pemilik Motor
                       </label>
                       <input
                         type="text"
@@ -572,13 +509,13 @@ export default function LoginPage() {
                         onChange={(e) => setRegCustomerName(e.target.value)}
                         required
                         placeholder="Contoh: Hendra Wijaya"
-                        className="input-custom w-full h-9.5 px-3 text-sm"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Nomor WhatsApp *
+                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                        Nomor WhatsApp
                       </label>
                       <input
                         type="tel"
@@ -586,63 +523,63 @@ export default function LoginPage() {
                         onChange={(e) => setRegCustomerPhone(e.target.value)}
                         required
                         placeholder="081299887766"
-                        className="input-custom w-full h-9.5 px-3 text-sm"
+                        className="input-dark w-full text-sm"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2.5">
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
-                          Nomor Plat Kendaraan *
+                        <label className="block text-xs font-medium text-slate-700 mb-1">
+                          Plat Nomor
                         </label>
                         <input
                           type="text"
                           value={regPlateNumber}
                           onChange={(e) => setRegPlateNumber(e.target.value.toUpperCase())}
                           required
-                          placeholder="B 9999 XYZ"
-                          className="input-custom w-full h-9.5 px-3 text-sm font-mono uppercase font-bold"
+                          placeholder="AB 1234 XY"
+                          className="input-dark w-full text-sm font-mono uppercase font-semibold"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
-                          Merk / Pabrikan *
+                        <label className="block text-xs font-medium text-slate-700 mb-1">
+                          Merk Motor
                         </label>
                         <input
                           type="text"
                           value={regBrand}
                           onChange={(e) => setRegBrand(e.target.value)}
                           required
-                          placeholder="Honda / Yamaha / Toyota"
-                          className="input-custom w-full h-9.5 px-3 text-sm"
+                          placeholder="Honda / Yamaha"
+                          className="input-dark w-full text-sm"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2.5">
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
-                          Model / Tipe Motor/Mobil *
+                        <label className="block text-xs font-medium text-slate-700 mb-1">
+                          Tipe Motor
                         </label>
                         <input
                           type="text"
                           value={regModel}
                           onChange={(e) => setRegModel(e.target.value)}
                           required
-                          placeholder="Vario 160 / NMAX 155"
-                          className="input-custom w-full h-9.5 px-3 text-sm"
+                          placeholder="Vario 160 / NMAX"
+                          className="input-dark w-full text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
-                          Tahun Kendaraan
+                        <label className="block text-xs font-medium text-slate-700 mb-1">
+                          Tahun
                         </label>
                         <input
                           type="number"
                           value={regYear}
                           onChange={(e) => setRegYear(e.target.value)}
                           placeholder="2024"
-                          className="input-custom w-full h-9.5 px-3 text-sm"
+                          className="input-dark w-full text-sm"
                         />
                       </div>
                     </div>
@@ -650,9 +587,9 @@ export default function LoginPage() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="btn-cyan w-full h-11 text-sm font-bold cursor-pointer disabled:opacity-60 mt-3"
+                      className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-2"
                     >
-                      {isLoading ? "Mendaftarkan ke Database..." : "Daftarkan & Buka Portal →"}
+                      {isLoading ? "Mendaftarkan..." : "Daftarkan & Buka Portal →"}
                     </button>
                   </form>
                 </div>
@@ -661,9 +598,8 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* Footer info */}
-        <p className="text-center text-[11px] text-slate-600 mt-6 font-medium">
-          © {new Date().getFullYear()} PitCare Auto — Modern Workshop Suite & Management System
+        <p className="text-center text-xs text-slate-400 mt-5">
+          © {new Date().getFullYear()} PitCare Auto — Sistem Manajemen Bengkel Modern
         </p>
       </div>
     </div>

@@ -63,6 +63,22 @@ export async function updatePartStockAction(id: string, newStock: number) {
   }
 }
 
+export async function restockPartAction(id: string, additionalStock: number) {
+  if (!id || isNaN(additionalStock) || additionalStock <= 0) {
+    return { success: false, error: "Jumlah penambahan stok harus berupa angka lebih dari 0." };
+  }
+
+  try {
+    const part = await db.partsInventory.restock(id, additionalStock);
+    revalidatePath("/inventory/parts");
+    revalidatePath("/dashboard");
+    revalidatePath("/services/new");
+    return { success: true, data: part };
+  } catch {
+    return { success: false, error: "Gagal memproses penambahan stok barang." };
+  }
+}
+
 export async function deletePartAction(id: string) {
   if (!id) return { success: false, error: "ID tidak valid." };
 

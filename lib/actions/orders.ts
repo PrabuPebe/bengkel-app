@@ -32,7 +32,15 @@ export async function createServiceOrderAction(data: {
   }
 
   try {
-    const order = await db.serviceOrder.create(data);
+    const sanitizedKm =
+      data.currentKm !== undefined && data.currentKm !== null
+        ? Math.floor(Math.abs(Number(String(data.currentKm).replace(/[^0-9]/g, ""))))
+        : undefined;
+
+    const order = await db.serviceOrder.create({
+      ...data,
+      currentKm: sanitizedKm && sanitizedKm > 0 ? sanitizedKm : undefined,
+    });
     revalidatePath("/services");
     revalidatePath("/cashier");
     revalidatePath("/dashboard");

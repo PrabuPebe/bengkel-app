@@ -8,6 +8,7 @@ import { getCustomersAction, createCustomerAction } from "@/lib/actions/customer
 import { getServicesAction } from "@/lib/actions/services";
 import { getPartsAction } from "@/lib/actions/parts";
 import { createServiceOrderAction } from "@/lib/actions/orders";
+import { getMechanicsAction } from "@/lib/actions/auth";
 
 function formatRupiah(amount: number): string {
   return new Intl.NumberFormat("id-ID", {
@@ -18,11 +19,11 @@ function formatRupiah(amount: number): string {
   }).format(amount);
 }
 
-const AVAILABLE_MECHANICS = [
-  { id: "usr-3", name: "Budi Santoso", role: "Kepala Mekanik Pit 1" },
-  { id: "usr-4", name: "Agus Pratama", role: "Teknisi Mesin & Transmisi" },
-  { id: "usr-5", name: "Rian Hidayat", role: "Teknisi Kelistrikan & Injeksi" },
-];
+export interface MechanicOption {
+  id: string;
+  name: string;
+  role?: string;
+}
 
 type ServicePackageKey = "NONE" | "SERVIS_RUTIN" | "SERVIS_CVT" | "SERVIS_PENGEREMAN";
 
@@ -41,32 +42,32 @@ const SMART_PACKAGES: SmartPackageConfig[] = [
   {
     key: "SERVIS_RUTIN",
     title: "Servis Rutin Ringan",
-    subtitle: "Tune-up berkala, cek injeksi, pelumasan & pengapian",
+    subtitle: "Ganti oli mesin, bersihkan busi & cek mesin harian",
     badge: "Rekomendasi: Oli Mesin (0.8L/1L) & Busi",
-    defaultComplaint: "Servis rutin berkala, ganti oli mesin dan pengecekan busi/pengapian.",
+    defaultComplaint: "Servis rutin berkala, ganti oli mesin dan pengecekan busi.",
     serviceKeywords: ["oli", "tune", "servis", "ringan", "rutin"],
     partKeywords: ["oli", "mpx", "yamalube", "shell", "busi", "ngk", "denso"],
-    recommendedLabels: ["Oli Mesin (0.8L/1L)", "Busi Pengapian"],
+    recommendedLabels: ["Oli Mesin (0.8L/1L)", "Busi"],
   },
   {
     key: "SERVIS_CVT",
-    title: "Servis CVT & Transmisi",
-    subtitle: "Pembersihan ruang CVT, cek pulley, roller & vanbelt",
-    badge: "Rekomendasi: Grease CVT & Roller Set / V-Belt",
-    defaultComplaint: "Servis CVT, tarikan awal terasa gredek dan pengecekan roller/v-belt.",
+    title: "Servis CVT",
+    subtitle: "Bersihkan rumah CVT, cek tarikan gredek, roller & vanbelt",
+    badge: "Rekomendasi: Grease CVT & Roller Set",
+    defaultComplaint: "Servis CVT, tarikan awal terasa gredek dan cek roller/v-belt.",
     serviceKeywords: ["cvt", "gardan", "transmisi", "vanbelt", "v-belt"],
     partKeywords: ["cvt", "grease", "roller", "belt", "vanbelt", "v-belt", "gardan"],
-    recommendedLabels: ["Grease CVT", "Roller Set", "V-Belt / Drive Belt"],
+    recommendedLabels: ["Grease CVT", "Roller Set", "V-Belt"],
   },
   {
     key: "SERVIS_PENGEREMAN",
     title: "Servis Pengereman",
-    subtitle: "Inspeksi kaliper, ganti kampas & kuras minyak rem",
+    subtitle: "Cek pengereman depan/belakang, ganti kampas & minyak rem",
     badge: "Rekomendasi: Kampas Rem & Minyak Rem",
-    defaultComplaint: "Servis pengereman, rem terasa kurang pakem/berdecit.",
+    defaultComplaint: "Servis pengereman, rem terasa kurang pakem atau berbunyi.",
     serviceKeywords: ["rem", "kampas", "kaliper"],
     partKeywords: ["rem", "kampas", "dispad", "brake", "minyak"],
-    recommendedLabels: ["Kampas Rem (Depan/Belakang)", "Minyak Rem DOT 3/4"],
+    recommendedLabels: ["Kampas Rem", "Minyak Rem"],
   },
 ];
 
@@ -79,21 +80,22 @@ export default function NewServiceOrderPage() {
   const [availableParts, setAvailableParts] = useState<PartsInventory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Mode Pelanggan: "existing" | "walkin"
-  const [customerInputMode, setCustomerInputMode] = useState<"existing" | "walkin">("existing");
+  // Mode Pelanggan: "walkin" (default ramah awam) | "existing"
+  const [customerInputMode, setCustomerInputMode] = useState<"walkin" | "existing">("walkin");
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
-  // Walk-in Quick Input (Plat Nomor, Nama, No HP, Tipe Motor)
+  // Walk-in Input
   const [walkinPlate, setWalkinPlate] = useState("");
   const [walkinName, setWalkinName] = useState("");
   const [walkinPhone, setWalkinPhone] = useState("");
   const [walkinBrand, setWalkinBrand] = useState("Honda");
   const [walkinModel, setWalkinModel] = useState("Vario 160");
 
-  const [selectedMechanicId, setSelectedMechanicId] = useState("usr-3");
+  const [mechanics, setMechanics] = useState<MechanicOption[]>([]);
+  const [selectedMechanicId, setSelectedMechanicId] = useState("");
   const [currentKm, setCurrentKm] = useState<string>("");
-  const [selectedPackage, setSelectedPackage] = useState<ServicePackageKey>("NONE");
+  const [selectedPackage, setSelectedPackage] = useState<ServicePackageKey>("SERVIS_RUTIN");
   const [complaints, setComplaints] = useState("");
   const [notes, setNotes] = useState("");
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
@@ -103,22 +105,37 @@ export default function NewServiceOrderPage() {
 
   useEffect(() => {
     let active = true;
-    Promise.all([getCustomersAction(), getServicesAction(), getPartsAction()]).then(
-      ([custData, servData, partData]) => {
-        if (active) {
-          setCustomers(custData);
-          setAvailableServices(servData.filter((s) => s.isActive));
-          setAvailableParts(partData);
-          if (custData.length > 0) {
-            setSelectedCustomerId(custData[0].id);
-            if (custData[0].vehicles.length > 0) {
-              setSelectedVehicleId(custData[0].vehicles[0].id);
-            }
+    Promise.all([
+      getCustomersAction(),
+      getServicesAction(),
+      getPartsAction(),
+      getMechanicsAction(),
+    ]).then(([custData, servData, partData, mechData]) => {
+      if (active) {
+        setCustomers(custData);
+        const activeSrvs = servData.filter((s) => s.isActive);
+        setAvailableServices(activeSrvs);
+        setAvailableParts(partData);
+        if (custData.length > 0) {
+          setSelectedCustomerId(custData[0].id);
+          if (custData[0].vehicles.length > 0) {
+            setSelectedVehicleId(custData[0].vehicles[0].id);
           }
-          setIsLoading(false);
         }
+        if (mechData && mechData.length > 0) {
+          setMechanics(mechData);
+          setSelectedMechanicId(mechData[0].id);
+        } else {
+          // Fallback cerdas jika belum ada akun mekanik di database
+          const fallback: MechanicOption[] = [
+            { id: "default-mechanic", name: "Mekanik Umum", role: "Teknisi" },
+          ];
+          setMechanics(fallback);
+          setSelectedMechanicId("default-mechanic");
+        }
+        setIsLoading(false);
       }
-    );
+    });
     return () => {
       active = false;
     };
@@ -126,7 +143,7 @@ export default function NewServiceOrderPage() {
 
   function showToast(msg: string) {
     setQuickActionToast(msg);
-    setTimeout(() => setQuickActionToast(""), 3500);
+    setTimeout(() => setQuickActionToast(""), 3000);
   }
 
   const selectedCustomer = customers.find((c) => c.id === selectedCustomerId);
@@ -149,15 +166,7 @@ export default function NewServiceOrderPage() {
     const existing = selectedParts.find((p) => p.partId === partId);
     const part = availableParts.find((p) => p.id === partId);
     if (!part) return;
-    if (part.stock <= 0) {
-      if (!silent) alert(`Stok ${part.name} sedang habis.`);
-      return;
-    }
     if (existing) {
-      if (existing.qty >= part.stock) {
-        if (!silent) alert(`Maksimal stok tersedia: ${part.stock} ${part.unit}`);
-        return;
-      }
       setSelectedParts((prev) =>
         prev.map((p) => (p.partId === partId ? { ...p, qty: p.qty + 1 } : p))
       );
@@ -165,27 +174,20 @@ export default function NewServiceOrderPage() {
       setSelectedParts((prev) => [...prev, { partId, qty: 1 }]);
     }
     if (!silent) {
-      showToast(`✓ ${part.name} ditambahkan ke rincian servis.`);
+      showToast(`✓ ${part.name} ditambahkan ke daftar servis.`);
     }
   }
 
   function updatePartQty(partId: string, delta: number) {
-    const part = availableParts.find((p) => p.id === partId);
-    if (!part) return;
     setSelectedParts((prev) => {
       const existing = prev.find((p) => p.partId === partId);
       if (!existing) return prev;
       const newQty = existing.qty + delta;
       if (newQty <= 0) return prev.filter((p) => p.partId !== partId);
-      if (newQty > part.stock) {
-        alert(`Maksimal stok: ${part.stock} ${part.unit}`);
-        return prev;
-      }
       return prev.map((p) => (p.partId === partId ? { ...p, qty: newQty } : p));
     });
   }
 
-  // === LOGIKA SMART PACKAGE RECOMMENDATION ===
   const activePackageConfig = SMART_PACKAGES.find((p) => p.key === selectedPackage);
 
   const recommendedPackageParts: PartsInventory[] = activePackageConfig
@@ -200,7 +202,6 @@ export default function NewServiceOrderPage() {
     if (!complaints.trim()) {
       setComplaints(pkg.defaultComplaint);
     }
-    // Otomatis centang jasa yang sesuai paket
     const matchedServices = availableServices.filter((s) => {
       const nameLower = s.name.toLowerCase();
       return pkg.serviceKeywords.some((kw) => nameLower.includes(kw));
@@ -215,15 +216,15 @@ export default function NewServiceOrderPage() {
     if (recommendedPackageParts.length === 0) return;
     let addedCount = 0;
     for (const part of recommendedPackageParts.slice(0, 3)) {
-      if (part.stock > 0 && !selectedParts.some((sp) => sp.partId === part.id)) {
+      if (!selectedParts.some((sp) => sp.partId === part.id)) {
         addPartToOrder(part.id, true);
         addedCount++;
       }
     }
-    showToast(`✓ ${addedCount || 1} suku cadang rekomendasi paket berhasil dimasukkan ke SPK!`);
+    showToast(`✓ ${addedCount || 1} suku cadang rekomendasi berhasil dimasukkan!`);
   }
 
-  // === LOGIKA ODOMETER LIFESPAN TRIGGER (PERMINTAAN DOSEN) ===
+  // Odometer Lifespan Trigger
   const numericKm = parseInt(currentKm.replace(/[^0-9]/g, ""), 10) || 0;
 
   interface OdometerAlertInfo {
@@ -239,44 +240,25 @@ export default function NewServiceOrderPage() {
     if (numericKm >= 24000) {
       const vbeltAndOilParts = availableParts.filter((p) => {
         const name = `${p.name} ${p.category}`.toLowerCase();
-        return (
-          name.includes("belt") ||
-          name.includes("vanbelt") ||
-          name.includes("oli") ||
-          name.includes("mpx") ||
-          name.includes("roller")
-        );
+        return name.includes("belt") || name.includes("vanbelt") || name.includes("oli") || name.includes("mpx") || name.includes("roller");
       });
       return {
         level: "CRITICAL",
-        title: `Perhatian: Odometer telah mencapai ${numericKm.toLocaleString("id-ID")} KM!`,
-        message: `Direkomendasikan ganti V-Belt & Oli Mesin hari ini! Interval batas aman V-Belt (24.000 KM) dan Oli Mesin (3.000 KM) telah tercapai untuk mencegah putus sabuk CVT di jalan.`,
+        title: `Perhatian: Odometer telah mencapai ${numericKm.toLocaleString("id-ID")} KM. Direkomendasikan ganti V-Belt & Oli hari ini!`,
+        message: `Motor sudah mencapai batas pemakaian 24.000 KM. Disarankan mengganti V-Belt dan Oli Mesin agar sabuk tidak putus di jalan.`,
         recommendedParts: vbeltAndOilParts.length > 0 ? vbeltAndOilParts.slice(0, 3) : availableParts.slice(0, 2),
-      };
-    }
-
-    if (numericKm >= 8000) {
-      const sparkAndOilParts = availableParts.filter((p) => {
-        const name = `${p.name} ${p.category}`.toLowerCase();
-        return name.includes("busi") || name.includes("oli") || name.includes("filter") || name.includes("mpx");
-      });
-      return {
-        level: "WARNING",
-        title: `Perhatian: Odometer telah mencapai ${numericKm.toLocaleString("id-ID")} KM!`,
-        message: `Direkomendasikan ganti Busi, Filter Udara & Oli Mesin hari ini! Kendaraan telah melewati siklus servis menengah 8.000 KM.`,
-        recommendedParts: sparkAndOilParts.length > 0 ? sparkAndOilParts.slice(0, 3) : availableParts.slice(0, 2),
       };
     }
 
     if (numericKm >= 3000) {
       const oilParts = availableParts.filter((p) => {
         const name = `${p.name} ${p.category}`.toLowerCase();
-        return name.includes("oli") || name.includes("mpx") || name.includes("pelumas");
+        return name.includes("oli") || name.includes("mpx") || name.includes("busi");
       });
       return {
         level: "WARNING",
-        title: `Perhatian: Odometer telah mencapai ${numericKm.toLocaleString("id-ID")} KM!`,
-        message: `Direkomendasikan ganti Oli Mesin hari ini! Interval pemakaian oli (>= 3.000 KM) telah tercapai agar suhu dan gesekan mesin tetap terjaga.`,
+        title: `Perhatian: Odometer telah mencapai ${numericKm.toLocaleString("id-ID")} KM. Direkomendasikan ganti Oli hari ini!`,
+        message: `Motor sudah menempuh jarak >= 3.000 KM. Disarankan mengganti Oli Mesin dan mengecek Busi agar tarikan tetap enteng.`,
         recommendedParts: oilParts.length > 0 ? oilParts.slice(0, 2) : availableParts.slice(0, 1),
       };
     }
@@ -288,14 +270,12 @@ export default function NewServiceOrderPage() {
 
   function handleOneClickOdometerParts() {
     if (!odometerAlert) return;
-    let added = 0;
     for (const part of odometerAlert.recommendedParts) {
-      if (part.stock > 0 && !selectedParts.some((sp) => sp.partId === part.id)) {
+      if (!selectedParts.some((sp) => sp.partId === part.id)) {
         addPartToOrder(part.id, true);
-        added++;
       }
     }
-    showToast(`✓ ${added || 1} suku cadang rekomendasi Odometer (${numericKm.toLocaleString("id-ID")} KM) ditambahkan ke SPK!`);
+    showToast(`✓ Suku cadang rekomendasi KM ${numericKm.toLocaleString("id-ID")} berhasil dimasukkan!`);
   }
 
   const totalServiceEst = selectedServiceIds.reduce((sum, sId) => {
@@ -319,28 +299,35 @@ export default function NewServiceOrderPage() {
 
     if (customerInputMode === "walkin") {
       if (!walkinPlate.trim() || !walkinName.trim() || !walkinPhone.trim()) {
-        setErrorMessage("Untuk pelanggan baru/walk-in, Plat Nomor, Nama, dan No. HP wajib diisi.");
+        setErrorMessage("Mohon lengkapi Plat Nomor, Nama Pelanggan, dan Nomor WhatsApp.");
         return;
       }
     } else {
-      if (!selectedCustomerId) {
-        setErrorMessage("Silakan pilih pelanggan terlebih dahulu.");
-        return;
-      }
-      if (!selectedVehicleId) {
-        setErrorMessage("Silakan pilih unit kendaraan.");
+      if (!selectedCustomerId || !selectedVehicleId) {
+        setErrorMessage("Mohon pilih pelanggan dan motor terlebih dahulu.");
         return;
       }
     }
 
     if (!complaints.trim()) {
-      setErrorMessage("Keluhan utama kendaraan wajib diisi.");
+      setErrorMessage("Mohon tuliskan keluhan atau paket servis yang diminta pelanggan.");
       return;
     }
 
-    const mechanic = AVAILABLE_MECHANICS.find((m) => m.id === selectedMechanicId);
+    // TUGAS 2: Ambil mekanik dari state dinamis dengan fallback cerdas
+    const selectedMechanic = mechanics.find((m) => m.id === selectedMechanicId);
+    const finalMechanicName = selectedMechanic?.name || "Mekanik Umum";
+    const finalMechanicId =
+      selectedMechanic && selectedMechanic.id !== "default-mechanic"
+        ? selectedMechanic.id
+        : undefined;
+
+    // TUGAS 5: Sanitasi murni integer positif untuk odometer (mencegah bug NaN)
+    const cleanOdometerDigits = currentKm.toString().replace(/[^0-9]/g, "");
+    const parsedKm = parseInt(cleanOdometerDigits, 10);
+    const sanitizedKm = !isNaN(parsedKm) && parsedKm > 0 ? Math.floor(parsedKm) : undefined;
+
     startTransition(async () => {
-      // Jika mode walk-in, daftarkan pelanggan & kendaraan terlebih dahulu ke Supabase
       if (customerInputMode === "walkin") {
         const fd = new FormData();
         fd.set("name", walkinName.trim());
@@ -351,7 +338,7 @@ export default function NewServiceOrderPage() {
         fd.set("year", new Date().getFullYear().toString());
         const custRes = await createCustomerAction(fd);
         if (!custRes.success || !custRes.data) {
-          setErrorMessage(custRes.error || "Gagal menyimpan data pelanggan walk-in.");
+          setErrorMessage(custRes.error || "Gagal menyimpan data pelanggan baru.");
           return;
         }
         finalCustomerId = custRes.data.id;
@@ -361,9 +348,9 @@ export default function NewServiceOrderPage() {
       const result = await createServiceOrderAction({
         customerId: finalCustomerId,
         vehicleId: finalVehicleId,
-        mechanicId: selectedMechanicId,
-        mechanicName: mechanic?.name || "Budi Santoso",
-        currentKm: numericKm > 0 ? numericKm : undefined,
+        mechanicId: finalMechanicId,
+        mechanicName: finalMechanicName,
+        currentKm: sanitizedKm,
         complaints: complaints.trim(),
         notes: notes.trim() || undefined,
         initialServiceIds: selectedServiceIds,
@@ -372,47 +359,47 @@ export default function NewServiceOrderPage() {
       if (result.success && result.data) {
         router.push(`/services/${result.data.id}`);
       } else {
-        setErrorMessage(result.error || "Gagal menerbitkan Work Order.");
+        setErrorMessage(result.error || "Gagal menyimpan data servis.");
       }
     });
   }
 
   if (isLoading) {
     return (
-      <div className="p-20 text-center text-slate-400 text-xs card-pitstop">
-        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        Memuat formulir penerimaan unit PitCare Auto...
+      <div className="p-16 text-center bg-white rounded-xl border border-slate-200 text-slate-500 text-sm">
+        Memuat halaman tambah servis baru...
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      {/* Header Halaman */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200/80">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-[#00D2FF] mb-1">
-            <Link href="/services" className="hover:underline flex items-center gap-1">
-              <span>←</span> Kembali ke Antrian Servis
-            </Link>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-            Pendaftaran Servis Baru & Smart Recommendation (SPK)
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-900 mb-1.5"
+          >
+            <span>←</span> Kembali ke Daftar Antrean
+          </Link>
+          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+            Tambah Servis Baru
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            PitCare Auto • Sistem Rekomendasi Suku Cadang Cerdas & Deteksi Interval Odometer Otomatis
+          <p className="text-sm text-slate-500 mt-0.5">
+            Catat data motor yang masuk dan pilih paket servis untuk melihat rekomendasi suku cadang otomatis.
           </p>
         </div>
       </div>
 
       {/* Toast Feedback */}
       {quickActionToast && (
-        <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center justify-between shadow-lg">
+        <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center justify-between">
           <span>{quickActionToast}</span>
           <button
             type="button"
             onClick={() => setQuickActionToast("")}
-            className="text-emerald-400 hover:text-white text-xs ml-4"
+            className="text-emerald-700 hover:text-emerald-900 ml-4"
           >
             ✕
           </button>
@@ -420,65 +407,117 @@ export default function NewServiceOrderPage() {
       )}
 
       {errorMessage && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-2.5">
-          <span>⚠️</span>
-          <span>{errorMessage}</span>
+        <div className="p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
+          ⚠️ {errorMessage}
         </div>
       )}
 
+      {/* 2 KOLOM RAPI SESUAI SPESIFIKASI LINEAR.APP */}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* KOLOM KIRI (8 KOLOM) */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* 1. IDENTITAS PELANGGAN, PLAT NOMOR & ODOMETER */}
-          <div className="card-pitstop p-6 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-lg bg-cyan-500/15 text-[#00D2FF] border border-cyan-500/30 flex items-center justify-center font-mono text-xs font-extrabold">
-                  1
-                </span>
-                <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Data Kendaraan, Pelanggan & Odometer (KM)
+        {/* ============================================================
+            KOLOM KIRI (6 KOLOM): DATA MOTOR & PEMILIK (PLAT, KM, KELUHAN)
+            ============================================================ */}
+        <div className="lg:col-span-6 space-y-6">
+          <div className="bg-white rounded-xl border border-slate-200/80 p-6 shadow-xs space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h2 className="text-base font-semibold text-slate-900">
+                  1. Data Motor & Pemilik
                 </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Masukkan nomor plat motor, kilometer saat ini, dan keluhan
+                </p>
               </div>
 
-              {/* Toggle Pilih Pelanggan Lama vs Input Cepat Walk-in */}
-              <div className="inline-flex rounded-xl bg-[#0B0F19] p-1 border border-slate-800 text-[11px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setCustomerInputMode("existing")}
-                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                    customerInputMode === "existing"
-                      ? "bg-cyan-500/20 text-[#00D2FF] border border-cyan-500/40"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Pilih Terdaftar ({customers.length})
-                </button>
+              {/* Pilihan Pelanggan Baru vs Terdaftar */}
+              <div className="inline-flex rounded-lg bg-slate-100 p-1 text-xs font-medium">
                 <button
                   type="button"
                   onClick={() => setCustomerInputMode("walkin")}
-                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
                     customerInputMode === "walkin"
-                      ? "bg-cyan-500/20 text-[#00D2FF] border border-cyan-500/40"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-white text-slate-900 font-semibold shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  + Input Cepat Plat / Pelanggan Baru
+                  Input Cepat
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCustomerInputMode("existing")}
+                  className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                    customerInputMode === "existing"
+                      ? "bg-white text-slate-900 font-semibold shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  Pelanggan Lama ({customers.length})
                 </button>
               </div>
             </div>
 
-            {customerInputMode === "existing" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {customerInputMode === "walkin" ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label-dark">Plat Nomor Motor *</label>
+                    <input
+                      type="text"
+                      value={walkinPlate}
+                      onChange={(e) => setWalkinPlate(e.target.value.toUpperCase())}
+                      placeholder="Contoh: AB 1234 XY"
+                      className="input-dark font-mono uppercase"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="label-dark">Merk & Tipe Motor</label>
+                    <input
+                      type="text"
+                      value={walkinModel}
+                      onChange={(e) => setWalkinModel(e.target.value)}
+                      placeholder="Contoh: Honda Vario 160"
+                      className="input-dark"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label-dark">Nama Pelanggan *</label>
+                    <input
+                      type="text"
+                      value={walkinName}
+                      onChange={(e) => setWalkinName(e.target.value)}
+                      placeholder="Contoh: Budi Santoso"
+                      className="input-dark"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="label-dark">No. WhatsApp Pelanggan *</label>
+                    <input
+                      type="text"
+                      value={walkinPhone}
+                      onChange={(e) => setWalkinPhone(e.target.value)}
+                      placeholder="0812xxxxxxx"
+                      className="input-dark font-mono tabular-nums"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
                 <div>
-                  <label className="label-dark">Nama / No. HP Pelanggan *</label>
+                  <label className="label-dark">Pilih Pelanggan Terdaftar *</label>
                   <select
                     value={selectedCustomerId}
                     onChange={(e) => handleCustomerChange(e.target.value)}
                     className="input-dark"
                     required
                   >
-                    <option value="">-- Pilih Pelanggan --</option>
+                    <option value="">-- Pilih Nama Pelanggan --</option>
                     {customers.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name} ({c.phone})
@@ -488,311 +527,245 @@ export default function NewServiceOrderPage() {
                 </div>
 
                 <div>
-                  <label className="label-dark">Plat Nomor & Unit Kendaraan *</label>
+                  <label className="label-dark">Pilih Plat Nomor Motor *</label>
                   <select
                     value={selectedVehicleId}
                     onChange={(e) => setSelectedVehicleId(e.target.value)}
                     className="input-dark font-mono"
-                    disabled={!selectedCustomerId || customerVehicles.length === 0}
                     required
                   >
-                    <option value="">
-                      {selectedCustomerId
-                        ? customerVehicles.length > 0
-                          ? "-- Pilih Plat Nomor Kendaraan --"
-                          : "Pelanggan belum memiliki kendaraan"
-                        : "-- Pilih Pelanggan Dahulu --"}
-                    </option>
                     {customerVehicles.map((v) => (
                       <option key={v.id} value={v.id}>
-                        [{v.plateNumber}] {v.brand} {v.model} ({v.year || "-"})
+                        [{v.plateNumber}] {v.brand} {v.model}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-[#0B0F19]/90 border border-cyan-500/30">
-                <div>
-                  <label className="label-dark">Plat Nomor Kendaraan *</label>
-                  <input
-                    type="text"
-                    value={walkinPlate}
-                    onChange={(e) => setWalkinPlate(e.target.value.toUpperCase())}
-                    placeholder="Contoh: B 4567 XYZ"
-                    className="input-dark font-mono uppercase"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="label-dark">Nama Pelanggan *</label>
-                  <input
-                    type="text"
-                    value={walkinName}
-                    onChange={(e) => setWalkinName(e.target.value)}
-                    placeholder="Contoh: Hendra Wijaya"
-                    className="input-dark"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="label-dark">Nomor WhatsApp / HP *</label>
-                  <input
-                    type="text"
-                    value={walkinPhone}
-                    onChange={(e) => setWalkinPhone(e.target.value)}
-                    placeholder="Contoh: 081234567890"
-                    className="input-dark font-mono"
-                    required
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="label-dark">Merk</label>
-                    <input
-                      type="text"
-                      value={walkinBrand}
-                      onChange={(e) => setWalkinBrand(e.target.value)}
-                      placeholder="Honda"
-                      className="input-dark"
-                    />
-                  </div>
-                  <div>
-                    <label className="label-dark">Tipe Motor</label>
-                    <input
-                      type="text"
-                      value={walkinModel}
-                      onChange={(e) => setWalkinModel(e.target.value)}
-                      placeholder="Vario 160"
-                      className="input-dark"
-                    />
-                  </div>
-                </div>
-              </div>
             )}
 
-            {/* Odometer Input & Mekanik */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            {/* Odometer (KM Saat Ini) */}
+            <div className="pt-2 border-t border-slate-100 space-y-3">
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="label-dark mb-0">Odometer Saat Ini (KM) *</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="label-dark mb-0">Odometer (Kilometer Saat Ini) *</label>
                   <div className="flex items-center gap-1">
-                    <span className="text-[10px] text-slate-500">Simulasi KM:</span>
+                    <span className="text-[11px] text-slate-400">Contoh cepat:</span>
                     <button
                       type="button"
                       onClick={() => setCurrentKm("3500")}
-                      className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-amber-500/20 text-amber-300 border border-slate-700 text-[10px] font-mono cursor-pointer"
+                      className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-mono tabular-nums cursor-pointer"
                     >
-                      3.500
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setCurrentKm("12000")}
-                      className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-amber-500/20 text-amber-300 border border-slate-700 text-[10px] font-mono cursor-pointer"
-                    >
-                      12.000
+                      3.500 KM
                     </button>
                     <button
                       type="button"
                       onClick={() => setCurrentKm("24500")}
-                      className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-rose-500/20 text-rose-300 border border-slate-700 text-[10px] font-mono cursor-pointer"
+                      className="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-mono tabular-nums cursor-pointer"
                     >
-                      24.500
+                      24.500 KM
                     </button>
                   </div>
                 </div>
                 <input
-                  type="number"
-                  min="0"
-                  placeholder="Ketik angka KM (misal: 24500)"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Kilometer saat ini, contoh: 24500"
                   value={currentKm}
-                  onChange={(e) => setCurrentKm(e.target.value)}
-                  className="input-dark font-mono text-base font-bold text-cyan-300"
+                  onChange={(e) => {
+                    // Sanitasi instan: hapus titik, koma, spasi, huruf
+                    const clean = e.target.value.replace(/[^0-9]/g, "");
+                    setCurrentKm(clean);
+                  }}
+                  className="input-dark font-mono tabular-nums"
                   required
                 />
               </div>
 
-              <div>
-                <label className="label-dark">Tugaskan Mekanik Pit *</label>
-                <select
-                  value={selectedMechanicId}
-                  onChange={(e) => setSelectedMechanicId(e.target.value)}
-                  className="input-dark"
+              {/* ODOMETER LIFESPAN TRIGGER (PERMINTAAN DOSEN) */}
+              {odometerAlert && (
+                <div
+                  className={`p-4 rounded-xl border ${
+                    odometerAlert.level === "CRITICAL"
+                      ? "bg-rose-50/80 border-rose-200 text-rose-900"
+                      : "bg-amber-50/80 border-amber-200 text-amber-900"
+                  }`}
                 >
-                  {AVAILABLE_MECHANICS.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.name} — {m.role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* BANNER PERINGATAN ODOMETER LIFESPAN TRIGGER (PERMINTAAN DOSEN) */}
-            {odometerAlert && (
-              <div
-                className={`p-4 rounded-2xl border transition-all ${
-                  odometerAlert.level === "CRITICAL"
-                    ? "bg-rose-950/40 border-rose-500/60 shadow-lg shadow-rose-950/30"
-                    : "bg-amber-950/40 border-amber-500/60 shadow-lg shadow-amber-950/30"
-                }`}
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-2.5">
+                    <div className="flex items-start gap-2">
                       <span
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider ${
-                          odometerAlert.level === "CRITICAL"
-                            ? "bg-rose-500 text-white"
-                            : "bg-amber-400 text-slate-950"
+                        className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
+                          odometerAlert.level === "CRITICAL" ? "bg-rose-600" : "bg-amber-600"
                         }`}
-                      >
-                        {odometerAlert.level === "CRITICAL" ? "⚠️ Lifespan Alert Kritis" : "⚡ Lifespan Alert Interval"}
-                      </span>
-                      <span
-                        className={`text-xs sm:text-sm font-extrabold ${
-                          odometerAlert.level === "CRITICAL" ? "text-rose-200" : "text-amber-200"
-                        }`}
-                      >
-                        {odometerAlert.title}
-                      </span>
+                      />
+                      <div>
+                        <p className="text-xs font-semibold leading-snug">
+                          {odometerAlert.title}
+                        </p>
+                        <p className="text-xs opacity-85 mt-1 leading-relaxed">
+                          {odometerAlert.message}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{odometerAlert.message}</p>
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                      <span className="text-[10px] text-slate-400 font-semibold">Suku Cadang Terkait:</span>
-                      {odometerAlert.recommendedParts.map((rp) => (
-                        <span
-                          key={rp.id}
-                          className="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-[11px] font-mono text-cyan-300"
-                        >
-                          {rp.name} ({formatRupiah(rp.sellPrice)})
-                        </span>
-                      ))}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={handleOneClickOdometerParts}
+                      className={`w-full py-2.5 px-3.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                        odometerAlert.level === "CRITICAL"
+                          ? "bg-rose-600 hover:bg-rose-700 text-white"
+                          : "bg-amber-600 hover:bg-amber-700 text-white"
+                      }`}
+                    >
+                      + Masukkan Suku Cadang Rekomendasi ke Daftar Servis (1-Klik)
+                    </button>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={handleOneClickOdometerParts}
-                    className={`px-4 py-2.5 rounded-xl text-xs font-extrabold shrink-0 cursor-pointer transition-all shadow-md ${
-                      odometerAlert.level === "CRITICAL"
-                        ? "bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/25"
-                        : "bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-amber-500/25"
-                    }`}
-                  >
-                    + Masukkan Rekomendasi (1-Klik)
-                  </button>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* 2. PILIH PAKET SERVIS & SMART RECOMMENDATION PANEL */}
-          <div className="card-pitstop p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-lg bg-cyan-500/15 text-[#00D2FF] border border-cyan-500/30 flex items-center justify-center font-mono text-xs font-extrabold">
-                  2
-                </span>
+            {/* Keluhan & Pilih Mekanik */}
+            <div className="space-y-4 pt-2 border-t border-slate-100">
+              <div>
+                <label className="label-dark">Keluhan Motor / Permintaan Pelanggan *</label>
+                <textarea
+                  rows={3}
+                  placeholder="Contoh: Tarikan awal gredek, ganti oli mesin rutin, rem belakang kurang pakem..."
+                  value={complaints}
+                  onChange={(e) => setComplaints(e.target.value)}
+                  className="input-dark resize-none py-2.5"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Pilih Paket Servis & Smart Recommendation Panel
-                  </h2>
-                  <p className="text-[11px] text-slate-400">
-                    Pilih paket servis untuk memunculkan rekomendasi suku cadang otomatis
-                  </p>
+                  <label className="label-dark">Mekanik yang Menangani</label>
+                  <select
+                    value={selectedMechanicId}
+                    onChange={(e) => setSelectedMechanicId(e.target.value)}
+                    className="input-dark"
+                  >
+                    {mechanics.map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.name} {m.role ? `(${m.role})` : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="label-dark">Catatan Tambahan (Opsional)</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Ditunggu pelanggan"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="input-dark"
+                  />
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* 3 Kartu Paket Servis Utama */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+        {/* ============================================================
+            KOLOM KANAN (6 KOLOM): PILIHAN PAKET SERVIS & KOTAK REKOMENDASI SUKU CADANG CERDAS
+            ============================================================ */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* 2. Pilihan Paket Servis & Smart Recommendation Panel */}
+          <div className="bg-white rounded-xl border border-slate-200/80 p-6 shadow-xs space-y-5">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-base font-semibold text-slate-900">
+                2. Pilih Paket Servis & Rekomendasi Suku Cadang
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Klik salah satu paket di bawah untuk menampilkan suku cadang yang disarankan
+              </p>
+            </div>
+
+            {/* 3 Pilihan Paket Servis */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {SMART_PACKAGES.map((pkg) => {
                 const isSelected = selectedPackage === pkg.key;
                 return (
-                  <div
+                  <button
                     key={pkg.key}
+                    type="button"
                     onClick={() => handleSelectPackage(pkg)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                    className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                       isSelected
-                        ? "bg-cyan-500/15 border-[#00D2FF] shadow-[0_0_20px_rgba(0,210,255,0.15)]"
-                        : "bg-[#0B0F19]/90 border-slate-800 hover:border-slate-600"
+                        ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                        : "bg-white text-slate-800 border-slate-200 hover:bg-slate-50"
                     }`}
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-extrabold text-white">{pkg.title}</span>
-                        <span
-                          className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${
-                            isSelected
-                              ? "bg-[#00D2FF] border-[#00D2FF] text-slate-950 font-bold"
-                              : "border-slate-600"
-                          }`}
-                        >
-                          {isSelected && "✓"}
-                        </span>
+                      <div className="flex items-center justify-between gap-1 mb-1">
+                        <span className="text-xs font-semibold">{pkg.title}</span>
+                        {isSelected && <span className="text-xs">✓</span>}
                       </div>
-                      <p className="text-[11px] text-slate-400 leading-relaxed mb-3">{pkg.subtitle}</p>
+                      <p
+                        className={`text-[11px] leading-snug ${
+                          isSelected ? "text-slate-300" : "text-slate-500"
+                        }`}
+                      >
+                        {pkg.subtitle}
+                      </p>
                     </div>
-                    <div className="p-2 rounded-lg bg-slate-900/90 border border-slate-800 text-[10px] font-mono text-cyan-300">
-                      💡 {pkg.badge}
-                    </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
 
-            {/* SMART RECOMMENDATION PANEL (Tampil Otomatis Saat Paket Dipilih) */}
+            {/* Kotak Rekomendasi Suku Cadang Cerdas */}
             {activePackageConfig && (
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-slate-900/90 to-blue-950/30 border border-cyan-500/40 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-cyan-500/20 pb-2.5">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/90 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40 text-[#00D2FF] text-[10px] font-extrabold uppercase">
-                        Smart Recommendation Active
-                      </span>
-                      <h3 className="text-xs font-extrabold text-white">
-                        Rekomendasi Suku Cadang — {activePackageConfig.title}
-                      </h3>
-                    </div>
-                    <p className="text-[11px] text-slate-300 mt-0.5">
-                      Komponen wajib cek/ganti: {activePackageConfig.recommendedLabels.join(" + ")}
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 mb-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      Rekomendasi Suku Cadang Cerdas
+                    </span>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      Paket {activePackageConfig.title}
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Disarankan: {activePackageConfig.recommendedLabels.join(" + ")}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={handleApplyAllPackageParts}
-                    className="btn-cyan px-3.5 py-2 text-xs font-extrabold shrink-0 cursor-pointer shadow-md"
+                    className="btn-primary text-xs px-3 py-2 shrink-0"
                   >
-                    + Masukkan Semua Paket (1-Klik)
+                    + Masukkan Semua Rekomendasi
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                   {recommendedPackageParts.map((part) => {
                     const alreadyInOrder = selectedParts.find((sp) => sp.partId === part.id);
                     return (
                       <div
                         key={part.id}
-                        className="p-3 rounded-xl bg-[#0B0F19]/90 border border-slate-800 flex items-center justify-between gap-2"
+                        className="p-3 rounded-lg bg-white border border-slate-200 flex items-center justify-between gap-2"
                       >
                         <div className="min-w-0">
-                          <p className="text-xs font-bold text-white truncate">{part.name}</p>
-                          <p className="text-[11px] font-mono text-cyan-400 font-semibold">
-                            {formatRupiah(part.sellPrice)}{" "}
-                            <span className="text-slate-500">• {part.category}</span>
+                          <p className="text-xs font-semibold text-slate-900 truncate">
+                            {part.name}
+                          </p>
+                          <p className="text-xs text-slate-500 font-medium tabular-nums">
+                            {formatRupiah(part.sellPrice)}
                           </p>
                         </div>
                         <button
                           type="button"
                           onClick={() => addPartToOrder(part.id)}
-                          className={`px-3 py-1.5 rounded-lg text-[11px] font-bold shrink-0 cursor-pointer transition-all ${
+                          className={`px-2.5 py-1.5 rounded-md text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
                             alreadyInOrder
-                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                              : "bg-cyan-500/20 hover:bg-cyan-500/30 text-[#00D2FF] border border-cyan-500/40"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-slate-100 hover:bg-slate-200 text-slate-800"
                           }`}
                         >
-                          {alreadyInOrder ? `✓ Terpilih (${alreadyInOrder.qty})` : "+ Tambah"}
+                          {alreadyInOrder ? `✓ Dipilih (${alreadyInOrder.qty})` : "+ Pilih"}
                         </button>
                       </div>
                     );
@@ -801,75 +774,26 @@ export default function NewServiceOrderPage() {
               </div>
             )}
 
-            {/* Keluhan & Catatan */}
-            <div className="space-y-3 pt-2">
-              <div>
-                <label className="label-dark">Keluhan Utama / Instruksi Pengerjaan *</label>
-                <textarea
-                  rows={2}
-                  placeholder="Contoh: Tarikan gas awal berat/gredek, ganti oli mesin rutin, rem belakang kurang pakem..."
-                  value={complaints}
-                  onChange={(e) => setComplaints(e.target.value)}
-                  className="input-dark resize-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="label-dark">Catatan Tambahan Front-Desk (Opsional)</label>
-                <input
-                  type="text"
-                  placeholder="Contoh: Pelanggan menunggu di ruang tunggu VIP, minta part bekas disimpan"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  className="input-dark"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* 3. KATALOG LENGKAP JASA & SUKU CADANG */}
-          <div className="card-pitstop p-6 space-y-5">
-            <div className="flex items-center gap-2.5 border-b border-slate-800 pb-3">
-              <span className="w-6 h-6 rounded-lg bg-cyan-500/15 text-[#00D2FF] border border-cyan-500/30 flex items-center justify-center font-mono text-xs font-extrabold">
-                3
-              </span>
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                Daftar Katalog Jasa Servis & Komponen Pendukung
-              </h2>
-            </div>
-
-            <div>
-              <p className="text-xs font-semibold text-slate-400 mb-2.5">Pilih Tindakan Jasa Servis:</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {/* Daftar Tambahan Jasa Servis */}
+            <div className="pt-2 border-t border-slate-100">
+              <p className="text-xs font-semibold text-slate-600 mb-2">
+                Pilih Tindakan Jasa Servis:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-44 overflow-y-auto pr-1">
                 {availableServices.map((srv) => {
                   const isChecked = selectedServiceIds.includes(srv.id);
                   return (
                     <div
                       key={srv.id}
                       onClick={() => toggleService(srv.id)}
-                      className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+                      className={`p-2.5 rounded-lg border text-xs cursor-pointer flex items-center justify-between transition-colors ${
                         isChecked
-                          ? "bg-cyan-500/12 border-cyan-500/50 text-white"
-                          : "bg-[#0B0F19]/80 border-slate-800/80 text-slate-300 hover:border-slate-700"
+                          ? "bg-slate-900 text-white border-slate-900 font-medium"
+                          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div
-                          className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold border ${
-                            isChecked
-                              ? "bg-[#00D2FF] border-[#00D2FF] text-slate-950"
-                              : "border-slate-600 bg-slate-900"
-                          }`}
-                        >
-                          {isChecked && "✓"}
-                        </div>
-                        <div className="truncate">
-                          <p className="text-xs font-semibold truncate">{srv.name}</p>
-                          <p className="text-[10px] font-mono text-slate-500">{srv.code}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-bold text-cyan-400 shrink-0 ml-2">
+                      <span className="truncate pr-2">{srv.name}</span>
+                      <span className="tabular-nums font-semibold shrink-0">
                         {formatRupiah(srv.price)}
                       </span>
                     </div>
@@ -877,145 +801,84 @@ export default function NewServiceOrderPage() {
                 })}
               </div>
             </div>
+          </div>
 
-            <div className="pt-3 border-t border-slate-800/80">
-              <p className="text-xs font-semibold text-slate-400 mb-2.5">
-                Tambah Komponen / Suku Cadang Pendukung Servis:
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-60 overflow-y-auto pr-1">
-                {availableParts.map((part) => (
-                  <div
-                    key={part.id}
-                    className="p-2.5 rounded-xl bg-[#0B0F19]/70 border border-slate-800/80 flex items-center justify-between"
-                  >
-                    <div className="min-w-0 pr-2">
-                      <p className="text-xs font-semibold text-slate-200 truncate">{part.name}</p>
-                      <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
-                        <span className="text-amber-400 font-semibold">{formatRupiah(part.sellPrice)}</span>
-                        <span>•</span>
-                        <span>{part.category}</span>
+          {/* 3. Ringkasan Biaya & Tombol Simpan */}
+          <div className="bg-white rounded-xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+            <h3 className="text-base font-semibold text-slate-900 border-b border-slate-100 pb-2.5">
+              3. Ringkasan Rincian Servis
+            </h3>
+
+            {/* Suku cadang terpilih */}
+            {selectedParts.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-slate-500">
+                  Suku Cadang yang Dipilih ({selectedParts.reduce((a, b) => a + b.qty, 0)} item):
+                </p>
+                {selectedParts.map((item) => {
+                  const part = availableParts.find((p) => p.id === item.partId);
+                  if (!part) return null;
+                  return (
+                    <div
+                      key={item.partId}
+                      className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-slate-200/80 text-xs"
+                    >
+                      <div>
+                        <p className="font-semibold text-slate-900">{part.name}</p>
+                        <p className="text-slate-500 tabular-nums">
+                          {formatRupiah(part.sellPrice)} × {item.qty}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => updatePartQty(item.partId, -1)}
+                          className="w-6 h-6 rounded bg-white border border-slate-200 text-slate-700 font-bold cursor-pointer"
+                        >
+                          -
+                        </button>
+                        <span className="w-5 text-center font-semibold tabular-nums">
+                          {item.qty}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => updatePartQty(item.partId, 1)}
+                          className="w-6 h-6 rounded bg-white border border-slate-200 text-slate-700 font-bold cursor-pointer"
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => addPartToOrder(part.id)}
-                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/40 text-xs font-bold transition-all cursor-pointer shrink-0"
-                    >
-                      + Tambah
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-            </div>
-          </div>
-        </div>
+            )}
 
-        {/* KOLOM KANAN: RINGKASAN SPK (4 KOLOM) */}
-        <div className="lg:col-span-4 space-y-6 sticky top-20">
-          <div className="card-pitstop p-6 space-y-5 border-cyan-500/30">
-            <div className="border-b border-slate-800 pb-3">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#00D2FF] font-bold">
-                PITCARE AUTO • WORK ORDER SUMMARY
-              </span>
-              <h3 className="text-base font-extrabold text-white mt-0.5">Ringkasan Penerimaan Servis</h3>
-            </div>
-
-            {/* Selected Services */}
-            <div className="space-y-2">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                Jasa Servis ({selectedServiceIds.length})
-              </p>
-              {selectedServiceIds.length === 0 ? (
-                <p className="text-xs text-slate-500 italic">Belum ada tindakan jasa dipilih</p>
-              ) : (
-                <div className="space-y-1.5">
-                  {selectedServiceIds.map((id) => {
-                    const srv = availableServices.find((s) => s.id === id);
-                    if (!srv) return null;
-                    return (
-                      <div key={id} className="flex items-center justify-between text-xs py-1">
-                        <span className="text-slate-300 truncate pr-2">{srv.name}</span>
-                        <span className="font-mono font-semibold text-white shrink-0">
-                          {formatRupiah(srv.price)}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Selected Parts */}
-            <div className="space-y-2 pt-3 border-t border-slate-800">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                Suku Cadang ({selectedParts.reduce((a, b) => a + b.qty, 0)})
-              </p>
-              {selectedParts.length === 0 ? (
-                <p className="text-xs text-slate-500 italic">Belum ada suku cadang dipilih</p>
-              ) : (
-                <div className="space-y-2">
-                  {selectedParts.map((item) => {
-                    const part = availableParts.find((p) => p.id === item.partId);
-                    if (!part) return null;
-                    return (
-                      <div
-                        key={item.partId}
-                        className="p-2.5 rounded-xl bg-[#0B0F19] border border-slate-800 flex items-center justify-between gap-2"
-                      >
-                        <div className="min-w-0">
-                          <p className="text-xs font-semibold text-white truncate">{part.name}</p>
-                          <p className="text-[10px] font-mono text-slate-400">
-                            {formatRupiah(part.sellPrice)} x {item.qty}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            type="button"
-                            onClick={() => updatePartQty(item.partId, -1)}
-                            className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold cursor-pointer"
-                          >
-                            -
-                          </button>
-                          <span className="text-xs font-mono font-bold text-white w-5 text-center">
-                            {item.qty}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => updatePartQty(item.partId, 1)}
-                            className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold cursor-pointer"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Subtotal Calculation */}
-            <div className="pt-4 border-t border-slate-800 space-y-2">
-              <div className="flex justify-between text-xs text-slate-400">
-                <span>Estimasi Jasa</span>
-                <span className="font-mono text-slate-200">{formatRupiah(totalServiceEst)}</span>
+            <div className="space-y-2 pt-2 border-t border-slate-100 text-sm">
+              <div className="flex justify-between text-slate-600">
+                <span>Total Biaya Jasa ({selectedServiceIds.length} tindakan)</span>
+                <span className="font-medium tabular-nums text-slate-900">
+                  {formatRupiah(totalServiceEst)}
+                </span>
               </div>
-              <div className="flex justify-between text-xs text-slate-400">
-                <span>Estimasi Suku Cadang</span>
-                <span className="font-mono text-slate-200">{formatRupiah(totalPartsEst)}</span>
+              <div className="flex justify-between text-slate-600">
+                <span>Total Harga Suku Cadang</span>
+                <span className="font-medium tabular-nums text-slate-900">
+                  {formatRupiah(totalPartsEst)}
+                </span>
               </div>
-              <div className="flex justify-between text-sm font-extrabold text-white pt-2 border-t border-slate-800/80">
-                <span>Total Estimasi Awal</span>
-                <span className="font-mono text-[#00D2FF] text-base">{formatRupiah(grandTotalEst)}</span>
+              <div className="flex justify-between text-base font-semibold text-slate-900 pt-2.5 border-t border-slate-200">
+                <span>Estimasi Total Biaya</span>
+                <span className="tabular-nums">{formatRupiah(grandTotalEst)}</span>
               </div>
             </div>
 
             <button
               type="submit"
               disabled={isPending}
-              className="btn-cyan w-full py-3.5 text-xs sm:text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+              className="btn-primary w-full py-3 text-sm font-semibold cursor-pointer disabled:opacity-50"
             >
-              {isPending ? "Menerbitkan SPK & Potong Stok..." : "🚀 Terbitkan SPK & Masuk Antrian Pit"}
+              {isPending ? "Menyimpan Servis..." : "Simpan & Masukkan ke Antrean Servis"}
             </button>
           </div>
         </div>

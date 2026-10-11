@@ -1,34 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0B0F17;
-  --foreground: #F8FAFC;
+  --background: #F8FAFC;
+  --foreground: #0F172A;
 
-  /* PitCare Auto Design Tokens — High-Tech Pitstop */
-  --c-obsidian: #0B0F17;
-  --c-sidebar: #0F172A;
-  --c-card: #131B2E;
-  --c-cyan: #00D2FF;
-  --c-electric: #2563EB;
-  --c-amber: #F59E0B;
+  /* PitCare Auto — Linear.app Precision Design Tokens */
+  --c-surface: #F8FAFC;
+  --c-card: #FFFFFF;
+  --c-border: #E2E8F0;
+  --c-text-primary: #0F172A;
+  --c-text-secondary: #64748B;
+  --c-accent: #0F172A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-obsidian: #0B0F17;
-  --color-pitstop-sidebar: #0F172A;
-  --color-pitstop-card: #131B2E;
-  --color-cyan-glow: #00D2FF;
-  --color-electric-blue: #2563EB;
-  --color-amber-gold: #F59E0B;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 body {
-  background-color: #0B0F17;
-  color: #F8FAFC;
+  background-color: #F8FAFC;
+  color: #0F172A;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -47,391 +41,252 @@ p, li {
 }
 
 button:active:not(:disabled), .btn-cyan:active:not(:disabled) {
-  transform: scale(0.98);
+  transform: scale(0.99);
 }
 
 /* ============================================================
-   PitCare Auto — High-Tech Pitstop Dark System v2.0
-   Surfaces: #0B0F17 (Body) | #0F172A (Sidebar) | #131B2E (Cards)
-   Accents:  #00D2FF (Hyper Cyan) | #2563EB (Electric) | #F59E0B (Amber)
+   PitCare Auto — Linear.app Clean Minimalist System
+   Surface: #F8FAFC | Cards: #FFFFFF | Border: #E2E8F0
    ============================================================ */
 
-/* ── Keyframe Animations ── */
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(0, 210, 255, 0.3); }
-  50%       { box-shadow: 0 0 20px rgba(0, 210, 255, 0.65), 0 0 40px rgba(0, 210, 255, 0.2); }
-}
-
-@keyframes float-up {
-  0%   { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Pitstop Floating Glass Cards ── */
-.card-pitstop, .card-floating {
-  background: linear-gradient(145deg, #161f35 0%, #111828 60%, #0d1420 100%);
-  border-radius: 1rem;
-  border: 1px solid rgba(30, 41, 59, 0.9);
-  box-shadow:
-    0 4px 24px -4px rgba(0, 0, 0, 0.6),
-    0 1px 0 rgba(255, 255, 255, 0.03) inset,
-    0 -1px 0 rgba(0, 0, 0, 0.3) inset;
-  color: #F8FAFC;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ── Linear Pure White Cards with Hairline Borders ── */
+.card-pitstop,
+.card-floating,
+.card-cockpit {
+  background-color: #FFFFFF !important;
+  border-radius: 0.75rem;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04) !important;
+  color: #0F172A !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   position: relative;
-  overflow: hidden;
 }
 
-.card-pitstop::before, .card-floating::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(0, 210, 255, 0.25) 50%, transparent 100%);
-  pointer-events: none;
+.card-pitstop:hover,
+.card-floating:hover {
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04) !important;
 }
 
-.card-pitstop:hover, .card-floating:hover {
-  border-color: rgba(0, 210, 255, 0.35);
-  box-shadow:
-    0 16px 40px -8px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(0, 210, 255, 0.08),
-    0 0 30px -5px rgba(0, 210, 255, 0.12),
-    0 1px 0 rgba(255, 255, 255, 0.04) inset;
-  transform: translateY(-2px);
-}
-
-.card-pitstop:hover::before, .card-floating:hover::before {
-  background: linear-gradient(90deg, transparent 0%, rgba(0, 210, 255, 0.5) 50%, transparent 100%);
-}
-
-/* Neon Glow Card Highlight */
-.card-glow-cyan {
-  border-color: rgba(0, 210, 255, 0.6) !important;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.15) !important;
-}
-
-/* Authentic Vehicle Number Plate Badge */
+/* ── Vehicle Number Plate Badge (Clean High-Contrast) ── */
 .plate-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.2rem 0.65rem;
-  background: linear-gradient(180deg, #18191e 0%, #0d0e12 100%);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  padding: 0.25rem 0.625rem;
+  background-color: #F1F5F9;
+  border: 1px solid #CBD5E1;
   border-radius: 0.375rem;
   font-family: var(--font-mono, monospace);
-  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
   font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: #f8fafc;
+  letter-spacing: 0.04em;
+  color: #0F172A;
   text-transform: uppercase;
 }
 
-/* Cockpit Command Center Cards */
-.card-cockpit {
-  background: linear-gradient(145deg, #141c2e 0%, #0e1524 60%, #0a0f1b 100%);
-  border: 1px solid rgba(30, 41, 59, 0.85);
-  border-radius: 1.25rem;
-  box-shadow: 0 8px 32px -6px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-  position: relative;
-  overflow: hidden;
-}
-
-/* ── Button System ── */
-.btn-cyan, .btn-sage, .btn-mocha {
-  background: linear-gradient(135deg, #00D2FF 0%, #2563EB 100%);
-  color: #ffffff;
-  font-weight: 700;
-  border-radius: 0.75rem;
-  letter-spacing: 0.01em;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 16px rgba(0, 210, 255, 0.30), 0 1px 0 rgba(255,255,255,0.15) inset;
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-cyan::after, .btn-sage::after, .btn-mocha::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.btn-cyan:hover, .btn-sage:hover, .btn-mocha:hover {
-  box-shadow: 0 8px 28px rgba(0, 210, 255, 0.50), 0 1px 0 rgba(255,255,255,0.2) inset;
-  transform: translateY(-1px);
-  filter: brightness(1.08);
-}
-
-.btn-cyan:active, .btn-sage:active, .btn-mocha:active {
-  transform: scale(0.98);
-}
-
-.btn-electric {
-  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-  color: #ffffff;
-  font-weight: 700;
-  border-radius: 0.75rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.30), 0 1px 0 rgba(255,255,255,0.12) inset;
-  border: none;
-}
-
-.btn-electric:hover {
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.50);
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-}
-
-.btn-charcoal, .btn-espresso {
-  background-color: #0F172A;
-  color: #F8FAFC;
-  font-weight: 700;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(51, 65, 85, 0.8);
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-charcoal:hover, .btn-espresso:hover {
-  background-color: #1e293b;
-  border-color: rgba(0, 210, 255, 0.4);
-  color: #00D2FF;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.btn-outline-steel, .btn-outline-mocha {
-  background-color: rgba(19, 27, 46, 0.7);
-  color: #CBD5E1;
-  border: 1px solid rgba(51, 65, 85, 0.8);
-  border-radius: 0.75rem;
-  font-weight: 600;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-outline-steel:hover, .btn-outline-mocha:hover {
-  background-color: #0F172A;
-  border-color: #00D2FF;
-  color: #00D2FF;
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.15);
-}
-
-/* ── Modern Pitstop Input System ── */
-.input-custom {
-  background-color: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(51, 65, 85, 0.8);
-  border-radius: 0.75rem;
-  color: #F8FAFC;
-  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3) inset;
-}
-
-.input-custom:focus {
-  outline: none;
-  border-color: #00D2FF;
-  background-color: rgba(15, 23, 42, 0.95);
-  box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.15), 0 1px 3px rgba(0,0,0,0.3) inset;
-}
-
-.input-custom::placeholder {
-  color: rgba(148, 163, 184, 0.5);
-}
-
-/* ── Status Badges ── */
+/* ── Linear Issue Style Status Badges ── */
 .badge-custom {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.625rem;
   border-radius: 9999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  backdrop-filter: blur(8px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
 
-/* Semantic Status Classes */
-.badge-antrian, .badge-status-antrian {
-  background-color: rgba(120, 53, 15, 0.35);
-  border: 1px solid rgba(245, 158, 11, 0.6);
-  color: #F59E0B;
-}
-
-.badge-pengerjaan, .badge-status-pengerjaan {
-  background-color: rgba(12, 74, 110, 0.4);
-  border: 1px solid rgba(2, 132, 199, 0.6);
-  color: #38BDF8;
-}
-
-.badge-menunggu-part, .badge-status-menunggu-part {
-  background-color: rgba(88, 28, 135, 0.4);
-  border: 1px solid rgba(168, 85, 247, 0.6);
-  color: #C084FC;
-}
-
-.badge-selesai-pengerjaan, .badge-status-selesai-pengerjaan {
-  background-color: rgba(6, 78, 59, 0.4);
-  border: 1px solid rgba(16, 185, 129, 0.6);
-  color: #34D399;
-}
-
-.badge-selesai-pembayaran, .badge-status-selesai-pembayaran {
-  background-color: rgba(19, 78, 74, 0.4);
-  border: 1px solid rgba(20, 184, 166, 0.6);
-  color: #2DD4BF;
-}
-
-.badge-stok-kritis, .badge-status-stok-kritis, .badge-danger {
-  background-color: rgba(136, 19, 55, 0.4);
-  border: 1px solid rgba(244, 63, 94, 0.6);
-  color: #FB7185;
-}
-
-/* Fallback badge compatibility */
-.badge-sage {
-  background-color: rgba(0, 210, 255, 0.15);
-  color: #00D2FF;
-  border: 1px solid rgba(0, 210, 255, 0.4);
-}
-
-.badge-cream {
-  background-color: rgba(37, 99, 235, 0.15);
-  color: #93C5FD;
-  border: 1px solid rgba(37, 99, 235, 0.4);
-}
-
+/* Antrean: Dot abu-abu + background slate tipis */
+.badge-antrian,
 .badge-steel {
-  background-color: rgba(51, 65, 85, 0.4);
-  color: #E2E8F0;
-  border: 1px solid rgba(100, 116, 139, 0.4);
+  background-color: #F1F5F9 !important;
+  color: #334155 !important;
+  border-color: #E2E8F0 !important;
 }
 
-/* ── Stat Icon Backgrounds ── */
-.stat-icon-cyan, .stat-icon-sage {
-  background: rgba(0, 210, 255, 0.15);
-  color: #00D2FF;
-  border: 1px solid rgba(0, 210, 255, 0.3);
+/* Sedang Dikerjakan: Dot kuning/amber + background amber tipis */
+.badge-pengerjaan,
+.badge-menunggu-part {
+  background-color: #FFFBEB !important;
+  color: #B45309 !important;
+  border-color: #FDE68A !important;
 }
 
-.stat-icon-blue, .stat-icon-charcoal {
-  background: rgba(37, 99, 235, 0.2);
-  color: #60A5FA;
-  border: 1px solid rgba(37, 99, 235, 0.4);
+/* Selesai / Lunas: Dot hijau zamrud + background emerald tipis */
+.badge-selesai-pengerjaan,
+.badge-selesai-pembayaran {
+  background-color: #ECFDF5 !important;
+  color: #047857 !important;
+  border-color: #A7F3D0 !important;
 }
 
-.stat-icon-amber, .stat-icon-steel {
-  background: rgba(245, 158, 11, 0.15);
-  color: #F59E0B;
-  border: 1px solid rgba(245, 158, 11, 0.35);
+/* Kritis / Perhatian: Dot merah lembut + background rose tipis */
+.badge-danger,
+.badge-stok-kritis {
+  background-color: #FFF1F2 !important;
+  color: #BE123C !important;
+  border-color: #FECDD3 !important;
 }
 
-.stat-icon-emerald, .stat-icon-cream {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34D399;
-  border: 1px solid rgba(16, 185, 129, 0.35);
+/* ── Touch-Friendly Form Controls (42px - 44px height) ── */
+.label-dark {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.375rem;
 }
 
-/* ── New Utility Classes ── */
-
-/* Gradient text — white fading to soft slate */
-.gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.input-dark,
+.select-dark {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.875rem;
+  background-color: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 0.5rem;
+  color: #0F172A !important;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Shimmer text (for headings / highlights) */
-.shimmer-text {
-  background: linear-gradient(90deg, #ffffff 0%, #00D2FF 40%, #ffffff 60%, #a5f3fc 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 4s linear infinite;
+.input-dark::placeholder {
+  color: #94A3B8 !important;
 }
 
-/* Neon top-border divider line */
-.neon-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(0, 210, 255, 0.6) 35%, rgba(37, 99, 235, 0.4) 65%, transparent 100%);
+.input-dark:focus,
+.select-dark:focus {
+  outline: none;
+  border-color: #0F172A !important;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08) !important;
 }
 
-/* Ambient radial glow overlay */
-.ambient-glow {
-  background: radial-gradient(ellipse 70% 50% at 70% 30%, rgba(0, 210, 255, 0.05) 0%, transparent 70%),
-              radial-gradient(ellipse 50% 60% at 20% 80%, rgba(37, 99, 235, 0.06) 0%, transparent 65%);
-  pointer-events: none;
-}
-
-/* Live animated pill */
-.pill-live {
+/* ── Primary & Secondary Buttons (Linear Style, 42px+ height) ── */
+.btn-cyan,
+.btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.2rem 0.625rem;
-  border-radius: 9999px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  background-color: rgba(0, 210, 255, 0.08);
-  border: 1px solid rgba(0, 210, 255, 0.3);
-  color: #00D2FF;
-  animation: glow-pulse 2.5s ease-in-out infinite;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.5rem 1rem;
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid #0F172A !important;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.08) !important;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
 }
 
-/* Float-in animation */
-.animate-float-in {
-  animation: float-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+.btn-cyan:hover,
+.btn-primary:hover {
+  background-color: #1E293B !important;
 }
 
-/* ── Custom Sleek Scrollbar ── */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.5rem 1rem;
+  background-color: #FFFFFF;
+  color: #334155;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+  transition: all 0.15s ease;
+  cursor: pointer;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.btn-secondary:hover {
+  background-color: #F8FAFC;
+  color: #0F172A;
+  border-color: #94A3B8;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.5);
-  border-radius: 9999px;
+/* ── Linear-Style Crisp Data Table ── */
+.table-dark {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 210, 255, 0.6);
+.table-dark thead tr {
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid #E2E8F0 !important;
 }
 
-/* ── Print Utilities for Receipts ── */
-@media print {
-  @page {
-    margin: 4mm;
-  }
+.table-dark th {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748B !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
+.table-dark tbody tr {
+  border-bottom: 1px solid #F1F5F9 !important;
+  transition: background-color 0.12s ease;
+}
 
-  .print\:hidden {
-    display: none !important;
-  }
+.table-dark tbody tr:hover {
+  background-color: rgba(248, 250, 252, 0.85) !important;
+}
 
-  .print\:block {
-    display: block !important;
-  }
+.table-dark td {
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
+  color: #1E293B !important;
+  vertical-align: middle;
+}
+
+/* ── Global Light-Mode Adaptation for Legacy Utility Classes inside Dashboard Shell ── */
+.linear-workspace .text-white,
+.linear-workspace .text-slate-100,
+.linear-workspace .text-slate-200 {
+  color: #0F172A !important;
+}
+
+.linear-workspace .text-slate-300,
+.linear-workspace .text-slate-400 {
+  color: #475569 !important;
+}
+
+.linear-workspace .text-\[\#00D2FF\],
+.linear-workspace .text-cyan-300,
+.linear-workspace .text-cyan-400 {
+  color: #0284C7 !important;
+}
+
+.linear-workspace .bg-\[\#0B0F19\],
+.linear-workspace .bg-\[\#0B0F19\]\/90,
+.linear-workspace .bg-\[\#0B0F19\]\/80,
+.linear-workspace .bg-\[\#0B0F19\]\/70,
+.linear-workspace .bg-\[\#0F172A\],
+.linear-workspace .bg-slate-900,
+.linear-workspace .bg-slate-900\/90,
+.linear-workspace .bg-slate-900\/80 {
+  background-color: #F8FAFC !important;
+}
+
+.linear-workspace .border-slate-800,
+.linear-workspace .border-slate-800\/80,
+.linear-workspace .border-slate-800\/90,
+.linear-workspace .border-slate-700,
+.linear-workspace .border-slate-700\/80 {
+  border-color: #E2E8F0 !important;
+}
+
+.linear-workspace .btn-cyan span,
+.linear-workspace .btn-cyan {
+  color: #FFFFFF !important;
 }

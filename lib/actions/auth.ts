@@ -1,9 +1,25 @@
 "use server";
 
 import { prisma } from "../prisma";
+import { db } from "../db";
 import { revalidatePath } from "next/cache";
 
 export type StaffRole = "ADMIN" | "CASHIER" | "MECHANIC";
+
+export async function getMechanicsAction() {
+  try {
+    const mechanics = await db.user.findMany("MECHANIC");
+    return mechanics.map((m) => ({
+      id: m.id,
+      name: m.name,
+      email: m.email,
+      role: m.role,
+    }));
+  } catch (err) {
+    console.error("getMechanicsAction error:", err);
+    return [];
+  }
+}
 
 export async function registerStaffAction(data: {
   name: string;

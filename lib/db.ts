@@ -9,6 +9,8 @@ import {
   ServiceStatus,
   PaymentMethod,
   PaymentStatus,
+  User,
+  UserRole,
 } from "./types/database";
 import { prisma } from "./prisma";
 
@@ -258,6 +260,37 @@ const memoryCustomers: Customer[] = [
         notes: "Mobil operasional usaha katering.",
       },
     ],
+  },
+];
+
+const memoryUsers: User[] = [
+  {
+    id: "usr-3",
+    name: "Budi Santoso",
+    email: "budi@pitcare.auto",
+    role: "MECHANIC",
+    createdAt: new Date(),
+  },
+  {
+    id: "usr-4",
+    name: "Agus Pratama",
+    email: "agus@pitcare.auto",
+    role: "MECHANIC",
+    createdAt: new Date(),
+  },
+  {
+    id: "usr-5",
+    name: "Rian Hidayat",
+    email: "rian@pitcare.auto",
+    role: "MECHANIC",
+    createdAt: new Date(),
+  },
+  {
+    id: "usr-1",
+    name: "Pak Joko",
+    email: "admin22@gmail.com",
+    role: "ADMIN",
+    createdAt: new Date(),
   },
 ];
 
@@ -1228,6 +1261,52 @@ export const db = {
       };
     },
 
+    async restock(id: string, additionalStock: number): Promise<PartsInventory | null> {
+      if (isRealDatabase) {
+        try {
+          let target = await prisma.partsInventory.findUnique({
+            where: { id },
+          });
+
+          if (!target) {
+            const mem = memoryParts.find((p) => p.id === id);
+            if (mem?.sku) {
+              target = await prisma.partsInventory.findUnique({
+                where: { sku: mem.sku },
+              });
+            }
+          }
+
+          if (target) {
+            const updated = await prisma.partsInventory.update({
+              where: { id: target.id },
+              data: { stock: target.stock + additionalStock },
+            });
+
+            const mapped = mapPrismaPart(updated);
+            const mem = memoryParts.find((p) => p.id === id || p.sku === mapped.sku);
+            if (mem) {
+              mem.stock = mapped.stock;
+              mem.isLowStock = mapped.isLowStock;
+            }
+
+            return mapped;
+          }
+        } catch (err) {
+          console.error("Error prisma.partsInventory.restock:", err);
+        }
+      }
+
+      const part = memoryParts.find((p) => p.id === id);
+      if (!part) return null;
+      part.stock += additionalStock;
+      part.isLowStock = part.stock <= part.minStock;
+      return {
+        ...part,
+        isLowStock: part.stock <= part.minStock,
+      };
+    },
+
     async delete(id: string): Promise<boolean> {
       if (isRealDatabase) {
         try {
@@ -2142,5 +2221,37 @@ export const db = {
       todayRevenue,
       topUsedParts,
     };
+  },
+
+  // === USERS & STAFF ===
+  user: {
+    async findMany(role?: UserRole): Promise<User[]> {
+      if (isRealDatabase) {
+        try {
+          const rows = await prisma.user.findMany({
+            where: role ? { role: role as any } : undefined,
+            orderBy: { name: "asc" },
+          });
+          if (rows.length > 0) {
+            return rows.map((u) => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              role: u.role as UserRole,
+              createdAt: u.createdAt,
+              updatedAt: u.updatedAt,
+            }));
+          }
+        } catch (err) {
+          console.error("Error prisma.user.findMany:", err);
+        }
+      }
+
+      let results = [...memoryUsers];
+      if (role) {
+        results = results.filter((u) => u.role === role);
+      }
+      return results;
+    },
   },
 };

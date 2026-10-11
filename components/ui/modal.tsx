@@ -33,7 +33,7 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -44,17 +44,16 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-[#131B2E] border border-slate-700/80 shadow-2xl shadow-black/80 text-slate-100 max-h-[90vh] flex flex-col"
+        className="relative z-10 w-full max-w-lg overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xl text-slate-900 max-h-[90vh] flex flex-col"
       >
         {/* Modal Header */}
-        <div className="flex items-start justify-between p-6 border-b border-slate-800">
+        <div className="flex items-start justify-between p-5 border-b border-slate-200">
           <div>
-            <h2 id="modal-title" className="text-base font-bold tracking-tight text-white flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#00D2FF]" />
-              <span>{title}</span>
+            <h2 id="modal-title" className="text-base font-semibold tracking-tight text-slate-900">
+              {title}
             </h2>
             {description && (
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed pl-3.5">
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                 {description}
               </p>
             )}
@@ -62,19 +61,17 @@ export function Modal({ isOpen, onClose, title, description, children }: ModalPr
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer ml-4 shrink-0"
-            aria-label="Tutup"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Tutup modal"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="overflow-y-auto p-6 flex-1">
-          {children}
-        </div>
+        {/* Modal Content */}
+        <div className="p-5 overflow-y-auto">{children}</div>
       </div>
     </div>
   );

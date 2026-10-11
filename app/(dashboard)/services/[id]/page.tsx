@@ -340,9 +340,21 @@ export default function ServiceOrderDetailPage({
               <span className="font-mono text-xs px-2.5 py-1 rounded bg-[#0B0F17] text-cyan-400 border border-cyan-500/30 font-black tracking-wider shadow-inner">
                 {order.vehicle?.plateNumber}
               </span>
-              <span className="text-xs text-slate-300 font-bold">
+              <span className="text-xs text-slate-500 font-medium">
                 ({order.vehicle?.brand} {order.vehicle?.model})
               </span>
+              {order.status === "MENUNGGU_PART" && (
+                <span className="badge-menunggu-part">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  Menunggu Part
+                </span>
+              )}
+              {order.status === "PENGERJAAN" && (
+                <span className="badge-pengerjaan">
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+                  Sedang Dikerjakan
+                </span>
+              )}
             </div>
             <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
               <span>Token: <span className="font-mono text-cyan-400 font-bold">{order.token}</span></span>
@@ -397,54 +409,109 @@ export default function ServiceOrderDetailPage({
         </div>
       )}
 
-      {/* Pipeline Stepper */}
-      <div className="card-pitstop p-6 sm:p-7">
+      {/* Stepper Card */}
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs">
+        {order.status === "MENUNGGU_PART" && (
+          <div className="mb-5 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="w-3 h-3 rounded-full bg-amber-500 animate-pulse shrink-0" />
+              <div>
+                <span className="font-bold text-sm text-amber-950">Status: Menunggu Sparepart (Tertunda)</span>
+                <p className="text-xs text-amber-800 mt-0.5">
+                  Proses servis dijeda sementara hingga suku cadang tersedia dari gudang atau distributor.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleStatusChange("PENGERJAAN")}
+              className="btn-primary flex items-center gap-2 px-4 py-2.5 text-xs font-semibold cursor-pointer shrink-0 shadow-xs"
+            >
+              ▶️ Lanjutkan Pengerjaan (Part Tersedia)
+            </button>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {steps.map((s, idx) => {
             const st = getStepStatus(s.key);
             return (
               <div
                 key={s.key}
-                className={`p-4 rounded-xl border transition-all duration-300 ${
+                className={`p-4 rounded-xl border transition-all ${
                   st === "current"
-                    ? "bg-gradient-to-b from-cyan-950/50 to-blue-950/40 border-cyan-500 shadow-md shadow-cyan-500/20"
+                    ? order.status === "MENUNGGU_PART"
+                      ? "bg-amber-50/80 border-amber-300 text-amber-950"
+                      : "bg-slate-900 text-white border-slate-900 shadow-xs"
                     : st === "completed"
-                      ? "bg-blue-950/30 text-slate-200 border-blue-600/50"
-                      : "bg-[#0B0F17]/50 border-slate-800 text-slate-500"
+                    ? "bg-slate-50 text-slate-800 border-slate-200"
+                    : "bg-white border-slate-200 text-slate-400"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
-                    st === "completed" ? "text-cyan-400" : st === "current" ? "text-cyan-300" : "text-slate-500"
-                  }`}>
+                  <span
+                    className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
+                      st === "completed"
+                        ? "text-emerald-600"
+                        : st === "current"
+                        ? order.status === "MENUNGGU_PART"
+                          ? "text-amber-700"
+                          : "text-slate-300"
+                        : "text-slate-400"
+                    }`}
+                  >
                     Tahap {idx + 1}
                   </span>
-                  {st === "completed" && <span className="text-xs font-bold text-cyan-400">✓</span>}
+                  {st === "completed" && <span className="text-xs font-bold text-emerald-600">✓</span>}
                   {st === "current" && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500 text-black">
-                      {order.status === "MENUNGGU_PART" ? "Tunda" : "Aktif"}
+                    <span
+                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                        order.status === "MENUNGGU_PART"
+                          ? "bg-amber-200 text-amber-900 border border-amber-300"
+                          : "bg-white text-slate-900"
+                      }`}
+                    >
+                      {order.status === "MENUNGGU_PART" ? "Menunggu Part" : "Aktif"}
                     </span>
                   )}
                 </div>
-                <p className={`text-xs font-bold ${
-                  st === "completed" ? "text-slate-200" : st === "current" ? "text-white" : "text-slate-400"
-                }`}>
+                <p
+                  className={`text-xs font-bold ${
+                    st === "current" && order.status !== "MENUNGGU_PART" ? "text-white" : "text-slate-900"
+                  }`}
+                >
                   {s.label}
                 </p>
-                <p className={`text-[11px] mt-0.5 leading-snug ${
-                  st === "completed" ? "text-slate-400" : st === "current" ? "text-slate-300" : "text-slate-600"
-                }`}>{s.desc}</p>
+                <p
+                  className={`text-[11px] mt-0.5 leading-snug ${
+                    st === "current" && order.status !== "MENUNGGU_PART" ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
+                  {s.desc}
+                </p>
               </div>
             );
           })}
         </div>
 
         {/* Status Controls */}
-        <div className="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <span>Status: <span className="font-bold text-slate-200">{order.status.replace("_", " ")}</span></span>
-            <span className="text-slate-700">•</span>
-            <span>Teknisi: <span className="font-bold text-slate-200">{order.mechanicName || "Teknisi PitCare Auto"}</span></span>
+        <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <span>
+              Status:{" "}
+              <span
+                className={`font-semibold ${
+                  order.status === "MENUNGGU_PART" ? "text-amber-700 font-bold" : "text-slate-900"
+                }`}
+              >
+                {order.status === "MENUNGGU_PART" ? "Menunggu Sparepart" : order.status.replace("_", " ")}
+              </span>
+            </span>
+            <span>•</span>
+            <span>
+              Teknisi: <span className="font-semibold text-slate-800">{order.mechanicName || "Teknisi PitCare Auto"}</span>
+            </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
@@ -453,7 +520,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="btn-cyan flex items-center gap-2 px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+                className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs font-semibold cursor-pointer"
               >
                 🚀 Mulai Pengerjaan Pit
               </button>
@@ -465,15 +532,15 @@ export default function ServiceOrderDetailPage({
                   type="button"
                   disabled={isPending}
                   onClick={() => handleStatusChange("MENUNGGU_PART")}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-purple-300 bg-purple-950/40 border border-purple-500/40 hover:bg-purple-900/40 transition-all cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-300 hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5"
                 >
-                  ⏸️ Tunda: Menunggu Part
+                  ⏸️ Tunda: Menunggu Sparepart
                 </button>
                 <button
                   type="button"
                   disabled={isPending}
                   onClick={() => setIsCompleteModalOpen(true)}
-                  className="btn-cyan flex items-center gap-2 px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+                  className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs font-semibold cursor-pointer"
                 >
                   ✅ Selesaikan Pengerjaan
                 </button>
@@ -485,9 +552,9 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="btn-cyan flex items-center gap-2 px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+                className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs font-semibold cursor-pointer shadow-xs"
               >
-                ▶️ Part Siap: Lanjutkan
+                ▶️ Lanjutkan Pengerjaan (Part Tersedia)
               </button>
             )}
 
@@ -496,7 +563,7 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 bg-[#0F172A] border border-slate-700 hover:border-slate-600 transition-all cursor-pointer"
+                className="btn-ghost px-3.5 py-2 text-xs font-semibold cursor-pointer"
               >
                 ↩️ Kembalikan ke Pit
               </button>
