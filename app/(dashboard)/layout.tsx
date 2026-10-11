@@ -1,14 +1,18 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { Sidebar } from "@/components/dashboard/sidebar";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex linear-workspace">
       {/* Linear-style slim pure white sidebar */}
-      <Sidebar />
+      <Sidebar user={session?.user as any} />
 
       {/* Main content workspace */}
       <div className="flex-1 flex flex-col min-w-0 lg:pl-64">

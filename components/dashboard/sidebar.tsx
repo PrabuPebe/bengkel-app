@@ -10,6 +10,8 @@ interface SidebarProps {
     name?: string | null;
     email?: string | null;
     role?: string | null;
+    workshopId?: string | null;
+    workshopName?: string | null;
   };
 }
 
@@ -109,6 +111,15 @@ export function Sidebar({ user }: SidebarProps) {
             </svg>
           ),
         },
+        {
+          name: "Kelola Staf Bengkel",
+          href: "/settings/staff",
+          icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          ),
+        },
       ],
     },
   ];
@@ -148,17 +159,17 @@ export function Sidebar({ user }: SidebarProps) {
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 px-5 flex items-center justify-between border-b border-slate-200/80">
-          <Link href="/dashboard" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-xs">
+        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200/80">
+          <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-xs shrink-0">
               PA
             </div>
-            <div>
-              <span className="text-sm font-semibold text-slate-900 tracking-tight block leading-none">
+            <div className="min-w-0">
+              <span className="text-sm font-semibold text-slate-900 tracking-tight block leading-none truncate">
                 PitCare Auto
               </span>
-              <span className="text-[11px] text-slate-500 font-medium block mt-0.5">
-                Sistem Servis Bengkel
+              <span className="text-[11px] text-blue-600 font-semibold block mt-0.5 truncate">
+                {user?.workshopName || "Bengkel Mitra"}
               </span>
             </div>
           </Link>
@@ -215,9 +226,14 @@ export function Sidebar({ user }: SidebarProps) {
 
           <div className="flex items-center justify-between px-2 py-1.5">
             <div className="min-w-0">
-              <p className="text-xs font-semibold text-slate-900 truncate">
-                {user?.name || "Admin Bengkel"}
-              </p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-xs font-semibold text-slate-900 truncate">
+                  {user?.name || "Admin Bengkel"}
+                </p>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-200 text-slate-700 uppercase shrink-0">
+                  {user?.role || "STAFF"}
+                </span>
+              </div>
               <p className="text-[11px] text-slate-500 truncate">
                 {user?.email || "Staff Operasional"}
               </p>
