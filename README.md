@@ -2,7 +2,7 @@
 
 **PitCare Auto** adalah Sistem Informasi Manajemen Operasional Servis Bengkel & Portal Pelanggan Terintegrasi berbasis **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, **Prisma ORM**, dan **PostgreSQL Supabase**.
 
-🌐 **Live Production URL:** [https://pitcareauto-prabupmb1212-sketch.vercel.app](https://pitcareauto-prabupmb1212-sketch.vercel.app)
+🌐 **Live Production URL:** [https://bengkelkuapp.vercel.app](https://bengkelkuapp.vercel.app)
 
 ---
 
