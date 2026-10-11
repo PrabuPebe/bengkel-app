@@ -574,6 +574,20 @@ function LoginFormContent() {
           )}
         </div>
 
+        <div className="mt-4 p-3.5 bg-indigo-50/80 border border-indigo-100 rounded-xl text-center">
+          <p className="text-xs text-indigo-950 font-medium">Pasang Aplikasi di HP Android Anda / Mahasiswa & Dosen</p>
+          <a
+            href="/PitCare-Auto.apk"
+            download="PitCare-Auto.apk"
+            className="mt-2 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-all cursor-pointer"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>Unduh Aplikasi Android (PitCare-Auto.apk)</span>
+          </a>
+        </div>
+
         <p className="text-center text-xs text-slate-400 mt-5">
           © {new Date().getFullYear()} PitCare Auto — Sistem Manajemen Bengkel Modern
         </p>
