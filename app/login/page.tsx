@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { registerStaffAction, StaffRole } from "@/lib/actions/auth";
 import {
   loginCustomerPortalAction,
   registerCustomerPortalAction,
 } from "@/lib/actions/customer-portal";
 
-export default function LoginPage() {
+function LoginFormContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Active Tab: "staff" | "customer"
   const [activeTab, setActiveTab] = useState<"staff" | "customer">("staff");
@@ -38,6 +40,17 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
+  useEffect(() => {
+    const registered = searchParams.get("registered");
+    const emailParam = searchParams.get("email");
+    if (registered === "1") {
+      setSuccessMsg("Pendaftaran bengkel berhasil! Silakan masuk dengan email dan password Owner Anda.");
+      if (emailParam) {
+        setStaffEmail(emailParam);
+      }
+    }
+  }, [searchParams]);
+
   async function handleStaffLogin(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -54,7 +67,7 @@ export default function LoginPage() {
       router.push("/dashboard");
       router.refresh();
     } else {
-      setError("Email atau password staf salah. Periksa kembali kredensial Anda.");
+      setError("Email atau password tidak cocok dengan akun database. Periksa kembali kredensial Anda.");
       setIsLoading(false);
     }
   }
@@ -108,7 +121,7 @@ export default function LoginPage() {
       router.push("/portal");
       router.refresh();
     } else {
-      setError(res.error || "Data kendaraan tidak ditemukan.");
+      setError(res.error || "Data kendaraan tidak ditemukan dalam database.");
       setIsLoading(false);
     }
   }
@@ -137,26 +150,8 @@ export default function LoginPage() {
     }
   }
 
-  function fillStaffAdmin() {
-    setStaffEmail("admin22@gmail.com");
-    setStaffPassword("mamang22");
-    setError("");
-  }
-
-  function fillStaffMechanic() {
-    setStaffEmail("mekanik@pitcare.auto");
-    setStaffPassword("pitcare123");
-    setError("");
-  }
-
-  function fillCustomerDemo() {
-    setCustomerPhone("081234567890");
-    setCustomerPlate("B 1234 ABC");
-    setError("");
-  }
-
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 text-slate-900">
+    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 text-slate-900 py-10">
       <div className="w-full max-w-md">
         {/* Brand Header */}
         <div className="text-center mb-6">
@@ -171,12 +166,12 @@ export default function LoginPage() {
           </div>
           <h1 className="text-xl font-semibold tracking-tight text-slate-900">PitCare Auto</h1>
           <p className="text-xs text-slate-500 mt-1">
-            Sistem Manajemen Servis & Riwayat Perawatan Motor
+            Platform SaaS Multi-Bengkel & Portal Riwayat Servis Pelanggan
           </p>
         </div>
 
         {/* Linear Pure White Card */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-xs p-6">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-xs p-6 md:p-7">
           {/* Dual Portal Tabs */}
           <div className="grid grid-cols-2 gap-1.5 p-1 rounded-lg bg-slate-100 border border-slate-200 mb-6">
             <button
@@ -192,7 +187,7 @@ export default function LoginPage() {
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <span>Masuk Staff Bengkel</span>
+              <span>Login Staf Bengkel</span>
             </button>
 
             <button
@@ -208,7 +203,7 @@ export default function LoginPage() {
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <span>Cek Motor Saya</span>
+              <span>Portal Pelanggan</span>
             </button>
           </div>
 
@@ -231,23 +226,23 @@ export default function LoginPage() {
               {staffMode === "login" ? (
                 <div>
                   <div className="mb-4">
-                    <h2 className="text-sm font-semibold text-slate-900">Masuk Staf & Mekanik</h2>
+                    <h2 className="text-sm font-semibold text-slate-900">Masuk ke Bengkel</h2>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Kelola antrean servis, rekomendasi suku cadang, dan kasir
+                      Masuk sebagai Pemilik (Owner), Admin, Kasir, atau Mekanik
                     </p>
                   </div>
 
                   <form onSubmit={handleStaffLogin} className="space-y-3.5">
                     <div>
                       <label className="block text-xs font-medium text-slate-700 mb-1">
-                        Email Staf
+                        Email Akun
                       </label>
                       <input
                         type="email"
                         value={staffEmail}
                         onChange={(e) => setStaffEmail(e.target.value)}
                         required
-                        placeholder="Contoh: mekanik@pitcare.auto"
+                        placeholder="nama@bengkel.com"
                         className="input-dark w-full text-sm"
                       />
                     </div>
@@ -271,61 +266,54 @@ export default function LoginPage() {
                       disabled={isLoading}
                       className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-1"
                     >
-                      {isLoading ? "Memverifikasi..." : "Masuk ke Dashboard Bengkel →"}
+                      {isLoading ? "Memverifikasi Kredensial..." : "Masuk ke Dashboard Bengkel →"}
                     </button>
                   </form>
 
-                  <div className="mt-3.5 text-center">
+                  {/* Multi-Bengkel SaaS CTA - Clean & Real */}
+                  <div className="mt-6 pt-5 border-t border-slate-100">
+                    <div className="rounded-lg bg-slate-50 border border-slate-200/80 p-3.5 text-center space-y-2">
+                      <p className="text-xs font-semibold text-slate-900">
+                        Ingin mengelola bengkel Anda sendiri di PitCare Auto?
+                      </p>
+                      <p className="text-[11px] text-slate-500">
+                        Daftarkan bengkel Anda secara mandiri dengan starter pack suku cadang & layanan otomatis.
+                      </p>
+                      <Link
+                        href="/register/workshop"
+                        className="inline-flex items-center justify-center w-full py-2 px-3 rounded-md bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer"
+                      >
+                        + Daftarkan Bengkel Baru Sekarang
+                      </Link>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 text-center">
                     <button
                       type="button"
                       onClick={() => {
                         setStaffMode("register");
                         setError("");
                       }}
-                      className="text-xs text-blue-600 hover:underline font-medium cursor-pointer"
+                      className="text-xs text-slate-500 hover:text-slate-800 underline font-medium cursor-pointer"
                     >
-                      Belum punya akun staf? Daftar Staf Baru
+                      Staf mekanik/kasir baru? Daftar akun staf
                     </button>
-                  </div>
-
-                  {/* Quick Fill Demo Staf */}
-                  <div className="mt-5 pt-4 border-t border-slate-100">
-                    <p className="text-[11px] font-medium text-slate-400 text-center mb-2">
-                      Akun Demo Cepat (Klik untuk Isi Otomatis)
-                    </p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={fillStaffAdmin}
-                        className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-left transition-colors cursor-pointer"
-                      >
-                        <p className="text-xs font-semibold text-slate-900">Pak Joko</p>
-                        <p className="text-[11px] text-slate-500">Pemilik / Admin</p>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={fillStaffMechanic}
-                        className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-left transition-colors cursor-pointer"
-                      >
-                        <p className="text-xs font-semibold text-slate-900">Budi Santoso</p>
-                        <p className="text-[11px] text-slate-500">Mekanik Kepala</p>
-                      </button>
-                    </div>
                   </div>
                 </div>
               ) : (
                 <div>
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                      <h2 className="text-sm font-semibold text-slate-900">Daftar Staf Baru</h2>
-                      <p className="text-xs text-slate-500 mt-0.5">Buat akun mekanik atau kasir baru</p>
+                      <h2 className="text-sm font-semibold text-slate-900">Daftar Akun Staf</h2>
+                      <p className="text-xs text-slate-500 mt-0.5">Buat akun untuk mekanik atau kasir</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setStaffMode("login")}
                       className="text-xs text-slate-500 hover:text-slate-900 underline cursor-pointer"
                     >
-                      Kembali
+                      Kembali ke Login
                     </button>
                   </div>
 
@@ -353,7 +341,7 @@ export default function LoginPage() {
                         value={staffEmail}
                         onChange={(e) => setStaffEmail(e.target.value)}
                         required
-                        placeholder="rian@pitcare.auto"
+                        placeholder="rian@bengkel.com"
                         className="input-dark w-full text-sm"
                       />
                     </div>
@@ -383,7 +371,7 @@ export default function LoginPage() {
                       >
                         <option value="MECHANIC">Mekanik / Teknisi</option>
                         <option value="CASHIER">Kasir</option>
-                        <option value="ADMIN">Pemilik / Admin</option>
+                        <option value="ADMIN">Administrator</option>
                       </select>
                     </div>
 
@@ -392,7 +380,7 @@ export default function LoginPage() {
                       disabled={isLoading}
                       className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-2"
                     >
-                      {isLoading ? "Menyimpan..." : "Simpan & Daftarkan Staf"}
+                      {isLoading ? "Menyimpan Data..." : "Simpan & Daftarkan Staf"}
                     </button>
                   </form>
                 </div>
@@ -400,7 +388,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* TAB 2: CEK MOTOR SAYA (PORTAL PELANGGAN) */}
+          {/* TAB 2: PORTAL PELANGGAN */}
           {activeTab === "customer" && (
             <div>
               {customerMode === "login" ? (
@@ -408,14 +396,14 @@ export default function LoginPage() {
                   <div className="mb-4">
                     <h2 className="text-sm font-semibold text-slate-900">Cek Kondisi & Riwayat Motor</h2>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Masukkan nomor WhatsApp & plat nomor untuk melihat status servis dan kesehatan oli
+                      Masukkan nomor WhatsApp & plat nomor motor untuk melihat riwayat servis di semua bengkel rekanan PitCare
                     </p>
                   </div>
 
                   <form onSubmit={handleCustomerLogin} className="space-y-3.5">
                     <div>
                       <label className="block text-xs font-medium text-slate-700 mb-1">
-                        Nomor WhatsApp / HP
+                        Nomor WhatsApp / HP Pelanggan
                       </label>
                       <input
                         type="tel"
@@ -436,7 +424,7 @@ export default function LoginPage() {
                         value={customerPlate}
                         onChange={(e) => setCustomerPlate(e.target.value.toUpperCase())}
                         required
-                        placeholder="Contoh: AB 1234 XY"
+                        placeholder="Contoh: B 1234 XYZ"
                         className="input-dark w-full text-sm font-mono uppercase font-semibold"
                       />
                     </div>
@@ -446,11 +434,11 @@ export default function LoginPage() {
                       disabled={isLoading}
                       className="btn-primary w-full h-11 text-xs font-semibold cursor-pointer disabled:opacity-60 mt-1"
                     >
-                      {isLoading ? "Mencari Data Motor..." : "Lihat Riwayat Motor Saya →"}
+                      {isLoading ? "Mencari Data Kendaraan..." : "Buka Portal Motor Saya →"}
                     </button>
                   </form>
 
-                  <div className="mt-3.5 text-center">
+                  <div className="mt-4 text-center">
                     <button
                       type="button"
                       onClick={() => {
@@ -459,27 +447,15 @@ export default function LoginPage() {
                       }}
                       className="text-xs text-blue-600 hover:underline font-medium cursor-pointer"
                     >
-                      Belum terdaftar? Daftarkan Motor Baru
+                      Motor baru pertama kali servis? Daftarkan Kendaraan
                     </button>
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-slate-100">
-                    <p className="text-[11px] font-medium text-slate-400 text-center mb-2">
-                      Contoh Data Pelanggan (Klik untuk Coba)
+                  <div className="mt-6 p-3 bg-slate-50 border border-slate-200/80 rounded-lg text-[11px] text-slate-500">
+                    <p className="font-medium text-slate-700 mb-0.5">💡 Informasi Portal Pelanggan:</p>
+                    <p>
+                      Pelanggan dapat memantau estimasi odometer oli berikutnya, rekomendasi suku cadang, dan riwayat pengerjaan dari seluruh bengkel rekanan PitCare Auto.
                     </p>
-                    <button
-                      type="button"
-                      onClick={fillCustomerDemo}
-                      className="w-full p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 text-left transition-colors cursor-pointer flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="text-xs font-semibold text-slate-900">Pak Bambang Santoso</p>
-                        <p className="text-[11px] text-slate-500 font-mono">
-                          WA: 081234567890 • Plat: B 1234 ABC
-                        </p>
-                      </div>
-                      <span className="text-[11px] font-semibold text-blue-600">Isi Otomatis</span>
-                    </button>
                   </div>
                 </div>
               ) : (
@@ -487,14 +463,14 @@ export default function LoginPage() {
                   <div className="mb-4 flex items-center justify-between">
                     <div>
                       <h2 className="text-sm font-semibold text-slate-900">Daftarkan Motor Baru</h2>
-                      <p className="text-xs text-slate-500 mt-0.5">Simpan data motor Anda di PitCare Auto</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Simpan profil motor Anda di PitCare Auto</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setCustomerMode("login")}
                       className="text-xs text-slate-500 hover:text-slate-900 underline cursor-pointer"
                     >
-                      Kembali
+                      Kembali ke Login
                     </button>
                   </div>
 
@@ -537,7 +513,7 @@ export default function LoginPage() {
                           value={regPlateNumber}
                           onChange={(e) => setRegPlateNumber(e.target.value.toUpperCase())}
                           required
-                          placeholder="AB 1234 XY"
+                          placeholder="B 1234 XYZ"
                           className="input-dark w-full text-sm font-mono uppercase font-semibold"
                         />
                       </div>
@@ -603,5 +579,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center text-xs text-slate-400">Memuat halaman masuk...</div>}>
+      <LoginFormContent />
+    </Suspense>
   );
 }

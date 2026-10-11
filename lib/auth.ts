@@ -2,6 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "./prisma";
+import { db } from "./db";
 
 const hasGoogleCredentials =
   Boolean(process.env.GOOGLE_CLIENT_ID) &&
@@ -21,27 +22,13 @@ export const authOptions: NextAuthOptions = {
         const inputUser = (credentials?.email || "").trim().toLowerCase();
         const inputPass = (credentials?.password || "").trim();
 
-        // 1. Root admin fallback (demo / offline resilient)
-        const validEmail = (process.env.LOGIN_EMAIL || "admin22@gmail.com").trim().toLowerCase();
-        const validPass = (process.env.LOGIN_PASSWORD || "mamang22").trim();
-        const validUsername = validEmail.split("@")[0]; // "admin22"
+        if (!inputUser || !inputPass) return null;
 
-        if (
-          (inputUser === validEmail || inputUser === validUsername || inputUser === "admin") &&
-          inputPass === validPass
-        ) {
-          return {
-            id: "usr-root-admin",
-            name: "Pak Joko (Admin)",
-            email: validEmail,
-            role: "ADMIN",
-          };
-        }
-
-        // 2. Query Supabase users table via Prisma
+        // 1. Query Supabase users table via Prisma
         try {
           const user = await prisma.user.findUnique({
             where: { email: inputUser },
+            include: { workshop: true },
           });
 
           if (user && user.password && user.password === inputPass) {
@@ -50,46 +37,40 @@ export const authOptions: NextAuthOptions = {
               name: user.name,
               email: user.email,
               role: user.role,
+              workshopId: user.workshopId || null,
+              workshopName: user.workshop?.name || "PitCare Auto",
             };
           }
         } catch (err) {
           console.error("NextAuth authorize Supabase error:", err);
         }
 
-        // 3. Fallback: Staff Mekanik & Demo (Budi Santoso) / In-Memory Resilient
-        if (
-          (inputUser === "mekanik@pitcare.auto" || inputUser === "budi@pitcare.auto" || inputUser === "mekanik") &&
-          (inputPass === "pitcare123" || inputPass === "mamang22" || inputPass === "password")
-        ) {
+        // 2. In-Memory Resilient Store (Akun baru terdaftar saat offline / database paus)
+        const memoryUsers = await db.user.findMany();
+        const matched = memoryUsers.find((u) => u.email.toLowerCase() === inputUser);
+        if (matched) {
+          const workshop = matched.workshopId ? await db.workshop.findById(matched.workshopId) : null;
           return {
-            id: "usr-3",
-            name: "Budi Santoso",
-            email: "mekanik@pitcare.auto",
-            role: "MECHANIC",
+            id: matched.id,
+            name: matched.name,
+            email: matched.email,
+            role: matched.role,
+            workshopId: matched.workshopId || null,
+            workshopName: workshop?.name || "PitCare Auto Pusat",
           };
         }
 
-        if (
-          (inputUser === "agus@pitcare.auto" || inputUser === "agus") &&
-          (inputPass === "pitcare123" || inputPass === "mamang22" || inputPass === "password")
-        ) {
+        // 3. Root Owner fallback (jika disetel lewat environment variable)
+        const validEmail = (process.env.LOGIN_EMAIL || "admin22@gmail.com").trim().toLowerCase();
+        const validPass = (process.env.LOGIN_PASSWORD || "mamang22").trim();
+        if (inputUser === validEmail && inputPass === validPass) {
           return {
-            id: "usr-4",
-            name: "Agus Pratama",
-            email: "agus@pitcare.auto",
-            role: "MECHANIC",
-          };
-        }
-
-        if (
-          (inputUser === "kasir@pitcare.auto" || inputUser === "kasir") &&
-          (inputPass === "pitcare123" || inputPass === "mamang22" || inputPass === "password")
-        ) {
-          return {
-            id: "usr-2",
-            name: "Siti Rahma",
-            email: "kasir@pitcare.auto",
-            role: "CASHIER",
+            id: "usr-root-admin",
+            name: "Admin Pusat",
+            email: validEmail,
+            role: "OWNER",
+            workshopId: "ws-default",
+            workshopName: "PitCare Auto Pusat",
           };
         }
 
@@ -110,6 +91,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = (user as any).role || "ADMIN";
+        token.workshopId = (user as any).workshopId || null;
+        token.workshopName = (user as any).workshopName || null;
       }
       return token;
     },
@@ -117,6 +100,8 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         (session.user as any).id = token.id || token.sub;
         (session.user as any).role = token.role || "ADMIN";
+        (session.user as any).workshopId = token.workshopId || null;
+        (session.user as any).workshopName = token.workshopName || null;
       }
       return session;
     },
