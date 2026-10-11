@@ -165,6 +165,15 @@ const memoryCustomers: Customer[] = [
         year: 2022,
         notes: "Ganti oli rutin tiap 2.000 KM.",
       },
+      {
+        id: "veh-demo-1",
+        customerId: "cust-1",
+        plateNumber: "B 1234 ABC",
+        brand: "Honda",
+        model: "Beat ESP 110",
+        year: 2023,
+        notes: "Kendaraan demo pengujian portal pelanggan.",
+      },
     ],
   },
   {
@@ -267,6 +276,13 @@ const memoryUsers: User[] = [
   {
     id: "usr-3",
     name: "Budi Santoso",
+    email: "mekanik@pitcare.auto",
+    role: "MECHANIC",
+    createdAt: new Date(),
+  },
+  {
+    id: "usr-3b",
+    name: "Budi Santoso",
     email: "budi@pitcare.auto",
     role: "MECHANIC",
     createdAt: new Date(),
@@ -279,10 +295,10 @@ const memoryUsers: User[] = [
     createdAt: new Date(),
   },
   {
-    id: "usr-5",
-    name: "Rian Hidayat",
-    email: "rian@pitcare.auto",
-    role: "MECHANIC",
+    id: "usr-2",
+    name: "Siti Rahma",
+    email: "kasir@pitcare.auto",
+    role: "CASHIER",
     createdAt: new Date(),
   },
   {
@@ -803,6 +819,25 @@ export const db = {
         );
       }
       return results;
+    },
+
+    async findById(id: string): Promise<Customer | null> {
+      if (isRealDatabase) {
+        try {
+          const row = await prisma.customer.findUnique({
+            where: { id },
+            include: {
+              vehicles: true,
+            },
+          });
+          if (row) {
+            return mapPrismaCustomer(row);
+          }
+        } catch (err) {
+          console.error("Error prisma.customer.findById:", err);
+        }
+      }
+      return memoryCustomers.find((c) => c.id === id) || null;
     },
 
     async create(data: {
@@ -2252,6 +2287,10 @@ export const db = {
         results = results.filter((u) => u.role === role);
       }
       return results;
+    },
+
+    addMemoryUser(user: User) {
+      memoryUsers.unshift(user);
     },
   },
 };

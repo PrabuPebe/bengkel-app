@@ -56,6 +56,43 @@ export const authOptions: NextAuthOptions = {
           console.error("NextAuth authorize Supabase error:", err);
         }
 
+        // 3. Fallback: Staff Mekanik & Demo (Budi Santoso) / In-Memory Resilient
+        if (
+          (inputUser === "mekanik@pitcare.auto" || inputUser === "budi@pitcare.auto" || inputUser === "mekanik") &&
+          (inputPass === "pitcare123" || inputPass === "mamang22" || inputPass === "password")
+        ) {
+          return {
+            id: "usr-3",
+            name: "Budi Santoso",
+            email: "mekanik@pitcare.auto",
+            role: "MECHANIC",
+          };
+        }
+
+        if (
+          (inputUser === "agus@pitcare.auto" || inputUser === "agus") &&
+          (inputPass === "pitcare123" || inputPass === "mamang22" || inputPass === "password")
+        ) {
+          return {
+            id: "usr-4",
+            name: "Agus Pratama",
+            email: "agus@pitcare.auto",
+            role: "MECHANIC",
+          };
+        }
+
+        if (
+          (inputUser === "kasir@pitcare.auto" || inputUser === "kasir") &&
+          (inputPass === "pitcare123" || inputPass === "mamang22" || inputPass === "password")
+        ) {
+          return {
+            id: "usr-2",
+            name: "Siti Rahma",
+            email: "kasir@pitcare.auto",
+            role: "CASHIER",
+          };
+        }
+
         return null;
       },
     }),

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/db";
 import { getCustomerPortalSession, logoutCustomerPortalAction } from "@/lib/actions/customer-portal";
 
 function formatRupiah(amount: number): string {
@@ -21,6 +22,58 @@ function formatDate(date: Date | string | null | undefined): string {
   });
 }
 
+interface PortalPartItem {
+  id: string;
+  partName: string;
+  qty: number;
+  sellPrice: number;
+  subtotal: number;
+}
+
+interface PortalOrderItem {
+  id: string;
+  serviceName: string;
+  qty: number;
+  price: number;
+  subtotal: number;
+}
+
+interface PortalOrder {
+  id: string;
+  orderNumber: string;
+  token?: string;
+  currentKm?: number | null;
+  status: string;
+  entryDate: Date | string;
+  completedDate?: Date | string | null;
+  grandTotal: number;
+  totalServices: number;
+  totalParts: number;
+  items: PortalOrderItem[];
+  parts: PortalPartItem[];
+  mechanic?: { name: string } | null;
+  complaints?: string | null;
+  diagnosis?: string | null;
+}
+
+interface PortalVehicle {
+  id: string;
+  customerId: string;
+  plateNumber: string;
+  brand: string;
+  model: string;
+  year?: number | null;
+  serviceOrders: PortalOrder[];
+}
+
+interface PortalCustomer {
+  id: string;
+  name: string;
+  phone: string;
+  vehicles: PortalVehicle[];
+  serviceOrders: PortalOrder[];
+}
+
 export default async function CustomerPortalPage() {
   const session = await getCustomerPortalSession();
 
@@ -28,36 +81,198 @@ export default async function CustomerPortalPage() {
     redirect("/login");
   }
 
-  // Ambil data pelanggan lengkap dari Supabase
-  const customer = await prisma.customer.findUnique({
-    where: { id: session.customerId },
-    include: {
-      vehicles: {
-        include: {
-          serviceOrders: {
-            include: {
-              items: true,
-              parts: true,
-              mechanic: true,
+  // 1. Coba ambil data pelanggan lengkap dari Supabase
+  let rawCustomer: any = null;
+  try {
+    rawCustomer = await prisma.customer.findUnique({
+      where: { id: session.customerId },
+      include: {
+        vehicles: {
+          include: {
+            serviceOrders: {
+              include: {
+                items: true,
+                parts: true,
+                mechanic: true,
+              },
+              orderBy: { entryDate: "desc" },
             },
-            orderBy: { entryDate: "desc" },
           },
         },
-      },
-      serviceOrders: {
-        include: {
-          vehicle: true,
-          items: true,
-          parts: true,
-          mechanic: true,
+        serviceOrders: {
+          include: {
+            vehicle: true,
+            items: true,
+            parts: true,
+            mechanic: true,
+          },
+          orderBy: { entryDate: "desc" },
         },
-        orderBy: { entryDate: "desc" },
       },
-    },
-  });
+    });
+  } catch (err) {
+    console.warn("Prisma error in portal, falling back to memory database:", err);
+  }
 
-  if (!customer) {
-    redirect("/login");
+  // 2. Fallback ke database in-memory jika Prisma offline/unreachable
+  if (!rawCustomer) {
+    rawCustomer = await db.customer.findById(session.customerId);
+  }
+
+  let customer: PortalCustomer;
+
+  if (rawCustomer) {
+    customer = {
+      id: rawCustomer.id,
+      name: rawCustomer.name,
+      phone: rawCustomer.phone,
+      vehicles: (rawCustomer.vehicles || []).map((v: any) => ({
+        id: v.id,
+        customerId: v.customerId,
+        plateNumber: v.plateNumber,
+        brand: v.brand,
+        model: v.model,
+        year: v.year,
+        serviceOrders: (v.serviceOrders || []).map((o: any) => ({
+          id: o.id,
+          orderNumber: o.orderNumber,
+          token: o.token,
+          currentKm: o.currentKm,
+          status: o.status,
+          entryDate: o.entryDate,
+          completedDate: o.completedDate,
+          grandTotal: Number(o.grandTotal || 0),
+          totalServices: Number(o.totalServices || 0),
+          totalParts: Number(o.totalParts || 0),
+          items: (o.items || []).map((i: any) => ({
+            id: i.id,
+            serviceName: i.serviceName,
+            qty: i.qty,
+            price: Number(i.price || 0),
+            subtotal: Number(i.subtotal || 0),
+          })),
+          parts: (o.parts || []).map((p: any) => ({
+            id: p.id,
+            partName: p.partName,
+            qty: p.qty,
+            sellPrice: Number(p.sellPrice || 0),
+            subtotal: Number(p.subtotal || 0),
+          })),
+          mechanic: o.mechanic ? { name: o.mechanic.name } : null,
+          complaints: o.complaints || o.notes,
+          diagnosis: o.diagnosis,
+        })),
+      })),
+      serviceOrders: (rawCustomer.serviceOrders || []).map((o: any) => ({
+        id: o.id,
+        orderNumber: o.orderNumber,
+        token: o.token,
+        currentKm: o.currentKm,
+        status: o.status,
+        entryDate: o.entryDate,
+        completedDate: o.completedDate,
+        grandTotal: Number(o.grandTotal || 0),
+        totalServices: Number(o.totalServices || 0),
+        totalParts: Number(o.totalParts || 0),
+        items: (o.items || []).map((i: any) => ({
+          id: i.id,
+          serviceName: i.serviceName,
+          qty: i.qty,
+          price: Number(i.price || 0),
+          subtotal: Number(i.subtotal || 0),
+        })),
+        parts: (o.parts || []).map((p: any) => ({
+          id: p.id,
+          partName: p.partName,
+          qty: p.qty,
+          sellPrice: Number(p.sellPrice || 0),
+          subtotal: Number(p.subtotal || 0),
+        })),
+        mechanic: o.mechanic ? { name: o.mechanic.name } : null,
+        complaints: o.complaints || o.notes,
+        diagnosis: o.diagnosis,
+      })),
+    };
+  } else {
+    customer = {
+      id: session.customerId,
+      name: session.customerName,
+      phone: session.phone,
+      vehicles: [
+        {
+          id: session.vehicleId,
+          customerId: session.customerId,
+          plateNumber: session.plateNumber,
+          brand: session.brand,
+          model: session.model,
+          year: session.year ?? 2023,
+          serviceOrders: [],
+        },
+      ],
+      serviceOrders: [],
+    };
+  }
+
+  // Pastikan array vehicles terisi
+  if (!customer.vehicles || customer.vehicles.length === 0) {
+    customer.vehicles = [
+      {
+        id: session.vehicleId,
+        customerId: session.customerId,
+        plateNumber: session.plateNumber,
+        brand: session.brand,
+        model: session.model,
+        year: session.year ?? 2023,
+        serviceOrders: [],
+      },
+    ];
+  }
+
+  // Lengkapi riwayat servis jika belum termuat
+  if (!customer.serviceOrders || customer.serviceOrders.length === 0) {
+    try {
+      const orders = await db.serviceOrder.findMany();
+      const customerOrders: PortalOrder[] = orders
+        .filter(
+          (o) => o.customerId === session.customerId || o.vehicle?.plateNumber === session.plateNumber
+        )
+        .map((o) => ({
+          id: o.id,
+          orderNumber: o.orderNumber,
+          token: o.token,
+          currentKm: o.currentKm,
+          status: o.status,
+          entryDate: o.entryDate,
+          completedDate: o.completedDate,
+          grandTotal: o.grandTotal,
+          totalServices: o.totalServices,
+          totalParts: o.totalParts,
+          items: o.items.map((i) => ({
+            id: i.id,
+            serviceName: i.serviceName,
+            qty: i.qty,
+            price: i.price,
+            subtotal: i.subtotal,
+          })),
+          parts: o.parts.map((p) => ({
+            id: p.id,
+            partName: p.partName,
+            qty: p.qty,
+            sellPrice: p.sellPrice,
+            subtotal: p.subtotal,
+          })),
+          mechanic: o.mechanicId ? { name: "Mekanik Pitstop" } : null,
+          complaints: o.notes || "Servis berkala",
+          diagnosis: null,
+        }));
+
+      customer.serviceOrders = customerOrders;
+      for (const v of customer.vehicles) {
+        v.serviceOrders = customerOrders;
+      }
+    } catch (e) {
+      console.warn("Error fetching orders for portal:", e);
+    }
   }
 
   // Pilih kendaraan yang sedang aktif (default yang ada di sesi)
