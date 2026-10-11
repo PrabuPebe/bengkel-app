@@ -1,18 +1,25 @@
-export type UserRole = "ADMIN" | "CASHIER" | "MECHANIC";
+export type UserRole = "OWNER" | "ADMIN" | "CASHIER" | "MECHANIC";
 
-export type ServiceStatus =
-  | "ANTRIAN"
-  | "PENGERJAAN"
-  | "MENUNGGU_PART"
-  | "SELESAI_PENGERJAAN"
-  | "SELESAI_PEMBAYARAN"
-  | "DIBATALKAN";
+export interface Workshop {
+  id: string;
+  name: string;
+  slug: string;
+  address?: string | null;
+  city?: string | null;
+  phone?: string | null;
+  logoUrl?: string | null;
+  isActive: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
+  workshopId?: string | null;
+  workshop?: Workshop | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -42,8 +49,17 @@ export interface Customer {
   vehicles: Vehicle[];
 }
 
+export type ServiceStatus =
+  | "ANTRIAN"
+  | "PENGERJAAN"
+  | "MENUNGGU_PART"
+  | "SELESAI_PENGERJAAN"
+  | "SELESAI_PEMBAYARAN"
+  | "DIBATALKAN";
+
 export interface ServicesCatalog {
   id: string;
+  workshopId?: string | null;
   code: string;
   name: string;
   description?: string | null;
@@ -56,6 +72,7 @@ export interface ServicesCatalog {
 
 export interface PartsInventory {
   id: string;
+  workshopId?: string | null;
   sku: string;
   name: string;
   category?: string | null;
@@ -96,6 +113,8 @@ export interface ServiceOrderPart {
 
 export interface ServiceOrder {
   id: string;
+  workshopId?: string | null;
+  workshop?: Workshop | null;
   orderNumber: string;
   token: string;
   customerId: string;

@@ -11,6 +11,7 @@ import {
   PaymentStatus,
   User,
   UserRole,
+  Workshop,
 } from "./types/database";
 import { prisma } from "./prisma";
 
@@ -22,6 +23,21 @@ const isRealDatabase = Boolean(
 );
 
 // Mappers Prisma Decimal -> Number & Safe Interface Types
+function mapPrismaWorkshop(w: any): Workshop {
+  return {
+    id: w.id,
+    name: w.name,
+    slug: w.slug,
+    address: w.address ?? null,
+    city: w.city ?? "Jakarta",
+    phone: w.phone ?? null,
+    logoUrl: w.logoUrl ?? null,
+    isActive: w.isActive ?? true,
+    createdAt: w.createdAt,
+    updatedAt: w.updatedAt,
+  };
+}
+
 function mapPrismaCustomer(c: any): Customer {
   return {
     id: c.id,
@@ -50,6 +66,7 @@ function mapPrismaCustomer(c: any): Customer {
 function mapPrismaService(s: any): ServicesCatalog {
   return {
     id: s.id,
+    workshopId: s.workshopId ?? null,
     code: s.code,
     name: s.name,
     description: s.description ?? null,
@@ -66,6 +83,7 @@ function mapPrismaPart(p: any): PartsInventory {
   const minStock = p.minStock ?? 5;
   return {
     id: p.id,
+    workshopId: p.workshopId ?? null,
     sku: p.sku,
     name: p.name,
     category: p.category ?? "Lain-lain",
@@ -84,6 +102,8 @@ function mapPrismaPart(p: any): PartsInventory {
 function mapPrismaOrder(o: any): ServiceOrder {
   return {
     id: o.id,
+    workshopId: o.workshopId ?? null,
+    workshop: o.workshop ? mapPrismaWorkshop(o.workshop) : undefined,
     orderNumber: o.orderNumber,
     token: o.token,
     customerId: o.customerId,
@@ -146,6 +166,21 @@ function mapPrismaOrder(o: any): ServiceOrder {
     updatedAt: o.updatedAt,
   };
 }
+
+const memoryWorkshops: Workshop[] = [
+  {
+    id: "ws-default",
+    name: "PitCare Auto Pusat",
+    slug: "pitcare-pusat",
+    address: "Jl. Veteran No. 45, Jakarta Selatan",
+    city: "Jakarta Selatan",
+    phone: "081298765432",
+    logoUrl: null,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
 
 const memoryCustomers: Customer[] = [
   {
@@ -767,6 +802,107 @@ const memoryServiceOrders: ServiceOrder[] = [
 
 // Helper database abstraction layer yang tangguh (Resilient Hybrid Layer)
 export const db = {
+  // === WORKSHOPS (MULTI-TENANCY) ===
+  workshop: {
+    async findMany(): Promise<Workshop[]> {
+      if (isRealDatabase) {
+        try {
+          const rows = await prisma.workshop.findMany({
+            where: { isActive: true },
+            orderBy: { name: "asc" },
+          });
+          if (rows.length > 0) {
+            return rows.map(mapPrismaWorkshop);
+          }
+        } catch (err) {
+          console.error("Error prisma.workshop.findMany:", err);
+        }
+      }
+      return [...memoryWorkshops];
+    },
+
+    async findById(id: string): Promise<Workshop | null> {
+      if (isRealDatabase) {
+        try {
+          const row = await prisma.workshop.findUnique({
+            where: { id },
+          });
+          if (row) return mapPrismaWorkshop(row);
+        } catch (err) {
+          console.error("Error prisma.workshop.findById:", err);
+        }
+      }
+      return memoryWorkshops.find((w) => w.id === id) || null;
+    },
+
+    async findBySlug(slug: string): Promise<Workshop | null> {
+      if (isRealDatabase) {
+        try {
+          const row = await prisma.workshop.findUnique({
+            where: { slug },
+          });
+          if (row) return mapPrismaWorkshop(row);
+        } catch (err) {
+          console.error("Error prisma.workshop.findBySlug:", err);
+        }
+      }
+      return memoryWorkshops.find((w) => w.slug === slug) || null;
+    },
+
+    async create(data: {
+      name: string;
+      slug?: string;
+      address?: string;
+      city?: string;
+      phone?: string;
+      logoUrl?: string;
+    }): Promise<Workshop> {
+      const generatedSlug = (
+        data.slug ||
+        data.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "")
+      ) + "-" + Math.random().toString(36).substring(2, 6);
+
+      if (isRealDatabase) {
+        try {
+          const created = await prisma.workshop.create({
+            data: {
+              name: data.name.trim(),
+              slug: generatedSlug,
+              address: data.address?.trim() || null,
+              city: data.city?.trim() || "Jakarta",
+              phone: data.phone?.trim() || null,
+              logoUrl: data.logoUrl?.trim() || null,
+              isActive: true,
+            },
+          });
+          const mapped = mapPrismaWorkshop(created);
+          memoryWorkshops.unshift(mapped);
+          return mapped;
+        } catch (err) {
+          console.error("Error prisma.workshop.create:", err);
+        }
+      }
+
+      const newWorkshop: Workshop = {
+        id: `ws-${Date.now()}`,
+        name: data.name.trim(),
+        slug: generatedSlug,
+        address: data.address?.trim() || null,
+        city: data.city?.trim() || "Jakarta",
+        phone: data.phone?.trim() || null,
+        logoUrl: data.logoUrl?.trim() || null,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      memoryWorkshops.unshift(newWorkshop);
+      return newWorkshop;
+    },
+  },
+
   // === CUSTOMERS & VEHICLES ===
   customer: {
     async findMany(query?: string): Promise<Customer[]> {
@@ -1015,19 +1151,23 @@ export const db = {
 
   // === SERVICES CATALOG ===
   servicesCatalog: {
-    async findMany(query?: string): Promise<ServicesCatalog[]> {
+    async findMany(query?: string, workshopId?: string): Promise<ServicesCatalog[]> {
       if (isRealDatabase) {
         try {
+          const where: any = {};
+          if (query && query.trim()) {
+            where.OR = [
+              { name: { contains: query.trim(), mode: "insensitive" } },
+              { code: { contains: query.trim(), mode: "insensitive" } },
+              { description: { contains: query.trim(), mode: "insensitive" } },
+            ];
+          }
+          if (workshopId) {
+            where.workshopId = workshopId;
+          }
+
           const rows = await prisma.servicesCatalog.findMany({
-            where: query && query.trim()
-              ? {
-                  OR: [
-                    { name: { contains: query.trim(), mode: "insensitive" } },
-                    { code: { contains: query.trim(), mode: "insensitive" } },
-                    { description: { contains: query.trim(), mode: "insensitive" } },
-                  ],
-                }
-              : undefined,
+            where: Object.keys(where).length > 0 ? where : undefined,
             orderBy: { createdAt: "desc" },
           });
           if (rows.length > 0) {
@@ -1039,6 +1179,9 @@ export const db = {
       }
 
       let results = [...memoryServices];
+      if (workshopId) {
+        results = results.filter((s) => !s.workshopId || s.workshopId === workshopId);
+      }
       if (query && query.trim()) {
         const q = query.toLowerCase().trim();
         results = results.filter(
@@ -1049,6 +1192,7 @@ export const db = {
     },
 
     async create(data: {
+      workshopId?: string;
       code: string;
       name: string;
       description?: string;
@@ -1059,6 +1203,7 @@ export const db = {
         try {
           const created = await prisma.servicesCatalog.create({
             data: {
+              workshopId: data.workshopId || null,
               code: data.code.toUpperCase().trim(),
               name: data.name.trim(),
               description: data.description?.trim() || null,
@@ -1078,6 +1223,7 @@ export const db = {
 
       const newService: ServicesCatalog = {
         id: `srv-${Date.now()}`,
+        workshopId: data.workshopId || null,
         code: data.code.toUpperCase().trim(),
         name: data.name.trim(),
         description: data.description?.trim() || null,
@@ -1119,7 +1265,7 @@ export const db = {
 
   // === PARTS INVENTORY ===
   partsInventory: {
-    async findMany(query?: string, category?: string): Promise<PartsInventory[]> {
+    async findMany(query?: string, category?: string, workshopId?: string): Promise<PartsInventory[]> {
       if (isRealDatabase) {
         try {
           const where: any = {};
@@ -1132,6 +1278,9 @@ export const db = {
           }
           if (category && category !== "all") {
             where.category = category;
+          }
+          if (workshopId) {
+            where.workshopId = workshopId;
           }
 
           const rows = await prisma.partsInventory.findMany({
@@ -1152,6 +1301,10 @@ export const db = {
         isLowStock: part.stock <= part.minStock,
       }));
 
+      if (workshopId) {
+        results = results.filter((p) => !p.workshopId || p.workshopId === workshopId);
+      }
+
       if (query && query.trim()) {
         const q = query.toLowerCase().trim();
         results = results.filter(
@@ -1170,6 +1323,7 @@ export const db = {
     },
 
     async create(data: {
+      workshopId?: string;
       sku: string;
       name: string;
       category?: string;
@@ -1183,9 +1337,12 @@ export const db = {
       if (isRealDatabase) {
         try {
           const upperSku = data.sku.toUpperCase().trim();
-          // Cek apakah SKU sudah ada di database Supabase
-          const existing = await prisma.partsInventory.findUnique({
-            where: { sku: upperSku },
+          // Cek apakah SKU sudah ada di bengkel terkait
+          const existing = await prisma.partsInventory.findFirst({
+            where: {
+              sku: upperSku,
+              ...(data.workshopId ? { workshopId: data.workshopId } : {}),
+            },
           });
 
           if (existing) {
@@ -1210,6 +1367,7 @@ export const db = {
 
           const created = await prisma.partsInventory.create({
             data: {
+              workshopId: data.workshopId || null,
               sku: upperSku,
               name: data.name.trim(),
               category: data.category?.trim() || "Lain-lain",
@@ -1232,6 +1390,7 @@ export const db = {
 
       const newPart: PartsInventory = {
         id: `part-${Date.now()}`,
+        workshopId: data.workshopId || null,
         sku: data.sku.toUpperCase().trim(),
         name: data.name.trim(),
         category: data.category?.trim() || "Lain-lain",
@@ -1370,9 +1529,17 @@ export const db = {
 
   // === SERVICE ORDERS (WORK ORDERS & BILLING) ===
   serviceOrder: {
-    async findMany(filters?: { status?: string; query?: string }): Promise<ServiceOrder[]> {
+    async findMany(filters?: { status?: string; query?: string; workshopId?: string }): Promise<ServiceOrder[]> {
       if (isRealDatabase) {
         try {
+          const where: any = {};
+          if (filters?.status && filters.status !== "ALL") {
+            where.status = filters.status as any;
+          }
+          if (filters?.workshopId) {
+            where.workshopId = filters.workshopId;
+          }
+
           const dbOrders = await prisma.serviceOrder.findMany({
             include: {
               customer: { include: { vehicles: true } },
@@ -1380,10 +1547,9 @@ export const db = {
               mechanic: true,
               items: true,
               parts: true,
+              workshop: true,
             },
-            where: filters?.status && filters.status !== "ALL"
-              ? { status: filters.status as any }
-              : undefined,
+            where: Object.keys(where).length > 0 ? where : undefined,
             orderBy: { entryDate: "desc" },
           });
 
@@ -1416,6 +1582,10 @@ export const db = {
           vehicle,
         };
       });
+
+      if (filters?.workshopId) {
+        results = results.filter((o) => !o.workshopId || o.workshopId === filters.workshopId);
+      }
 
       if (filters?.status && filters.status !== "ALL") {
         results = results.filter((o) => o.status === filters.status);
@@ -1505,6 +1675,7 @@ export const db = {
     },
 
     async create(data: {
+      workshopId?: string;
       customerId: string;
       vehicleId: string;
       mechanicId?: string;
@@ -1583,6 +1754,7 @@ export const db = {
 
             return await tx.serviceOrder.create({
               data: {
+                workshopId: data.workshopId || null,
                 orderNumber,
                 token,
                 customerId: data.customerId,
@@ -1674,6 +1846,7 @@ export const db = {
 
       const newOrder: ServiceOrder = {
         id: orderId,
+        workshopId: data.workshopId || null,
         orderNumber,
         token,
         customerId: data.customerId,
@@ -2260,11 +2433,16 @@ export const db = {
 
   // === USERS & STAFF ===
   user: {
-    async findMany(role?: UserRole): Promise<User[]> {
+    async findMany(role?: UserRole, workshopId?: string): Promise<User[]> {
       if (isRealDatabase) {
         try {
+          const where: any = {};
+          if (role) where.role = role as any;
+          if (workshopId) where.workshopId = workshopId;
+
           const rows = await prisma.user.findMany({
-            where: role ? { role: role as any } : undefined,
+            where: Object.keys(where).length > 0 ? where : undefined,
+            include: { workshop: true },
             orderBy: { name: "asc" },
           });
           if (rows.length > 0) {
@@ -2273,6 +2451,8 @@ export const db = {
               name: u.name,
               email: u.email,
               role: u.role as UserRole,
+              workshopId: u.workshopId ?? null,
+              workshop: u.workshop ? mapPrismaWorkshop(u.workshop) : null,
               createdAt: u.createdAt,
               updatedAt: u.updatedAt,
             }));
@@ -2285,6 +2465,9 @@ export const db = {
       let results = [...memoryUsers];
       if (role) {
         results = results.filter((u) => u.role === role);
+      }
+      if (workshopId) {
+        results = results.filter((u) => !u.workshopId || u.workshopId === workshopId);
       }
       return results;
     },
