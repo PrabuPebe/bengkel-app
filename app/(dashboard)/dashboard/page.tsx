@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { Header } from "@/components/dashboard/header";
 import { db } from "@/lib/db";
 import { ServiceStatus } from "@/lib/types/database";
@@ -62,8 +64,10 @@ function getLinearStatusBadge(status: ServiceStatus | string) {
 }
 
 export default async function DashboardOverviewPage() {
-  const stats = await db.getStats();
-  const recentOrders = await db.serviceOrder.findMany();
+  const session = await getServerSession(authOptions);
+  const sessionWorkshopId = (session?.user as any)?.workshopId || undefined;
+  const stats = await db.getStats(sessionWorkshopId);
+  const recentOrders = await db.serviceOrder.findMany({ workshopId: sessionWorkshopId });
   const feedOrders = recentOrders.slice(0, 7);
   const activeServicesToday =
     stats.activeQueueCount + stats.inProgressCount + stats.readyForCashierCount;

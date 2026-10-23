@@ -1,11 +1,25 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth";
 import { db } from "../db";
 import { ServiceStatus, PaymentMethod } from "../types/database";
 
-export async function getServiceOrdersAction(filters?: { status?: string; query?: string }) {
-  return await db.serviceOrder.findMany(filters);
+export async function getServiceOrdersAction(filters?: { status?: string; query?: string; workshopId?: string }) {
+  let effectiveWorkshopId = filters?.workshopId;
+  if (!effectiveWorkshopId) {
+    try {
+      const session = await getServerSession(authOptions);
+      effectiveWorkshopId = (session?.user as any)?.workshopId || undefined;
+    } catch {
+      // ignore
+    }
+  }
+  return await db.serviceOrder.findMany({
+    ...filters,
+    workshopId: effectiveWorkshopId,
+  });
 }
 
 export async function getServiceOrderByIdAction(id: string) {
@@ -19,6 +33,7 @@ export async function getServiceOrderByTokenAction(token: string) {
 export async function createServiceOrderAction(data: {
   customerId: string;
   vehicleId: string;
+  workshopId?: string;
   mechanicId?: string;
   mechanicName?: string;
   currentKm?: number;
@@ -32,6 +47,16 @@ export async function createServiceOrderAction(data: {
   }
 
   try {
+    let effectiveWorkshopId = data.workshopId;
+    if (!effectiveWorkshopId) {
+      try {
+        const session = await getServerSession(authOptions);
+        effectiveWorkshopId = (session?.user as any)?.workshopId || undefined;
+      } catch {
+        // ignore
+      }
+    }
+
     const sanitizedKm =
       data.currentKm !== undefined && data.currentKm !== null
         ? Math.floor(Math.abs(Number(String(data.currentKm).replace(/[^0-9]/g, ""))))
@@ -39,6 +64,7 @@ export async function createServiceOrderAction(data: {
 
     const order = await db.serviceOrder.create({
       ...data,
+      workshopId: effectiveWorkshopId,
       currentKm: sanitizedKm && sanitizedKm > 0 ? sanitizedKm : undefined,
     });
     revalidatePath("/services");
@@ -47,7 +73,7 @@ export async function createServiceOrderAction(data: {
     revalidatePath("/inventory/parts");
     return { success: true, data: order };
   } catch {
-    return { success: false, error: "Gagal menerbitkan Work Order servis." };
+    return { success: false, error: "Gagal menerbitkan Tiket Servis." };
   }
 }
 

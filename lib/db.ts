@@ -936,9 +936,7 @@ export const db = {
               : undefined,
             orderBy: { createdAt: "desc" },
           });
-          if (rows.length > 0) {
-            return rows.map(mapPrismaCustomer);
-          }
+          return rows.map(mapPrismaCustomer);
         } catch (err) {
           console.error("Error prisma.customer.findMany:", err);
           // fallback to in-memory store
@@ -1553,21 +1551,19 @@ export const db = {
             orderBy: { entryDate: "desc" },
           });
 
-          if (dbOrders.length > 0) {
-            let mapped = dbOrders.map(mapPrismaOrder);
-            if (filters?.query && filters.query.trim()) {
-              const q = filters.query.toLowerCase().trim();
-              mapped = mapped.filter(
-                (o) =>
-                  o.orderNumber.toLowerCase().includes(q) ||
-                  o.customer?.name.toLowerCase().includes(q) ||
-                  o.customer?.phone.toLowerCase().includes(q) ||
-                  o.vehicle?.plateNumber.toLowerCase().includes(q) ||
-                  o.vehicle?.model.toLowerCase().includes(q)
-              );
-            }
-            return mapped;
+          let mapped = dbOrders.map(mapPrismaOrder);
+          if (filters?.query && filters.query.trim()) {
+            const q = filters.query.toLowerCase().trim();
+            mapped = mapped.filter(
+              (o) =>
+                o.orderNumber.toLowerCase().includes(q) ||
+                o.customer?.name.toLowerCase().includes(q) ||
+                o.customer?.phone.toLowerCase().includes(q) ||
+                o.vehicle?.plateNumber.toLowerCase().includes(q) ||
+                o.vehicle?.model.toLowerCase().includes(q)
+            );
           }
+          return mapped;
         } catch (err) {
           console.error("Error prisma.serviceOrder.findMany:", err);
         }
@@ -1584,7 +1580,7 @@ export const db = {
       });
 
       if (filters?.workshopId) {
-        results = results.filter((o) => !o.workshopId || o.workshopId === filters.workshopId);
+        results = results.filter((o) => o.workshopId === filters.workshopId);
       }
 
       if (filters?.status && filters.status !== "ALL") {
@@ -2223,9 +2219,14 @@ export const db = {
   },
 
   // === DASHBOARD STATS ===
-  async getStats() {
+  async getStats(workshopId?: string) {
     if (isRealDatabase) {
       try {
+        const orderWhere: any = {};
+        if (workshopId) {
+          orderWhere.workshopId = workshopId;
+        }
+
         const [
           totalCustomers,
           totalVehicles,
@@ -2235,11 +2236,13 @@ export const db = {
         ] = await Promise.all([
           prisma.customer.count(),
           prisma.vehicle.count(),
-          prisma.servicesCatalog.count(),
+          prisma.servicesCatalog.count(workshopId ? { where: { workshopId } } : undefined),
           prisma.partsInventory.findMany({
+            where: workshopId ? { workshopId } : undefined,
             select: { id: true, sku: true, name: true, category: true, stock: true, minStock: true, sellPrice: true, unit: true },
           }),
           prisma.serviceOrderPart.findMany({
+            where: workshopId ? { order: { workshopId } } : undefined,
             select: { partId: true, partName: true, qty: true, subtotal: true },
           }),
         ]);
@@ -2279,8 +2282,8 @@ export const db = {
           }
         }
 
-        // 2. Jika transaksi DB masih sedikit (< 5 part unik), lengkapi dengan histori operasional awal agar Top 5 selalu terisi representatif
-        if (usageMap.size < 5) {
+        // 2. Jika bukan workshop spesifik (hanya tampilan demo umum), lengkapi dari memory
+        if (usageMap.size < 5 && !workshopId) {
           for (const ord of memoryServiceOrders) {
             for (const mp of ord.parts) {
               const matchedPart = allParts.find((p) => p.name.toLowerCase() === mp.partName.toLowerCase());
@@ -2302,69 +2305,31 @@ export const db = {
           }
         }
 
-        // 3. Jika masih kurang dari 5, lengkapi dari katalog part fast-moving
-        if (usageMap.size < 5) {
-          for (const p of allParts) {
-            if (usageMap.size >= 5) break;
-            if (!usageMap.has(p.id)) {
-              usageMap.set(p.id, {
-                partId: p.id,
-                name: p.name,
-                sku: p.sku,
-                category: p.category || "Suku Cadang",
-                totalQty: 2,
-                totalRevenue: Number(p.sellPrice) * 2,
-                currentStock: p.stock,
-                minStock: p.minStock,
-                unit: p.unit,
-              });
-            }
-          }
-        }
-
         const topUsedParts = Array.from(usageMap.values())
           .sort((a, b) => b.totalQty - a.totalQty || b.totalRevenue - a.totalRevenue)
           .slice(0, 5);
 
-        const dbOrderCount = await prisma.serviceOrder.count();
-        let activeQueueCount = 0;
-        let inProgressCount = 0;
-        let readyForCashierCount = 0;
-        let completedOrdersCount = 0;
-        let todayRevenue = 0;
-
-        if (dbOrderCount > 0) {
-          const [
-            qCount,
-            pCount,
-            rCount,
-            cCount,
-            paidOrders,
-          ] = await Promise.all([
-            prisma.serviceOrder.count({ where: { status: "ANTRIAN" } }),
-            prisma.serviceOrder.count({ where: { status: "PENGERJAAN" } }),
-            prisma.serviceOrder.count({ where: { status: "SELESAI_PENGERJAAN" } }),
-            prisma.serviceOrder.count({ where: { status: "SELESAI_PEMBAYARAN" } }),
-            prisma.serviceOrder.findMany({
-              where: { paymentStatus: "PAID" },
-              select: { grandTotal: true },
-            }),
-          ]);
-          activeQueueCount = qCount;
-          inProgressCount = pCount;
-          readyForCashierCount = rCount;
-          completedOrdersCount = cCount;
-          todayRevenue = paidOrders.reduce((acc, o) => acc + Number(o.grandTotal), 0);
-        } else {
-          activeQueueCount = memoryServiceOrders.filter((o) => o.status === "ANTRIAN").length;
-          inProgressCount = memoryServiceOrders.filter((o) => o.status === "PENGERJAAN").length;
-          readyForCashierCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PENGERJAAN").length;
-          completedOrdersCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PEMBAYARAN").length;
-          todayRevenue = memoryServiceOrders
-            .filter((o) => o.paymentStatus === "PAID")
-            .reduce((acc, o) => acc + o.grandTotal, 0);
-        }
-
+        const [
+          qCount,
+          pCount,
+          rCount,
+          cCount,
+          paidOrders,
+        ] = await Promise.all([
+          prisma.serviceOrder.count({ where: { status: "ANTRIAN", ...orderWhere } }),
+          prisma.serviceOrder.count({ where: { status: "PENGERJAAN", ...orderWhere } }),
+          prisma.serviceOrder.count({ where: { status: "SELESAI_PENGERJAAN", ...orderWhere } }),
+          prisma.serviceOrder.count({ where: { status: "SELESAI_PEMBAYARAN", ...orderWhere } }),
+          prisma.serviceOrder.findMany({
+            where: { paymentStatus: "PAID", ...orderWhere },
+            select: { grandTotal: true },
+          }),
+        ]);
+        const activeQueueCount = qCount;
+        const inProgressCount = pCount;
+        const readyForCashierCount = rCount;
+        const completedOrdersCount = cCount;
+        const todayRevenue = paidOrders.reduce((acc, o) => acc + Number(o.grandTotal), 0);
         const todayServicesCount = activeQueueCount + inProgressCount + readyForCashierCount + completedOrdersCount;
 
         return {
@@ -2388,31 +2353,37 @@ export const db = {
     }
 
     // Memory fallback
-    const totalCustomers = memoryCustomers.length;
-    const totalVehicles = memoryCustomers.reduce((acc, c) => acc + c.vehicles.length, 0);
+    const effectiveMemoryOrders = workshopId
+      ? memoryServiceOrders.filter((o) => o.workshopId === workshopId)
+      : memoryServiceOrders;
+
+    const totalCustomers = workshopId ? 0 : memoryCustomers.length;
+    const totalVehicles = workshopId ? 0 : memoryCustomers.reduce((acc, c) => acc + c.vehicles.length, 0);
     const totalServices = memoryServices.length;
     const lowStockParts = memoryParts.filter((p) => p.stock <= p.minStock);
 
-    const activeQueueCount = memoryServiceOrders.filter((o) => o.status === "ANTRIAN").length;
-    const inProgressCount = memoryServiceOrders.filter((o) => o.status === "PENGERJAAN").length;
-    const readyForCashierCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PENGERJAAN").length;
-    const completedOrdersCount = memoryServiceOrders.filter((o) => o.status === "SELESAI_PEMBAYARAN").length;
+    const activeQueueCount = effectiveMemoryOrders.filter((o) => o.status === "ANTRIAN").length;
+    const inProgressCount = effectiveMemoryOrders.filter((o) => o.status === "PENGERJAAN").length;
+    const readyForCashierCount = effectiveMemoryOrders.filter((o) => o.status === "SELESAI_PENGERJAAN").length;
+    const completedOrdersCount = effectiveMemoryOrders.filter((o) => o.status === "SELESAI_PEMBAYARAN").length;
     const todayServicesCount = activeQueueCount + inProgressCount + readyForCashierCount + completedOrdersCount;
-    const todayRevenue = memoryServiceOrders
+    const todayRevenue = effectiveMemoryOrders
       .filter((o) => o.paymentStatus === "PAID")
       .reduce((acc, o) => acc + o.grandTotal, 0);
 
-    const topUsedParts = memoryParts.slice(0, 5).map((p, idx) => ({
-      partId: p.id,
-      name: p.name,
-      sku: p.sku,
-      category: p.category,
-      totalQty: Math.max(1, 12 - idx * 2),
-      totalRevenue: p.sellPrice * Math.max(1, 12 - idx * 2),
-      currentStock: p.stock,
-      minStock: p.minStock,
-      unit: p.unit,
-    }));
+    const topUsedParts = workshopId && effectiveMemoryOrders.length === 0
+      ? []
+      : memoryParts.slice(0, 5).map((p, idx) => ({
+          partId: p.id,
+          name: p.name,
+          sku: p.sku,
+          category: p.category,
+          totalQty: Math.max(1, 12 - idx * 2),
+          totalRevenue: p.sellPrice * Math.max(1, 12 - idx * 2),
+          currentStock: p.stock,
+          minStock: p.minStock,
+          unit: p.unit,
+        }));
 
     return {
       totalCustomers,

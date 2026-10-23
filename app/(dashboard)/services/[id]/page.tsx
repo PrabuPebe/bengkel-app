@@ -84,14 +84,20 @@ export default function ServiceOrderDetailPage({
         setIsLoading(false);
       }
     });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [resolvedParams.id]);
 
   function handleStatusChange(newStatus: ServiceStatus, finalDiagnosis?: string) {
     if (!order) return;
     setActionError("");
     startTransition(async () => {
-      const res = await updateServiceStatusAction(order.id, newStatus, finalDiagnosis ?? diagnosisInput);
+      const res = await updateServiceStatusAction(
+        order.id,
+        newStatus,
+        finalDiagnosis ?? diagnosisInput
+      );
       if (res.success && res.data) {
         setOrder(res.data);
         setIsCompleteModalOpen(false);
@@ -170,7 +176,7 @@ export default function ServiceOrderDetailPage({
     setActionError("");
     const part = availableParts.find((p) => p.id === partId);
     if (!part || part.stock < 1) {
-      setActionError(`Stok ${part?.name || "part"} tidak mencukupi!`);
+      setActionError(`Stok ${part?.name || "suku cadang"} tidak mencukupi!`);
       return;
     }
     startTransition(async () => {
@@ -194,40 +200,47 @@ export default function ServiceOrderDetailPage({
 
   if (isLoading) {
     return (
-      <div className="p-24 text-center text-slate-400 card-pitstop">
-        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        <p className="text-sm font-semibold">Memuat rincian Work Order PitCare Auto...</p>
+      <div className="p-20 text-center bg-white rounded-xl border border-slate-200 text-slate-500 shadow-xs">
+        <div className="w-8 h-8 border-2 border-slate-900 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <p className="text-sm font-semibold text-slate-900">Memuat rincian Tiket Servis PitCare Auto...</p>
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="p-16 text-center card-pitstop max-w-lg mx-auto">
-        <div className="w-12 h-12 rounded-xl bg-rose-950/40 text-rose-400 flex items-center justify-center mx-auto mb-3 text-xl font-bold border border-rose-500/40">
+      <div className="p-12 text-center bg-white rounded-xl border border-slate-200 max-w-lg mx-auto shadow-xs">
+        <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3 text-xl font-bold border border-rose-200">
           !
         </div>
-        <h2 className="text-base font-bold text-slate-100 mb-2">Work Order Tidak Ditemukan</h2>
-        <p className="text-xs text-slate-400 mb-6">
-          Nomor SPK atau ID yang dicari tidak tersedia dalam database PitCare Auto.
+        <h2 className="text-base font-semibold text-slate-900 mb-2">Tiket Servis Tidak Ditemukan</h2>
+        <p className="text-sm text-slate-500 mb-6">
+          Nomor Tiket atau ID yang dicari tidak tersedia dalam database PitCare Auto.
         </p>
-        <Link href="/services" className="btn-cyan inline-flex items-center px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20">
-          ← Kembali ke Daftar SPK
+        <Link
+          href="/services"
+          className="btn-primary inline-flex items-center px-4 py-2.5 text-xs font-semibold"
+        >
+          ← Kembali ke Antrean Servis
         </Link>
       </div>
     );
   }
 
   const steps = [
-    { key: "ANTRIAN", label: "1. Antrian Pit", desc: "Menunggu giliran mekanik" },
-    { key: "PENGERJAAN", label: "2. Pengerjaan Pit", desc: "Tindakan & perbaikan" },
-    { key: "SELESAI_PENGERJAAN", label: "3. Siap Kasir", desc: "Pengerjaan tuntas" },
-    { key: "SELESAI_PEMBAYARAN", label: "4. Faktur Lunas", desc: "Selesai di kasir" },
+    { key: "ANTRIAN", label: "1. Antrean Servis", desc: "Menunggu giliran mekanik" },
+    { key: "PENGERJAAN", label: "2. Sedang Dikerjakan", desc: "Tindakan & perbaikan mekanik" },
+    { key: "SELESAI_PENGERJAAN", label: "3. Siap Kasir", desc: "Pengerjaan tuntas, siap ditagih" },
+    { key: "SELESAI_PEMBAYARAN", label: "4. Faktur Lunas", desc: "Pembayaran tuntas di kasir" },
   ];
 
   const getStepStatus = (stepKey: string) => {
     const orderIndexMap: Record<string, number> = {
-      ANTRIAN: 1, PENGERJAAN: 2, MENUNGGU_PART: 2.5, SELESAI_PENGERJAAN: 3, SELESAI_PEMBAYARAN: 4,
+      ANTRIAN: 1,
+      PENGERJAAN: 2,
+      MENUNGGU_PART: 2.5,
+      SELESAI_PENGERJAAN: 3,
+      SELESAI_PEMBAYARAN: 4,
     };
     const currentIdx = orderIndexMap[order.status] || 0;
     const thisIdx = orderIndexMap[stepKey] || 0;
@@ -236,81 +249,86 @@ export default function ServiceOrderDetailPage({
     return "upcoming";
   };
 
-  // Odometer & Smart Recommendation Calculation for Mechanic
   const currentKmNum = order.currentKm || 0;
   const isEditableOrder = order.status !== "SELESAI_PEMBAYARAN" && order.status !== "DIBATALKAN";
-  const recommendedSmartParts = availableParts.filter((p) => {
-    const text = `${order.complaints} ${order.items.map((i) => i.serviceName).join(" ")}`.toLowerCase();
-    const partText = `${p.name} ${p.category}`.toLowerCase();
-    if (currentKmNum >= 24000 && (partText.includes("belt") || partText.includes("oli") || partText.includes("roller"))) return true;
-    if (currentKmNum >= 3000 && (partText.includes("oli") || partText.includes("busi"))) return true;
-    if (text.includes("cvt") && (partText.includes("cvt") || partText.includes("roller") || partText.includes("belt"))) return true;
-    if (text.includes("rem") && (partText.includes("rem") || partText.includes("kampas"))) return true;
-    if (text.includes("oli") && partText.includes("oli")) return true;
-    return false;
-  }).slice(0, 4);
+  const recommendedSmartParts = availableParts
+    .filter((p) => {
+      const text = `${order.complaints} ${order.items.map((i) => i.serviceName).join(" ")}`.toLowerCase();
+      const partText = `${p.name} ${p.category}`.toLowerCase();
+      if (currentKmNum >= 24000 && (partText.includes("belt") || partText.includes("oli") || partText.includes("roller"))) return true;
+      if (currentKmNum >= 3000 && (partText.includes("oli") || partText.includes("busi"))) return true;
+      if (text.includes("cvt") && (partText.includes("cvt") || partText.includes("roller") || partText.includes("belt"))) return true;
+      if (text.includes("rem") && (partText.includes("rem") || partText.includes("kampas"))) return true;
+      if (text.includes("oli") && partText.includes("oli")) return true;
+      return false;
+    })
+    .slice(0, 4);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      {/* ODOMETER LIFESPAN ALERT & SMART RECOMMENDATION PANEL */}
+      {/* ODOMETER LIFESPAN ALERT & SMART RECOMMENDATION PANEL (DESAIN ELEGAN LINEAR) */}
       {isEditableOrder && (currentKmNum >= 3000 || recommendedSmartParts.length > 0) && (
         <div
-          className={`p-4 rounded-2xl border ${
+          className={`p-5 rounded-xl border shadow-xs ${
             currentKmNum >= 24000
-              ? "bg-rose-950/35 border-rose-500/50"
-              : "bg-amber-950/30 border-amber-500/40"
+              ? "bg-rose-50/90 border-rose-200 text-rose-950"
+              : "bg-amber-50/90 border-amber-200 text-amber-950"
           }`}
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
-                  className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${
-                    currentKmNum >= 24000 ? "bg-rose-500 text-white" : "bg-amber-400 text-slate-950"
+                  className={`px-2.5 py-0.5 rounded-md text-[11px] font-semibold tracking-wide uppercase ${
+                    currentKmNum >= 24000
+                      ? "bg-rose-600 text-white"
+                      : "bg-amber-500 text-white"
                   }`}
                 >
-                  {currentKmNum >= 24000 ? "⚠️ Odometer Critical Alert" : "💡 Smart Service Recommendation"}
+                  {currentKmNum >= 24000 ? "⚠️ Peringatan Odometer Kritis" : "💡 Rekomendasi Servis Cerdas"}
                 </span>
-                <span className="text-xs sm:text-sm font-extrabold text-white">
+                <span className="text-xs sm:text-sm font-bold text-slate-900">
                   {currentKmNum >= 24000
-                    ? `Perhatian: Odometer telah mencapai ${currentKmNum.toLocaleString("id-ID")} KM. Direkomendasikan ganti V-Belt & Oli hari ini!`
+                    ? `Perhatian: Odometer mencapai ${currentKmNum.toLocaleString("id-ID")} KM. Sangat disarankan ganti V-Belt & Oli mesin hari ini!`
                     : currentKmNum >= 3000
-                    ? `Perhatian: Odometer telah mencapai ${currentKmNum.toLocaleString("id-ID")} KM. Direkomendasikan ganti Oli Mesin & Busi hari ini!`
-                    : "Rekomendasi Suku Cadang Cerdas Berdasarkan Keluhan & Paket Servis"}
+                    ? `Perhatian: Odometer mencapai ${currentKmNum.toLocaleString("id-ID")} KM. Direkomendasikan ganti Oli Mesin & pengecekan Busi!`
+                    : "Rekomendasi Suku Cadang Cerdas Berdasarkan Keluhan Motor"}
                 </span>
               </div>
-              <p className="text-xs text-slate-300">
-                Klik tombol 1-Klik di bawah untuk langsung memasukkan komponen rekomendasi ke rincian SPK ini:
+              <p className="text-xs text-slate-600">
+                Pilih suku cadang di bawah untuk langsung memasukkannya ke rincian tiket servis ini:
               </p>
             </div>
           </div>
 
           {recommendedSmartParts.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-3 pt-3 border-t border-slate-800/80">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-3 pt-3 border-t border-slate-200/80">
               {recommendedSmartParts.map((rp) => {
                 const inOrder = order.parts.find((op) => op.partId === rp.id);
                 return (
                   <div
                     key={rp.id}
-                    className="p-2.5 rounded-xl bg-[#0B0F19]/90 border border-slate-800 flex items-center justify-between gap-2"
+                    className="p-3 rounded-lg bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-2"
                   >
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-white truncate">{rp.name}</p>
-                      <p className="text-[10px] font-mono text-cyan-400">
-                        {formatRupiah(rp.sellPrice)} • {rp.category}
+                      <p className="text-xs font-semibold text-slate-900 truncate">{rp.name}</p>
+                      <p className="text-xs font-mono text-slate-600">
+                        {formatRupiah(rp.sellPrice)} • <span className="text-slate-500">{rp.category}</span>
                       </p>
                     </div>
                     <button
                       type="button"
                       disabled={isPending}
                       onClick={() => handleQuickAddPart(rp.id)}
-                      className={`px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shrink-0 cursor-pointer transition-all ${
+                      className={`px-2.5 py-1.5 rounded-md text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
                         inOrder
-                          ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                          : "bg-amber-400 hover:bg-amber-300 text-slate-950"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          : currentKmNum >= 24000
+                          ? "bg-rose-600 hover:bg-rose-700 text-white"
+                          : "bg-slate-900 hover:bg-slate-800 text-white"
                       }`}
                     >
-                      {inOrder ? `✓ Ada (${inOrder.qty})` : "+ 1-Klik Pakai"}
+                      {inOrder ? `✓ Dipakai (${inOrder.qty})` : "+ 1-Klik"}
                     </button>
                   </div>
                 );
@@ -325,8 +343,8 @@ export default function ServiceOrderDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/services"
-            className="p-2.5 rounded-xl bg-[#0F172A] border border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500 transition-all cursor-pointer"
-            title="Kembali ke Daftar SPK"
+            className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs cursor-pointer"
+            title="Kembali ke Daftar Antrean Servis"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -334,32 +352,32 @@ export default function ServiceOrderDetailPage({
           </Link>
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-black text-slate-100 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 {order.orderNumber}
               </h1>
-              <span className="font-mono text-xs px-2.5 py-1 rounded bg-[#0B0F17] text-cyan-400 border border-cyan-500/30 font-black tracking-wider shadow-inner">
+              <span className="font-mono text-xs px-2.5 py-1 rounded-md bg-slate-100 text-slate-900 border border-slate-300 font-bold tracking-wider">
                 {order.vehicle?.plateNumber}
               </span>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-xs text-slate-600 font-medium">
                 ({order.vehicle?.brand} {order.vehicle?.model})
               </span>
               {order.status === "MENUNGGU_PART" && (
-                <span className="badge-menunggu-part">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                  Menunggu Part
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" />
+                  Menunggu Suku Cadang
                 </span>
               )}
               {order.status === "PENGERJAAN" && (
-                <span className="badge-pengerjaan">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
                   <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
                   Sedang Dikerjakan
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
-              <span>Token: <span className="font-mono text-cyan-400 font-bold">{order.token}</span></span>
-              <span className="text-slate-700">•</span>
-              <span>Diterima: {formatDate(order.entryDate)}</span>
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-2 flex-wrap">
+              <span>Kode Pelacakan: <span className="font-mono font-semibold text-slate-800">{order.token}</span></span>
+              <span className="text-slate-300">•</span>
+              <span>Waktu Masuk: {formatDate(order.entryDate)}</span>
             </p>
           </div>
         </div>
@@ -368,57 +386,63 @@ export default function ServiceOrderDetailPage({
           <button
             type="button"
             onClick={handleCopyTrackingLink}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 bg-[#0F172A] border border-slate-700 hover:border-cyan-500 hover:text-cyan-400 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="btn-ghost px-3.5 py-2 text-xs font-semibold cursor-pointer shadow-2xs"
           >
-            {copiedLink ? "✓ Tersalin!" : "🔗 Salin Link Tracking"}
+            {copiedLink ? "✓ Link Tersalin!" : "🔗 Salin Link Pelacakan"}
           </button>
 
           <Link
             href={`/track/${order.token}`}
             target="_blank"
-            className="px-3.5 py-2 rounded-xl text-xs font-bold text-cyan-400 bg-[#0F172A] border border-cyan-500/30 hover:bg-cyan-500/15 hover:border-cyan-500 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-2xs flex items-center gap-1.5"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            Buka Pelacakan ↗
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            Buka Pelacakan HP ↗
           </Link>
 
           {order.status === "SELESAI_PENGERJAAN" && (
             <Link
               href={`/cashier/${order.id}`}
-              className="btn-cyan flex items-center gap-2 px-4 py-2 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+              className="btn-primary flex items-center gap-2 px-4 py-2 text-xs font-semibold cursor-pointer shadow-xs"
             >
-              Proses Bayar Kasir 💳
+              Proses Bayar di Kasir 💳
             </Link>
           )}
 
           {order.status === "SELESAI_PEMBAYARAN" && (
             <Link
               href={`/cashier/${order.id}`}
-              className="btn-electric flex items-center gap-2 px-4 py-2 text-xs cursor-pointer"
+              className="btn-primary flex items-center gap-2 px-4 py-2 text-xs font-semibold cursor-pointer shadow-xs"
             >
-              Cetak Faktur Kasir 🖨️
+              Lihat Faktur Lunas 🖨️
             </Link>
           )}
         </div>
       </div>
 
       {actionError && (
-        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-sm font-medium flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center justify-between">
           <span>{actionError}</span>
-          <button type="button" onClick={() => setActionError("")} className="text-rose-400 hover:text-rose-200 ml-4 cursor-pointer font-bold">✕</button>
+          <button
+            type="button"
+            onClick={() => setActionError("")}
+            className="text-rose-600 hover:text-rose-900 ml-4 font-bold cursor-pointer"
+          >
+            ✕
+          </button>
         </div>
       )}
 
       {/* Stepper Card */}
       <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs">
         {order.status === "MENUNGGU_PART" && (
-          <div className="mb-5 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="mb-5 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-900 text-xs font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
             <div className="flex items-center gap-2.5">
-              <span className="w-3 h-3 rounded-full bg-amber-500 animate-pulse shrink-0" />
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-500 animate-pulse shrink-0" />
               <div>
-                <span className="font-bold text-sm text-amber-950">Status: Menunggu Sparepart (Tertunda)</span>
-                <p className="text-xs text-amber-800 mt-0.5">
-                  Proses servis dijeda sementara hingga suku cadang tersedia dari gudang atau distributor.
+                <span className="font-bold text-sm text-purple-950">Status: Menunggu Suku Cadang (Dijeda)</span>
+                <p className="text-xs text-purple-800 mt-0.5">
+                  Pengerjaan servis dijeda sementara hingga suku cadang tersedia dari gudang atau distributor.
                 </p>
               </div>
             </div>
@@ -426,9 +450,9 @@ export default function ServiceOrderDetailPage({
               type="button"
               disabled={isPending}
               onClick={() => handleStatusChange("PENGERJAAN")}
-              className="btn-primary flex items-center gap-2 px-4 py-2.5 text-xs font-semibold cursor-pointer shrink-0 shadow-xs"
+              className="btn-primary flex items-center gap-2 px-4 py-2 text-xs font-semibold cursor-pointer shrink-0 shadow-xs"
             >
-              ▶️ Lanjutkan Pengerjaan (Part Tersedia)
+              ▶️ Lanjutkan Pengerjaan (Part Sudah Ada)
             </button>
           </div>
         )}
@@ -442,7 +466,7 @@ export default function ServiceOrderDetailPage({
                 className={`p-4 rounded-xl border transition-all ${
                   st === "current"
                     ? order.status === "MENUNGGU_PART"
-                      ? "bg-amber-50/80 border-amber-300 text-amber-950"
+                      ? "bg-purple-50 border-purple-300 text-purple-950"
                       : "bg-slate-900 text-white border-slate-900 shadow-xs"
                     : st === "completed"
                     ? "bg-slate-50 text-slate-800 border-slate-200"
@@ -456,7 +480,7 @@ export default function ServiceOrderDetailPage({
                         ? "text-emerald-600"
                         : st === "current"
                         ? order.status === "MENUNGGU_PART"
-                          ? "text-amber-700"
+                          ? "text-purple-700"
                           : "text-slate-300"
                         : "text-slate-400"
                     }`}
@@ -468,11 +492,11 @@ export default function ServiceOrderDetailPage({
                     <span
                       className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                         order.status === "MENUNGGU_PART"
-                          ? "bg-amber-200 text-amber-900 border border-amber-300"
+                          ? "bg-purple-200 text-purple-900"
                           : "bg-white text-slate-900"
                       }`}
                     >
-                      {order.status === "MENUNGGU_PART" ? "Menunggu Part" : "Aktif"}
+                      {order.status === "MENUNGGU_PART" ? "Tertunda" : "Aktif"}
                     </span>
                   )}
                 </div>
@@ -499,18 +523,25 @@ export default function ServiceOrderDetailPage({
         <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <span>
-              Status:{" "}
-              <span
-                className={`font-semibold ${
-                  order.status === "MENUNGGU_PART" ? "text-amber-700 font-bold" : "text-slate-900"
-                }`}
-              >
-                {order.status === "MENUNGGU_PART" ? "Menunggu Sparepart" : order.status.replace("_", " ")}
+              Status Saat Ini:{" "}
+              <span className="font-semibold text-slate-900">
+                {order.status === "MENUNGGU_PART"
+                  ? "Menunggu Suku Cadang"
+                  : order.status === "PENGERJAAN"
+                  ? "Sedang Dikerjakan"
+                  : order.status === "ANTRIAN"
+                  ? "Antrean Servis"
+                  : order.status === "SELESAI_PENGERJAAN"
+                  ? "Siap Bayar di Kasir"
+                  : order.status === "SELESAI_PEMBAYARAN"
+                  ? "Faktur Lunas"
+                  : order.status}
               </span>
             </span>
             <span>•</span>
             <span>
-              Teknisi: <span className="font-semibold text-slate-800">{order.mechanicName || "Teknisi PitCare Auto"}</span>
+              Teknisi / Mekanik:{" "}
+              <strong className="text-slate-800">{order.mechanicName || "Mekanik PitCare"}</strong>
             </span>
           </div>
 
@@ -520,9 +551,9 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs font-semibold cursor-pointer"
+                className="btn-primary flex items-center gap-2 px-4 py-2.5 text-xs font-semibold cursor-pointer shadow-xs"
               >
-                🚀 Mulai Pengerjaan Pit
+                🚀 Mulai Pengerjaan
               </button>
             )}
 
@@ -532,15 +563,15 @@ export default function ServiceOrderDetailPage({
                   type="button"
                   disabled={isPending}
                   onClick={() => handleStatusChange("MENUNGGU_PART")}
-                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-300 hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-3.5 py-2.5 rounded-lg text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-200 hover:bg-purple-100 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  ⏸️ Tunda: Menunggu Sparepart
+                  ⏸️ Tunda: Tunggu Suku Cadang
                 </button>
                 <button
                   type="button"
                   disabled={isPending}
                   onClick={() => setIsCompleteModalOpen(true)}
-                  className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs font-semibold cursor-pointer"
+                  className="btn-primary flex items-center gap-2 px-4 py-2.5 text-xs font-semibold cursor-pointer shadow-xs"
                 >
                   ✅ Selesaikan Pengerjaan
                 </button>
@@ -552,9 +583,9 @@ export default function ServiceOrderDetailPage({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusChange("PENGERJAAN")}
-                className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs font-semibold cursor-pointer shadow-xs"
+                className="btn-primary flex items-center gap-2 px-4 py-2.5 text-xs font-semibold cursor-pointer shadow-xs"
               >
-                ▶️ Lanjutkan Pengerjaan (Part Tersedia)
+                ▶️ Lanjutkan Pengerjaan (Part Sudah Ada)
               </button>
             )}
 
@@ -565,7 +596,7 @@ export default function ServiceOrderDetailPage({
                 onClick={() => handleStatusChange("PENGERJAAN")}
                 className="btn-ghost px-3.5 py-2 text-xs font-semibold cursor-pointer"
               >
-                ↩️ Kembalikan ke Pit
+                ↩️ Kembalikan ke Proses Pengerjaan
               </button>
             )}
           </div>
@@ -575,73 +606,73 @@ export default function ServiceOrderDetailPage({
       {/* Info Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Customer & Vehicle Card */}
-        <div className="card-pitstop p-6 space-y-4">
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-800">
-            Identitas Pelanggan & Unit
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs space-y-4">
+          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider pb-3 border-b border-slate-100">
+            Identitas Pelanggan & Kendaraan
           </h2>
           <div>
-            <p className="text-[11px] text-slate-400">Pemilik Kendaraan</p>
-            <p className="text-sm font-bold text-slate-100 mt-0.5">{order.customer?.name}</p>
+            <p className="text-[11px] text-slate-500">Pemilik Kendaraan</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">{order.customer?.name}</p>
             <a
               href={`https://wa.me/${order.customer?.phone?.replace(/^0/, "62")}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-cyan-400 font-semibold hover:underline mt-1"
+              className="inline-flex items-center gap-1.5 text-xs text-blue-600 font-semibold hover:underline mt-1 font-mono"
             >
               📱 WhatsApp: {order.customer?.phone}
             </a>
           </div>
-          <div className="pt-3 border-t border-slate-800">
-            <p className="text-[11px] text-slate-400">Kendaraan</p>
-            <p className="text-sm font-bold text-slate-100 mt-0.5">
+          <div className="pt-3 border-t border-slate-100">
+            <p className="text-[11px] text-slate-500">Kendaraan</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">
               {order.vehicle?.brand} {order.vehicle?.model}
             </p>
-            <p className="font-mono text-xs font-bold text-cyan-400 mt-0.5">{order.vehicle?.plateNumber}</p>
+            <p className="font-mono text-xs font-bold text-slate-800 mt-0.5">{order.vehicle?.plateNumber}</p>
             {order.currentKm && (
-              <p className="text-xs text-slate-400 mt-1">
-                KM: <span className="font-mono font-bold text-slate-200">{order.currentKm.toLocaleString("id-ID")} KM</span>
+              <p className="text-xs text-slate-600 mt-1">
+                Kilometer: <span className="font-mono font-bold text-slate-900">{order.currentKm.toLocaleString("id-ID")} KM</span>
               </p>
             )}
           </div>
-          <div className="pt-3 border-t border-slate-800">
-            <p className="text-[11px] text-slate-400">Keluhan Masuk</p>
-            <p className="text-xs text-slate-300 mt-1 italic leading-relaxed">
+          <div className="pt-3 border-t border-slate-100">
+            <p className="text-[11px] text-slate-500">Keluhan Pelanggan</p>
+            <p className="text-xs text-slate-700 mt-1 italic leading-relaxed">
               &quot;{order.complaints}&quot;
             </p>
           </div>
         </div>
 
-        {/* Diagnosis Card */}
-        <div className="lg:col-span-2 card-pitstop p-6 flex flex-col justify-between">
+        {/* Diagnosis / Catatan Perbaikan Mekanik */}
+        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                Catatan Pemeriksaan & Diagnosis
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+              <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Catatan Perbaikan Mekanik
               </h2>
-              <span className="text-[11px] text-slate-400">
-                Mekanik: <strong className="text-slate-200">{order.mechanicName}</strong>
+              <span className="text-xs text-slate-500">
+                Mekanik: <strong className="text-slate-800">{order.mechanicName || "Mekanik PitCare"}</strong>
               </span>
             </div>
-            <p className="text-xs text-slate-400 mb-2">
-              Tuliskan temuan masalah teknis, rekomendasi perbaikan, atau kondisi hasil uji jalan:
+            <p className="text-xs text-slate-500 mb-2">
+              Tuliskan temuan masalah teknis, catatan perbaikan, atau kondisi hasil uji coba jalan motor:
             </p>
             <textarea
               rows={4}
               value={diagnosisInput}
               onChange={(e) => setDiagnosisInput(e.target.value)}
               placeholder="Contoh: Busi aus renggang, seal shock kanan rembes oli, v-belt mulai retak rambut..."
-              className="input-custom w-full p-3.5 text-xs leading-relaxed"
+              className="input-dark w-full p-3.5 text-xs leading-relaxed"
             />
           </div>
-          <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-800">
-            <span className="text-[11px] text-slate-400">
-              {order.diagnosis ? "✓ Catatan tersimpan" : "Belum ada catatan diagnosis"}
+          <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
+            <span className="text-xs text-slate-500">
+              {order.diagnosis ? "✓ Catatan tersimpan" : "Belum ada catatan perbaikan"}
             </span>
             <button
               type="button"
               disabled={isPending}
               onClick={handleSaveDiagnosis}
-              className="btn-cyan px-4 py-2 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+              className="btn-primary px-4 py-2 text-xs font-semibold cursor-pointer shadow-xs"
             >
               Simpan Catatan
             </button>
@@ -649,21 +680,24 @@ export default function ServiceOrderDetailPage({
         </div>
       </div>
 
-      {/* Tindakan Jasa */}
-      <div className="card-pitstop p-6 sm:p-7">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      {/* Tindakan Jasa Servis */}
+      <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
           <div>
-            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+            <h2 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
               🔧 Tindakan Jasa Servis
-              <span className="text-xs font-normal text-slate-400">({order.items.length} tindakan)</span>
+              <span className="text-xs font-normal text-slate-500">({order.items.length} tindakan)</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Pekerjaan jasa yang dikerjakan teknisi pada unit ini.</p>
+            <p className="text-xs text-slate-500 mt-0.5">Pekerjaan jasa servis yang dikerjakan mekanik pada unit motor ini.</p>
           </div>
           {order.status !== "SELESAI_PEMBAYARAN" && (
             <button
               type="button"
-              onClick={() => { setActionError(""); setIsAddServiceModalOpen(true); }}
-              className="btn-cyan px-4 py-2 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+              onClick={() => {
+                setActionError("");
+                setIsAddServiceModalOpen(true);
+              }}
+              className="btn-primary px-3.5 py-2 text-xs font-semibold cursor-pointer shadow-xs"
             >
               + Tambah Jasa Servis
             </button>
@@ -671,12 +705,12 @@ export default function ServiceOrderDetailPage({
         </div>
 
         {order.items.length === 0 ? (
-          <p className="py-8 text-center text-xs text-slate-500">Belum ada tindakan jasa yang dicatat.</p>
+          <p className="py-8 text-center text-xs text-slate-400">Belum ada tindakan jasa yang dicatat.</p>
         ) : (
           <div className="overflow-x-auto mt-3">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider">
+                <tr className="text-slate-500 border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider">
                   <th className="py-3 px-3">Nama Jasa Servis</th>
                   <th className="py-3 px-3 text-right">Biaya Satuan</th>
                   <th className="py-3 px-3 text-center">Qty</th>
@@ -684,16 +718,23 @@ export default function ServiceOrderDetailPage({
                   {order.status !== "SELESAI_PEMBAYARAN" && <th className="py-3 px-3 text-right">Aksi</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100">
                 {order.items.map((item) => (
-                  <tr key={item.id} className="text-slate-200 hover:bg-cyan-500/5 transition-colors">
-                    <td className="py-3.5 px-3 font-bold">{item.serviceName}</td>
-                    <td className="py-3.5 px-3 text-right font-mono text-slate-400">{formatRupiah(item.price)}</td>
-                    <td className="py-3.5 px-3 text-center font-mono text-cyan-300">{item.qty}</td>
-                    <td className="py-3.5 px-3 text-right font-mono font-black text-cyan-400">{formatRupiah(item.subtotal)}</td>
+                  <tr key={item.id} className="text-slate-800 hover:bg-slate-50 transition-colors">
+                    <td className="py-3.5 px-3 font-semibold text-slate-900">{item.serviceName}</td>
+                    <td className="py-3.5 px-3 text-right font-mono text-slate-600">{formatRupiah(item.price)}</td>
+                    <td className="py-3.5 px-3 text-center font-mono text-slate-800 font-semibold">{item.qty}</td>
+                    <td className="py-3.5 px-3 text-right font-mono font-bold text-slate-900">{formatRupiah(item.subtotal)}</td>
                     {order.status !== "SELESAI_PEMBAYARAN" && (
                       <td className="py-3.5 px-3 text-right">
-                        <button type="button" onClick={() => handleRemoveService(item.id)} className="text-rose-400 hover:bg-rose-500/20 p-1.5 rounded-lg transition-colors cursor-pointer" title="Hapus Jasa">✕</button>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveService(item.id)}
+                          className="text-rose-600 hover:bg-rose-50 p-1.5 rounded-md transition-colors cursor-pointer"
+                          title="Hapus Jasa"
+                        >
+                          ✕
+                        </button>
                       </td>
                     )}
                   </tr>
@@ -702,28 +743,31 @@ export default function ServiceOrderDetailPage({
             </table>
           </div>
         )}
-        <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
-          <p className="text-xs text-slate-400">
-            Subtotal Jasa: <span className="font-mono font-black text-cyan-400 ml-1.5">{formatRupiah(order.totalServices)}</span>
+        <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+          <p className="text-xs text-slate-600 font-medium">
+            Subtotal Biaya Jasa: <span className="font-mono font-bold text-slate-900 ml-1.5">{formatRupiah(order.totalServices)}</span>
           </p>
         </div>
       </div>
 
       {/* Suku Cadang */}
-      <div className="card-pitstop p-6 sm:p-7">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
           <div>
-            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+            <h2 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
               📦 Suku Cadang Terpakai
-              <span className="text-xs font-normal text-slate-400">({order.parts.length} part)</span>
+              <span className="text-xs font-normal text-slate-500">({order.parts.length} part)</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Stok gudang dipotong otomatis dan dikembalikan jika dibatalkan.</p>
+            <p className="text-xs text-slate-500 mt-0.5">Stok gudang otomatis terpotong dan dikembalikan jika dibatalkan.</p>
           </div>
           {order.status !== "SELESAI_PEMBAYARAN" && (
             <button
               type="button"
-              onClick={() => { setActionError(""); setIsAddPartModalOpen(true); }}
-              className="btn-cyan px-4 py-2 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+              onClick={() => {
+                setActionError("");
+                setIsAddPartModalOpen(true);
+              }}
+              className="btn-primary px-3.5 py-2 text-xs font-semibold cursor-pointer shadow-xs"
             >
               + Ambil Suku Cadang
             </button>
@@ -731,12 +775,12 @@ export default function ServiceOrderDetailPage({
         </div>
 
         {order.parts.length === 0 ? (
-          <p className="py-8 text-center text-xs text-slate-500">Belum ada pemakaian suku cadang.</p>
+          <p className="py-8 text-center text-xs text-slate-400">Belum ada pemakaian suku cadang.</p>
         ) : (
           <div className="overflow-x-auto mt-3">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider">
+                <tr className="text-slate-500 border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider">
                   <th className="py-3 px-3">Nama Suku Cadang</th>
                   <th className="py-3 px-3 text-right">Harga Satuan</th>
                   <th className="py-3 px-3 text-center">Qty</th>
@@ -744,16 +788,23 @@ export default function ServiceOrderDetailPage({
                   {order.status !== "SELESAI_PEMBAYARAN" && <th className="py-3 px-3 text-right">Aksi</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100">
                 {order.parts.map((p) => (
-                  <tr key={p.id} className="text-slate-200 hover:bg-cyan-500/5 transition-colors">
-                    <td className="py-3.5 px-3 font-bold">{p.partName}</td>
-                    <td className="py-3.5 px-3 text-right font-mono text-slate-400">{formatRupiah(p.sellPrice)}</td>
-                    <td className="py-3.5 px-3 text-center font-mono text-cyan-300">{p.qty}</td>
-                    <td className="py-3.5 px-3 text-right font-mono font-black text-cyan-400">{formatRupiah(p.subtotal)}</td>
+                  <tr key={p.id} className="text-slate-800 hover:bg-slate-50 transition-colors">
+                    <td className="py-3.5 px-3 font-semibold text-slate-900">{p.partName}</td>
+                    <td className="py-3.5 px-3 text-right font-mono text-slate-600">{formatRupiah(p.sellPrice)}</td>
+                    <td className="py-3.5 px-3 text-center font-mono text-slate-800 font-semibold">{p.qty}</td>
+                    <td className="py-3.5 px-3 text-right font-mono font-bold text-slate-900">{formatRupiah(p.subtotal)}</td>
                     {order.status !== "SELESAI_PEMBAYARAN" && (
                       <td className="py-3.5 px-3 text-right">
-                        <button type="button" onClick={() => handleRemovePart(p.id)} className="text-rose-400 hover:bg-rose-500/20 p-1.5 rounded-lg transition-colors cursor-pointer" title="Kembalikan Part">✕</button>
+                        <button
+                          type="button"
+                          onClick={() => handleRemovePart(p.id)}
+                          className="text-rose-600 hover:bg-rose-50 p-1.5 rounded-md transition-colors cursor-pointer"
+                          title="Kembalikan Part"
+                        >
+                          ✕
+                        </button>
                       </td>
                     )}
                   </tr>
@@ -762,62 +813,94 @@ export default function ServiceOrderDetailPage({
             </table>
           </div>
         )}
-        <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
-          <p className="text-xs text-slate-400">
-            Subtotal Suku Cadang: <span className="font-mono font-black text-cyan-400 ml-1.5">{formatRupiah(order.totalParts)}</span>
+        <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+          <p className="text-xs text-slate-600 font-medium">
+            Subtotal Suku Cadang: <span className="font-mono font-bold text-slate-900 ml-1.5">{formatRupiah(order.totalParts)}</span>
           </p>
         </div>
       </div>
 
-      {/* Grand Total */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#0B0F17] border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-inner">
+      {/* Grand Total Card (Linear High Contrast) */}
+      <div className="p-6 sm:p-7 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-sm">
         <div className="space-y-1">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Rekapitulasi SPK</p>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-1">
-            <span>Jasa: <strong className="font-mono text-cyan-400">{formatRupiah(order.totalServices)}</strong></span>
-            <span className="text-slate-700">•</span>
-            <span>Sparepart: <strong className="font-mono text-cyan-400">{formatRupiah(order.totalParts)}</strong></span>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Rekapitulasi Tiket Servis</p>
+          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-300 pt-1">
+            <span>Jasa: <strong className="font-mono text-white">{formatRupiah(order.totalServices)}</strong></span>
+            <span className="text-slate-600">•</span>
+            <span>Sparepart: <strong className="font-mono text-white">{formatRupiah(order.totalParts)}</strong></span>
             {order.discount > 0 && (
               <>
-                <span className="text-slate-700">•</span>
+                <span className="text-slate-600">•</span>
                 <span className="text-rose-400 font-mono">Diskon: -{formatRupiah(order.discount)}</span>
               </>
             )}
           </div>
         </div>
         <div className="flex items-baseline gap-3">
-          <span className="text-xs font-bold text-slate-400 uppercase">Grand Total:</span>
-          <span className="text-3xl font-black font-mono text-cyan-400 drop-shadow-[0_0_15px_rgba(0,210,255,0.4)]">{formatRupiah(order.grandTotal)}</span>
+          <span className="text-xs font-semibold text-slate-400 uppercase">Grand Total:</span>
+          <span className="text-2xl sm:text-3xl font-extrabold font-mono text-white">{formatRupiah(order.grandTotal)}</span>
         </div>
       </div>
 
       {/* Modal Tambah Jasa */}
-      <Modal isOpen={isAddServiceModalOpen} onClose={() => setIsAddServiceModalOpen(false)} title="Tambahkan Tindakan Jasa" description="Pilih jenis pekerjaan dari katalog bengkel PitCare Auto.">
+      <Modal
+        isOpen={isAddServiceModalOpen}
+        onClose={() => setIsAddServiceModalOpen(false)}
+        title="Tambahkan Tindakan Jasa Servis"
+        description="Pilih jenis pekerjaan dari katalog bengkel PitCare Auto."
+      >
         <form onSubmit={handleAddService} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Pilih Jasa Servis *</label>
-            <select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} required className="input-custom w-full h-11 px-3.5 text-xs cursor-pointer">
+            <label className="label-dark">Pilih Jasa Servis *</label>
+            <select
+              value={selectedServiceId}
+              onChange={(e) => setSelectedServiceId(e.target.value)}
+              required
+              className="input-dark w-full h-11 px-3.5 text-xs cursor-pointer"
+            >
               <option value="">-- Pilih dari Katalog Jasa --</option>
               {availableServices.map((s) => (
-                <option key={s.id} value={s.id}>{s.name} — {formatRupiah(s.price)} (~{s.duration || 30} mnt)</option>
+                <option key={s.id} value={s.id}>
+                  {s.name} — {formatRupiah(s.price)} (~{s.duration || 30} mnt)
+                </option>
               ))}
             </select>
           </div>
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-            <button type="button" onClick={() => setIsAddServiceModalOpen(false)} className="px-4 py-2 text-xs rounded-xl bg-[#0F172A] text-slate-300 border border-slate-700 hover:border-slate-600 cursor-pointer">Batal</button>
-            <button type="submit" disabled={isPending || !selectedServiceId} className="btn-cyan px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20 disabled:opacity-60">
-              {isPending ? "Menambahkan..." : "Tambah ke SPK"}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsAddServiceModalOpen(false)}
+              className="btn-ghost px-4 py-2 text-xs font-semibold cursor-pointer"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={isPending || !selectedServiceId}
+              className="btn-primary px-5 py-2.5 text-xs font-semibold cursor-pointer disabled:opacity-60"
+            >
+              {isPending ? "Menambahkan..." : "Tambah ke Tiket Servis"}
             </button>
           </div>
         </form>
       </Modal>
 
       {/* Modal Ambil Suku Cadang */}
-      <Modal isOpen={isAddPartModalOpen} onClose={() => setIsAddPartModalOpen(false)} title="Ambil Suku Cadang dari Gudang" description="Stok gudang akan otomatis dipotong sesuai kuantitas pemakaian.">
+      <Modal
+        isOpen={isAddPartModalOpen}
+        onClose={() => setIsAddPartModalOpen(false)}
+        title="Ambil Suku Cadang dari Gudang"
+        description="Stok gudang akan otomatis dipotong sesuai kuantitas pemakaian."
+      >
         <form onSubmit={handleAddPart} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Pilih Suku Cadang *</label>
-            <select value={selectedPartId} onChange={(e) => setSelectedPartId(e.target.value)} required className="input-custom w-full h-11 px-3.5 text-xs cursor-pointer">
+            <label className="label-dark">Pilih Suku Cadang *</label>
+            <select
+              value={selectedPartId}
+              onChange={(e) => setSelectedPartId(e.target.value)}
+              required
+              className="input-dark w-full h-11 px-3.5 text-xs cursor-pointer"
+            >
               <option value="">-- Pilih Suku Cadang --</option>
               {availableParts.map((p) => (
                 <option key={p.id} value={p.id} disabled={p.stock <= 0}>
@@ -827,13 +910,30 @@ export default function ServiceOrderDetailPage({
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Jumlah Pemakaian (Qty) *</label>
-            <input type="number" min={1} value={partQty} onChange={(e) => setPartQty(parseInt(e.target.value, 10) || 1)} required className="input-custom w-full h-11 px-3.5 text-xs font-mono" />
+            <label className="label-dark">Jumlah Pemakaian (Qty) *</label>
+            <input
+              type="number"
+              min={1}
+              value={partQty}
+              onChange={(e) => setPartQty(parseInt(e.target.value, 10) || 1)}
+              required
+              className="input-dark w-full h-11 px-3.5 text-xs font-mono"
+            />
           </div>
-          {actionError && <p className="text-xs text-rose-400 font-medium">{actionError}</p>}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-            <button type="button" onClick={() => setIsAddPartModalOpen(false)} className="px-4 py-2 text-xs rounded-xl bg-[#0F172A] text-slate-300 border border-slate-700 hover:border-slate-600 cursor-pointer">Batal</button>
-            <button type="submit" disabled={isPending || !selectedPartId} className="btn-cyan px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20 disabled:opacity-60">
+          {actionError && <p className="text-xs text-rose-600 font-semibold">{actionError}</p>}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsAddPartModalOpen(false)}
+              className="btn-ghost px-4 py-2 text-xs font-semibold cursor-pointer"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={isPending || !selectedPartId}
+              className="btn-primary px-5 py-2.5 text-xs font-semibold cursor-pointer disabled:opacity-60"
+            >
               {isPending ? "Memproses..." : "Ambil & Pasang"}
             </button>
           </div>
@@ -841,24 +941,40 @@ export default function ServiceOrderDetailPage({
       </Modal>
 
       {/* Modal Konfirmasi Selesai */}
-      <Modal isOpen={isCompleteModalOpen} onClose={() => setIsCompleteModalOpen(false)} title="Konfirmasi Pengerjaan Selesai" description="Unit kendaraan akan ditandai selesai dan siap ditagih di terminal kasir.">
+      <Modal
+        isOpen={isCompleteModalOpen}
+        onClose={() => setIsCompleteModalOpen(false)}
+        title="Konfirmasi Pengerjaan Selesai"
+        description="Unit kendaraan akan ditandai selesai dan siap ditagih di terminal kasir."
+      >
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Hasil Akhir Pemeriksaan *</label>
+            <label className="label-dark">Hasil Akhir Pemeriksaan / Catatan Mekanik *</label>
             <textarea
               rows={3}
               value={diagnosisInput}
               onChange={(e) => setDiagnosisInput(e.target.value)}
               placeholder="Contoh: Seluruh pengerjaan tuntas, oli mesin dan filter baru, mesin ditest normal dan responsif."
-              className="input-custom w-full p-3.5 text-xs leading-relaxed"
+              className="input-dark w-full p-3.5 text-xs leading-relaxed"
             />
           </div>
-          <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-cyan-500/30 text-slate-300 text-xs shadow-inner">
-            💡 Setelah diselesaikan, SPK ini langsung muncul di <strong>Kasir & Billing</strong> siap untuk ditagih.
+          <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs">
+            💡 Setelah diselesaikan, tiket servis ini akan langsung siap ditagih di terminal <strong>Kasir & Billing</strong>.
           </div>
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-            <button type="button" onClick={() => setIsCompleteModalOpen(false)} className="px-4 py-2 text-xs rounded-xl bg-[#0F172A] text-slate-300 border border-slate-700 hover:border-slate-600 cursor-pointer">Batal</button>
-            <button type="button" disabled={isPending} onClick={() => handleStatusChange("SELESAI_PENGERJAAN", diagnosisInput)} className="btn-cyan px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20 disabled:opacity-60">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsCompleteModalOpen(false)}
+              className="btn-ghost px-4 py-2 text-xs font-semibold cursor-pointer"
+            >
+              Batal
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleStatusChange("SELESAI_PENGERJAAN", diagnosisInput)}
+              className="btn-primary px-5 py-2.5 text-xs font-semibold cursor-pointer disabled:opacity-60"
+            >
               {isPending ? "Memproses..." : "Konfirmasi Selesai Servis"}
             </button>
           </div>

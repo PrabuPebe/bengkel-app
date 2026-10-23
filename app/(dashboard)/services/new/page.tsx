@@ -440,7 +440,7 @@ export default function NewServiceOrderPage() {
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  Input Cepat
+                  Pelanggan Baru (Cepat)
                 </button>
                 <button
                   type="button"
