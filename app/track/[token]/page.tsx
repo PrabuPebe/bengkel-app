@@ -75,10 +75,10 @@ export default function PublicServiceTrackingPage({
   }
 
   const steps = [
-    { key: "ANTRIAN", label: "Antrian Pit", desc: "Menunggu giliran teknisi" },
-    { key: "PENGERJAAN", label: "Pengerjaan", desc: "Tindakan perbaikan & pasang part" },
-    { key: "SELESAI_PENGERJAAN", label: "Selesai Pengerjaan", desc: "Uji jalan & siap billing" },
-    { key: "SELESAI_PEMBAYARAN", label: "Siap Diambil", desc: "Unit siap serah terima" },
+    { key: "ANTRIAN", label: "Antrean Servis", desc: "Menunggu giliran mekanik" },
+    { key: "PENGERJAAN", label: "Sedang Dikerjakan", desc: "Tindakan perbaikan & penggantian part" },
+    { key: "SELESAI_PENGERJAAN", label: "Selesai Pengerjaan", desc: "Uji coba motor & siap ke kasir" },
+    { key: "SELESAI_PEMBAYARAN", label: "Siap Diambil", desc: "Faktur lunas & siap serah terima" },
   ];
 
   const getStepStatus = (stepKey: string) => {
@@ -100,26 +100,26 @@ export default function PublicServiceTrackingPage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col items-center justify-center p-6">
-        <div className="w-10 h-10 border-3 border-cyan-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-sm font-semibold text-slate-400">Menghubungkan ke PitCare Auto Live Tracker...</p>
+      <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col items-center justify-center p-6">
+        <div className="w-9 h-9 border-2 border-slate-900 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-semibold text-slate-600">Menghubungkan ke PitCare Auto Live Tracker...</p>
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-16 h-16 rounded-3xl bg-rose-950/40 border border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl font-bold mb-4 shadow-lg">
+      <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 text-2xl font-bold mb-4 shadow-xs">
           !
         </div>
-        <h1 className="text-xl font-bold text-slate-100 mb-2">Token Pelacakan Tidak Ditemukan</h1>
-        <p className="text-xs text-slate-400 max-w-md mb-6 leading-relaxed">
-          Link pelacakan atau nomor token yang Anda masukkan tidak terdaftar dalam sistem PitCare Auto. Pastikan Anda mengklik tautan resmi dari pesan WhatsApp kami.
+        <h1 className="text-lg font-bold text-slate-900 mb-1.5">Token Pelacakan Tidak Ditemukan</h1>
+        <p className="text-xs text-slate-500 max-w-md mb-6 leading-relaxed">
+          Tautan pelacakan atau nomor token yang Anda akses tidak terdaftar dalam sistem PitCare Auto. Pastikan Anda mengklik tautan resmi yang dikirimkan melalui WhatsApp bengkel.
         </p>
         <Link
           href="/"
-          className="btn-cyan px-5 py-2.5 text-xs cursor-pointer shadow-lg shadow-cyan-500/20"
+          className="btn-primary px-4 py-2 text-xs font-semibold cursor-pointer shadow-xs"
         >
           Kembali ke Beranda
         </Link>
@@ -128,27 +128,27 @@ export default function PublicServiceTrackingPage({
   }
 
   const waMessage = encodeURIComponent(
-    `Halo PitCare Auto, saya ingin menanyakan perkembangan servis kendaraan saya:\n- No. SPK: ${order.orderNumber}\n- Plat Nomor: ${order.vehicle?.plateNumber || "-"}\n- Pemilik: ${order.customer?.name || "-"}\nMohon informasinya. Terima kasih!`
+    `Halo PitCare Auto, saya ingin menanyakan perkembangan servis kendaraan saya:\n- No. Tiket: ${order.orderNumber}\n- Plat Nomor: ${order.vehicle?.plateNumber || "-"}\n- Pemilik: ${order.customer?.name || "-"}\nMohon informasinya. Terima kasih!`
   );
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] text-slate-100 antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 antialiased py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Top Branding Header */}
-        <div className="flex items-center justify-between pb-6 border-b border-slate-800">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#2563EB] to-[#00D2FF] flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-cyan-500/20">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-xs">
               PA
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-black tracking-tight text-white">PITCARE AUTO</h1>
-                <span className="badge-selesai-pengerjaan">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Tracker
+                <h1 className="text-base font-bold tracking-tight text-slate-900">PitCare Auto</h1>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Tracking
                 </span>
               </div>
-              <p className="text-xs text-slate-400">Portal Transparan Pelacakan Progres Servis</p>
+              <p className="text-xs text-slate-500">Pelacakan Transparan Status Servis Kendaraan</p>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export default function PublicServiceTrackingPage({
             type="button"
             onClick={handleManualRefresh}
             disabled={isRefreshing}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 bg-[#0F172A] border border-slate-700 hover:border-cyan-500 hover:text-cyan-400 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            className="btn-ghost px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:opacity-50"
             title="Muat ulang status terbaru"
           >
             <span className={`inline-block ${isRefreshing ? "animate-spin" : ""}`}>🔄</span>
@@ -165,37 +165,37 @@ export default function PublicServiceTrackingPage({
         </div>
 
         {/* Live Status Hero Card */}
-        <div className="card-pitstop p-6 sm:p-7 relative overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2.5 mb-2.5">
-                <span className="font-mono text-xs font-bold px-3 py-1 rounded-xl bg-[#0F172A] text-slate-300 border border-slate-700">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
                   {order.orderNumber}
                 </span>
-                <span className="font-mono text-xs font-black px-3 py-1 rounded-xl bg-[#0B0F17] text-cyan-400 border border-cyan-500/30 tracking-wider shadow-inner">
+                <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-slate-900 text-white tracking-wider">
                   {order.vehicle?.plateNumber}
                 </span>
               </div>
-              <h2 className="text-xl font-bold text-slate-100 tracking-tight">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 {order.vehicle?.brand} {order.vehicle?.model}
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Pemilik: <strong className="text-slate-200">{order.customer?.name}</strong> • Masuk: {formatDate(order.entryDate)}
+              <p className="text-xs text-slate-500 mt-1">
+                Pemilik: <strong className="text-slate-800">{order.customer?.name}</strong> • Masuk: {formatDate(order.entryDate)}
               </p>
             </div>
 
             <div className="sm:text-right">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                Status Operasional
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+                Status Saat Ini
               </span>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs bg-[#0B0F17] border border-cyan-500/40 text-cyan-300 shadow-inner">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-semibold text-xs bg-slate-100 border border-slate-200 text-slate-800">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>
-                  {order.status === "ANTRIAN" && "Dalam Antrian Pit"}
-                  {order.status === "PENGERJAAN" && "Sedang Dalam Pengerjaan"}
+                  {order.status === "ANTRIAN" && "Menunggu Antrean"}
+                  {order.status === "PENGERJAAN" && "Sedang Dikerjakan"}
                   {order.status === "MENUNGGU_PART" && "Menunggu Suku Cadang"}
-                  {order.status === "SELESAI_PENGERJAAN" && "Pengerjaan Selesai (Siap Ditagih)"}
-                  {order.status === "SELESAI_PEMBAYARAN" && "Selesai & Lunas (Siap Diambil)"}
+                  {order.status === "SELESAI_PENGERJAAN" && "Pengerjaan Selesai (Siap Kasir)"}
+                  {order.status === "SELESAI_PEMBAYARAN" && "Lunas / Siap Diambil"}
                 </span>
               </div>
             </div>
@@ -203,127 +203,137 @@ export default function PublicServiceTrackingPage({
         </div>
 
         {/* 4-Step Progress Pipeline */}
-        <div className="card-pitstop p-6 sm:p-7">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-5 pb-3 border-b border-slate-800">
-            Tahapan Pengerjaan Unit Kendaraan
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs">
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 pb-3 border-b border-slate-100">
+            Tahapan Pengerjaan Motor
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             {steps.map((s, idx) => {
               const st = getStepStatus(s.key);
               return (
                 <div
                   key={s.key}
-                  className={`p-4 rounded-xl border transition-all duration-300 ${
+                  className={`p-4 rounded-xl border transition-all ${
                     st === "current"
-                      ? "bg-gradient-to-b from-cyan-950/50 to-blue-950/40 border-cyan-500 shadow-md shadow-cyan-500/20"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
                       : st === "completed"
-                        ? "bg-blue-950/30 text-slate-200 border-blue-600/50"
-                        : "bg-[#0B0F17]/50 border-slate-800 text-slate-500"
+                      ? "bg-slate-50 text-slate-800 border-slate-200"
+                      : "bg-white text-slate-400 border-slate-200"
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
-                      st === "completed" ? "text-cyan-400" : st === "current" ? "text-cyan-300" : "text-slate-500"
-                    }`}>
-                      Langkah {idx + 1}
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span
+                      className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
+                        st === "completed"
+                          ? "text-emerald-600"
+                          : st === "current"
+                          ? "text-slate-300"
+                          : "text-slate-400"
+                      }`}
+                    >
+                      Tahap {idx + 1}
                     </span>
                     {st === "completed" && (
-                      <span className="text-xs font-bold text-cyan-400 flex items-center gap-1">
-                        ✓ Selesai
-                      </span>
+                      <span className="text-xs font-bold text-emerald-600">✓ Selesai</span>
                     )}
                     {st === "current" && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500 text-black">
-                        Berjalan
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white text-slate-900">
+                        Aktif
                       </span>
                     )}
                   </div>
-                  <p className={`text-xs font-bold ${
-                    st === "completed" ? "text-slate-200" : st === "current" ? "text-white" : "text-slate-400"
-                  }`}>
+                  <p
+                    className={`text-xs font-bold ${
+                      st === "current" ? "text-white" : "text-slate-900"
+                    }`}
+                  >
                     {s.label}
                   </p>
-                  <p className={`text-[11px] mt-1 leading-snug ${
-                    st === "completed" ? "text-slate-400" : st === "current" ? "text-slate-300" : "text-slate-600"
-                  }`}>{s.desc}</p>
+                  <p
+                    className={`text-[11px] mt-1 leading-snug ${
+                      st === "current" ? "text-slate-300" : "text-slate-500"
+                    }`}
+                  >
+                    {s.desc}
+                  </p>
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-5 pt-3.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
             <span>
-              Teknisi Ahli: <strong className="text-slate-200">{order.mechanicName || "Teknisi PitCare Auto"}</strong>
+              Mekanik Bertugas: <strong className="text-slate-800">{order.mechanicName || "Mekanik PitCare Auto"}</strong>
             </span>
-            <span className="font-mono">Update Real-time: {lastRefreshed.toLocaleTimeString("id-ID")}</span>
+            <span className="font-mono text-[11px]">Update: {lastRefreshed.toLocaleTimeString("id-ID")}</span>
           </div>
         </div>
 
         {/* Diagnosis & Mechanic Findings */}
-        <div className="card-pitstop p-6 sm:p-7 space-y-4">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-800">
-            Catatan Keluhan & Hasil Pemeriksaan Teknisi
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-4">
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider pb-3 border-b border-slate-100">
+            Catatan Keluhan & Hasil Pemeriksaan Mekanik
           </h3>
 
-          <div className="space-y-3.5 text-xs">
-            <div className="p-4 rounded-xl bg-[#0F172A] border border-slate-800">
-              <span className="text-slate-400 font-semibold block text-[11px] mb-1">
+          <div className="space-y-3 text-xs">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <span className="text-slate-500 font-semibold block text-[11px] mb-1">
                 Keluhan Awal Saat Masuk:
               </span>
-              <p className="text-slate-200 italic leading-relaxed">
+              <p className="text-slate-800 italic leading-relaxed">
                 &quot;{order.complaints}&quot;
               </p>
             </div>
 
             {order.diagnosis ? (
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-cyan-500/30">
-                <span className="text-cyan-400 font-bold block text-[11px] mb-1">
-                  Hasil Analisis / Diagnosis Teknisi:
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="text-slate-900 font-bold block text-[11px] mb-1">
+                  Catatan Tindakan & Pemeriksaan Mekanik:
                 </span>
-                <p className="text-slate-200 leading-relaxed font-medium">
+                <p className="text-slate-700 leading-relaxed font-medium">
                   {order.diagnosis}
                 </p>
               </div>
             ) : (
-              <p className="text-xs text-slate-500 italic py-1">
-                Teknisi sedang melakukan inspeksi menyeluruh pada unit kendaraan Anda.
+              <p className="text-xs text-slate-400 italic py-1">
+                Mekanik sedang melakukan inspeksi menyeluruh pada unit motor Anda.
               </p>
             )}
           </div>
         </div>
 
         {/* Itemized Services & Spareparts Breakdown */}
-        <div className="card-pitstop p-6 sm:p-7 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Rincian Pekerjaan & Biaya Transparan
             </h3>
-            <span className="text-xs text-cyan-400 font-mono">PitCare Auto Guarantee</span>
+            <span className="text-xs text-emerald-700 font-semibold">Garansi Resmi PitCare</span>
           </div>
 
           <div className="space-y-4">
             {/* Services */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <p className="text-xs font-semibold text-slate-800 flex items-center gap-1.5">
                   <span>🔧 Tindakan Jasa Servis</span>
                 </p>
-                <span className="font-mono font-black text-cyan-400 text-xs">
+                <span className="font-mono font-bold text-slate-900 text-xs">
                   {formatRupiah(order.totalServices)}
                 </span>
               </div>
               {order.items.length === 0 ? (
-                <p className="text-xs text-slate-500 italic py-1">Belum ada item jasa servis.</p>
+                <p className="text-xs text-slate-400 italic py-1">Belum ada item tindakan jasa.</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {order.items.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#0F172A] border border-slate-800"
+                      className="flex items-center justify-between text-xs p-3 rounded-lg bg-slate-50 border border-slate-200"
                     >
-                      <span className="text-slate-200 font-semibold">{item.serviceName}</span>
-                      <span className="font-mono font-black text-cyan-400">{formatRupiah(item.subtotal)}</span>
+                      <span className="text-slate-800 font-medium">{item.serviceName}</span>
+                      <span className="font-mono font-bold text-slate-900">{formatRupiah(item.subtotal)}</span>
                     </div>
                   ))}
                 </div>
@@ -331,42 +341,42 @@ export default function PublicServiceTrackingPage({
             </div>
 
             {/* Spareparts */}
-            <div className="pt-3 border-t border-slate-800">
+            <div className="pt-3 border-t border-slate-100">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <p className="text-xs font-semibold text-slate-800 flex items-center gap-1.5">
                   <span>📦 Suku Cadang Terpakai</span>
                 </p>
-                <span className="font-mono font-black text-cyan-400 text-xs">
+                <span className="font-mono font-bold text-slate-900 text-xs">
                   {formatRupiah(order.totalParts)}
                 </span>
               </div>
               {order.parts.length === 0 ? (
-                <p className="text-xs text-slate-500 italic py-1">Belum ada suku cadang terpakai.</p>
+                <p className="text-xs text-slate-400 italic py-1">Belum ada pemakaian suku cadang.</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {order.parts.map((p) => (
                     <div
                       key={p.id}
-                      className="flex items-center justify-between text-xs p-3 rounded-xl bg-[#0F172A] border border-slate-800"
+                      className="flex items-center justify-between text-xs p-3 rounded-lg bg-slate-50 border border-slate-200"
                     >
-                      <span className="text-slate-200">
-                        <strong className="font-bold">{p.partName}</strong>{" "}
-                        <span className="text-slate-400 font-mono text-[11px]">({p.qty}x)</span>
+                      <span className="text-slate-800">
+                        <strong className="font-semibold">{p.partName}</strong>{" "}
+                        <span className="text-slate-500 font-mono text-[11px]">({p.qty}x)</span>
                       </span>
-                      <span className="font-mono font-black text-cyan-400">{formatRupiah(p.subtotal)}</span>
+                      <span className="font-mono font-bold text-slate-900">{formatRupiah(p.subtotal)}</span>
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Total */}
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between bg-[#0B0F17] p-5 rounded-2xl border border-cyan-500/30 shadow-inner">
+            {/* Total Grand Card */}
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between bg-slate-900 text-white p-5 sm:p-6 rounded-xl shadow-xs">
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Total Estimasi Biaya
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                  Total Biaya Servis
                 </span>
-                <span className="text-2xl font-black font-mono text-cyan-400 drop-shadow-[0_0_12px_rgba(0,210,255,0.3)] mt-0.5 block">
+                <span className="text-2xl font-bold font-mono text-white mt-0.5 block">
                   {formatRupiah(order.grandTotal)}
                 </span>
               </div>
@@ -375,13 +385,13 @@ export default function PublicServiceTrackingPage({
                   Status Pembayaran:
                 </span>
                 <span
-                  className={order.paymentStatus === "PAID" ? "badge-selesai-pembayaran" : "badge-antrian"}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                    order.paymentStatus === "PAID"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-amber-400 text-slate-950"
+                  }`}
                 >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      order.paymentStatus === "PAID" ? "bg-teal-400" : "bg-amber-400 animate-pulse"
-                    }`}
-                  />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
                   {order.paymentStatus === "PAID" ? "LUNAS" : "Menunggu Pembayaran"}
                 </span>
               </div>
@@ -390,29 +400,29 @@ export default function PublicServiceTrackingPage({
         </div>
 
         {/* WhatsApp Assistance Button */}
-        <div className="card-pitstop p-6 sm:p-7 text-center space-y-3">
-          <h4 className="text-sm font-bold text-slate-100">Butuh Informasi Tambahan Mengenai Pengerjaan?</h4>
-          <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-            Tim teknisi dan service advisor PitCare Auto siap memberikan rincian progres atau konsultasi suku cadang.
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 text-center space-y-3 shadow-xs">
+          <h4 className="text-sm font-bold text-slate-900">Butuh Informasi Tambahan Mengenai Pengerjaan?</h4>
+          <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+            Tim teknisi dan service advisor PitCare Auto siap memberikan informasi progres atau konsultasi suku cadang kendaraan Anda.
           </p>
           <div className="pt-2">
             <a
               href={`https://wa.me/6281234567890?text=${waMessage}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-lg shadow-emerald-600/25 cursor-pointer active:scale-98"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors shadow-xs cursor-pointer"
             >
-              <span>📱 Hubungi Tim PitCare Auto via WhatsApp</span>
+              <span>📱 Hubungi Bengkel via WhatsApp</span>
             </a>
           </div>
-          <p className="text-[10px] text-slate-500 pt-2">
-            Garansi servis resmi PitCare Auto: 7 hari / 500 KM untuk kenyamanan dan kepuasan berkendara Anda.
+          <p className="text-[11px] text-slate-400 pt-1">
+            Garansi servis resmi PitCare Auto: 7 hari / 500 KM untuk kenyamanan dan keamanan berkendara Anda.
           </p>
         </div>
 
         {/* Footer */}
-        <div className="text-center py-6 text-xs text-slate-500 border-t border-slate-800">
-          <p>© {new Date().getFullYear()} PitCare Auto — Platform Manajemen & Pelacakan Otomotif Modern</p>
+        <div className="text-center py-6 text-xs text-slate-400 border-t border-slate-200">
+          <p>© {new Date().getFullYear()} PitCare Auto — Sistem Operasional & Pelacakan Bengkel Modern</p>
         </div>
       </div>
     </div>
