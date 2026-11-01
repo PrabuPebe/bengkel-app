@@ -639,7 +639,7 @@ export function PortalClient({ customer, initialVehicleId }: PortalClientProps) 
               </svg>
 
               {/* =========================================================================
-                  3 INTERACTIVE HOTSPOT PINS (OVERLAY BUTTONS)
+                  3 INTERACTIVE HOTSPOT PINS (CLEAN NO-OVERLAP)
                   ========================================================================= */}
 
               {/* PIN 1: Rem Depan / Kampas Rem (Depan Bawah) */}
@@ -647,44 +647,31 @@ export function PortalClient({ customer, initialVehicleId }: PortalClientProps) 
                 className="absolute"
                 style={{ left: "77%", top: "73%", transform: "translate(-50%, -50%)" }}
               >
-                <div className="relative group">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveHotspot("rem");
-                      handleScrollTo("section-countdown");
-                    }}
-                    className="relative flex items-center justify-center cursor-pointer p-1"
-                    aria-label="Pin Rem Depan - Klik untuk lihat rekomendasi servis"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveHotspot("rem");
+                    handleScrollTo("section-countdown");
+                  }}
+                  className="group relative flex items-center justify-center cursor-pointer p-1"
+                  aria-label="Pin Rem Depan - Klik untuk lihat rekomendasi servis"
+                >
+                  <span
+                    className={`absolute w-8 h-8 rounded-full animate-ping opacity-60 ${
+                      brakeStatusLevel === "good" ? "bg-emerald-400" : "bg-amber-400"
+                    }`}
+                  />
+                  <span
+                    className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-xs font-bold text-white transition-transform group-hover:scale-115 ${
+                      brakeStatusLevel === "good" ? "bg-emerald-500" : "bg-amber-500"
+                    }`}
                   >
-                    <span
-                      className={`absolute w-8 h-8 rounded-full animate-ping opacity-60 ${
-                        brakeStatusLevel === "good" ? "bg-emerald-400" : "bg-amber-400"
-                      }`}
-                    />
-                    <span
-                      className={`relative w-6 h-6 rounded-full border-2 border-white shadow-md flex items-center justify-center text-[10px] font-bold text-white transition-transform group-hover:scale-125 ${
-                        brakeStatusLevel === "good" ? "bg-emerald-500" : "bg-amber-500"
-                      }`}
-                    >
-                      1
-                    </span>
-                  </button>
-
-                  {/* Tooltip / Label Card */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-44 bg-slate-900 text-white p-2.5 rounded-xl text-left shadow-lg pointer-events-none opacity-90 sm:group-hover:opacity-100 transition-opacity z-20">
-                    <p className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
-                      Titik 1: Pengereman
-                    </p>
-                    <p className="text-xs font-bold leading-tight mt-0.5">Sistem Rem & Cakram</p>
-                    <p className="text-[10px] text-slate-300 mt-1">
-                      🟢 Kampas rem dalam kondisi baik & pakem.
-                    </p>
-                    <span className="text-[9px] text-slate-400 block mt-1 underline">
-                      Klik untuk periksa ➔
-                    </span>
-                  </div>
-                </div>
+                    1
+                  </span>
+                  <span className="hidden sm:inline-block absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-bold text-slate-700 shadow-xs whitespace-nowrap">
+                    Rem Depan
+                  </span>
+                </button>
               </div>
 
               {/* PIN 2: Ruang Mesin - Oli Mesin & Busi (Tengah Bawah) */}
@@ -692,56 +679,39 @@ export function PortalClient({ customer, initialVehicleId }: PortalClientProps) 
                 className="absolute"
                 style={{ left: "46%", top: "71%", transform: "translate(-50%, -50%)" }}
               >
-                <div className="relative group">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveHotspot("mesin");
-                      handleScrollTo("card-oli");
-                    }}
-                    className="relative flex items-center justify-center cursor-pointer p-1"
-                    aria-label="Pin Ruang Mesin (Oli & Busi) - Klik untuk lihat rincian"
-                  >
-                    <span
-                      className={`absolute w-8 h-8 rounded-full animate-ping opacity-60 ${
-                        oilLevel === "critical"
-                          ? "bg-rose-400"
-                          : oilLevel === "warning"
-                          ? "bg-amber-400"
-                          : "bg-emerald-400"
-                      }`}
-                    />
-                    <span
-                      className={`relative w-6 h-6 rounded-full border-2 border-white shadow-md flex items-center justify-center text-[10px] font-bold text-white transition-transform group-hover:scale-125 ${
-                        oilLevel === "critical"
-                          ? "bg-rose-500"
-                          : oilLevel === "warning"
-                          ? "bg-amber-500"
-                          : "bg-emerald-500"
-                      }`}
-                    >
-                      2
-                    </span>
-                  </button>
-
-                  {/* Tooltip / Label Card */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 text-white p-2.5 rounded-xl text-left shadow-lg pointer-events-none opacity-90 sm:group-hover:opacity-100 transition-opacity z-20">
-                    <p className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
-                      Titik 2: Ruang Mesin
-                    </p>
-                    <p className="text-xs font-bold leading-tight mt-0.5">Oli Mesin & Busi</p>
-                    <p className="text-[10px] text-slate-300 mt-1">
-                      {oilLevel === "critical"
-                        ? "🔴 Waktunya ganti oli mesin hari ini!"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveHotspot("mesin");
+                    handleScrollTo("card-oli");
+                  }}
+                  className="group relative flex items-center justify-center cursor-pointer p-1"
+                  aria-label="Pin Ruang Mesin (Oli & Busi) - Klik untuk lihat rincian"
+                >
+                  <span
+                    className={`absolute w-8 h-8 rounded-full animate-ping opacity-60 ${
+                      oilLevel === "critical"
+                        ? "bg-rose-400"
                         : oilLevel === "warning"
-                        ? `🟡 Sisa oli ${oilRemainingKm.toLocaleString("id-ID")} KM lagi.`
-                        : `🟢 Oli prima (${oilRemainingKm.toLocaleString("id-ID")} KM).`}
-                    </p>
-                    <span className="text-[9px] text-cyan-300 block mt-1 underline">
-                      Klik untuk buka detail Oli & Busi ➔
-                    </span>
-                  </div>
-                </div>
+                        ? "bg-amber-400"
+                        : "bg-emerald-400"
+                    }`}
+                  />
+                  <span
+                    className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-xs font-bold text-white transition-transform group-hover:scale-115 ${
+                      oilLevel === "critical"
+                        ? "bg-rose-500"
+                        : oilLevel === "warning"
+                        ? "bg-amber-500"
+                        : "bg-emerald-500"
+                    }`}
+                  >
+                    2
+                  </span>
+                  <span className="hidden sm:inline-block absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-bold text-slate-700 shadow-xs whitespace-nowrap">
+                    Oli & Busi
+                  </span>
+                </button>
               </div>
 
               {/* PIN 3: CVT & V-Belt / Rantai (Belakang Kiri) */}
@@ -749,57 +719,167 @@ export function PortalClient({ customer, initialVehicleId }: PortalClientProps) 
                 className="absolute"
                 style={{ left: "28%", top: "72%", transform: "translate(-50%, -50%)" }}
               >
-                <div className="relative group">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveHotspot("cvt");
-                      handleScrollTo("card-vbelt");
-                    }}
-                    className="relative flex items-center justify-center cursor-pointer p-1"
-                    aria-label="Pin CVT & V-Belt - Klik untuk lihat rincian"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveHotspot("cvt");
+                    handleScrollTo("card-vbelt");
+                  }}
+                  className="group relative flex items-center justify-center cursor-pointer p-1"
+                  aria-label="Pin CVT & V-Belt - Klik untuk lihat rincian"
+                >
+                  <span
+                    className={`absolute w-8 h-8 rounded-full animate-ping opacity-60 ${
+                      beltLevel === "critical"
+                        ? "bg-rose-400"
+                        : beltLevel === "warning"
+                        ? "bg-amber-400"
+                        : "bg-emerald-400"
+                    }`}
+                  />
+                  <span
+                    className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-xs font-bold text-white transition-transform group-hover:scale-115 ${
+                      beltLevel === "critical"
+                        ? "bg-rose-500"
+                        : beltLevel === "warning"
+                        ? "bg-amber-500"
+                        : "bg-emerald-500"
+                    }`}
                   >
+                    3
+                  </span>
+                  <span className="hidden sm:inline-block absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-bold text-slate-700 shadow-xs whitespace-nowrap">
+                    V-Belt & CVT
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Interactive Selector Badges (Ramah Pengguna Awam, Tidak Menumpuk) */}
+            <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveHotspot("cvt");
+                  handleScrollTo("card-vbelt");
+                }}
+                className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                  activeHotspot === "cvt"
+                    ? "bg-purple-50/70 border-purple-300 ring-2 ring-purple-400/20 shadow-xs"
+                    : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60"
+                }`}
+              >
+                <span
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs text-white shrink-0 ${
+                    beltLevel === "critical"
+                      ? "bg-rose-500"
+                      : beltLevel === "warning"
+                      ? "bg-amber-500"
+                      : "bg-emerald-500"
+                  }`}
+                >
+                  3
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-xs font-bold text-slate-900 truncate">V-Belt & CVT</p>
                     <span
-                      className={`absolute w-8 h-8 rounded-full animate-ping opacity-60 ${
+                      className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
                         beltLevel === "critical"
-                          ? "bg-rose-400"
+                          ? "bg-rose-100 text-rose-700"
                           : beltLevel === "warning"
-                          ? "bg-amber-400"
-                          : "bg-emerald-400"
-                      }`}
-                    />
-                    <span
-                      className={`relative w-6 h-6 rounded-full border-2 border-white shadow-md flex items-center justify-center text-[10px] font-bold text-white transition-transform group-hover:scale-125 ${
-                        beltLevel === "critical"
-                          ? "bg-rose-500"
-                          : beltLevel === "warning"
-                          ? "bg-amber-500"
-                          : "bg-emerald-500"
+                          ? "bg-amber-100 text-amber-700"
+                          : "bg-emerald-100 text-emerald-700"
                       }`}
                     >
-                      3
-                    </span>
-                  </button>
-
-                  {/* Tooltip / Label Card */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 text-white p-2.5 rounded-xl text-left shadow-lg pointer-events-none opacity-90 sm:group-hover:opacity-100 transition-opacity z-20">
-                    <p className="text-[10px] font-mono text-purple-400 font-bold uppercase tracking-wider">
-                      Titik 3: Transmisi CVT
-                    </p>
-                    <p className="text-xs font-bold leading-tight mt-0.5">V-Belt & Roller</p>
-                    <p className="text-[10px] text-slate-300 mt-1">
-                      {beltLevel === "critical"
-                        ? "🔴 Sabuk CVT wajib diganti hari ini!"
-                        : beltLevel === "warning"
-                        ? `🟡 Sabuk CVT sisa ${beltRemainingKm.toLocaleString("id-ID")} KM.`
-                        : `🟢 Sabuk CVT aman (${beltRemainingKm.toLocaleString("id-ID")} KM).`}
-                    </p>
-                    <span className="text-[9px] text-purple-300 block mt-1 underline">
-                      Klik untuk buka detail V-Belt ➔
+                      {beltLevel === "critical" ? "Wajib Ganti" : beltLevel === "warning" ? "Perlu Cek" : "Prima"}
                     </span>
                   </div>
+                  <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                    {beltLevel === "critical"
+                      ? "Lewat batas pemakaian"
+                      : `Sisa ${beltRemainingKm.toLocaleString("id-ID")} KM`}
+                  </p>
                 </div>
-              </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveHotspot("mesin");
+                  handleScrollTo("card-oli");
+                }}
+                className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                  activeHotspot === "mesin"
+                    ? "bg-sky-50/70 border-sky-300 ring-2 ring-sky-400/20 shadow-xs"
+                    : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60"
+                }`}
+              >
+                <span
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs text-white shrink-0 ${
+                    oilLevel === "critical"
+                      ? "bg-rose-500"
+                      : oilLevel === "warning"
+                      ? "bg-amber-500"
+                      : "bg-emerald-500"
+                  }`}
+                >
+                  2
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-xs font-bold text-slate-900 truncate">Oli Mesin & Busi</p>
+                    <span
+                      className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                        oilLevel === "critical"
+                          ? "bg-rose-100 text-rose-700"
+                          : oilLevel === "warning"
+                          ? "bg-amber-100 text-amber-700"
+                          : "bg-emerald-100 text-emerald-700"
+                      }`}
+                    >
+                      {oilLevel === "critical" ? "Wajib Ganti" : oilLevel === "warning" ? "Perlu Cek" : "Prima"}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                    {oilLevel === "critical"
+                      ? "Waktunya ganti oli"
+                      : `Sisa ${oilRemainingKm.toLocaleString("id-ID")} KM`}
+                  </p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveHotspot("rem");
+                  handleScrollTo("section-countdown");
+                }}
+                className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                  activeHotspot === "rem"
+                    ? "bg-emerald-50/70 border-emerald-300 ring-2 ring-emerald-400/20 shadow-xs"
+                    : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60"
+                }`}
+              >
+                <span
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs text-white shrink-0 ${
+                    brakeStatusLevel === "good" ? "bg-emerald-500" : "bg-amber-500"
+                  }`}
+                >
+                  1
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-xs font-bold text-slate-900 truncate">Sistem Pengereman</p>
+                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-700">
+                      Aman & Pakem
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                    Kampas rem depan & belakang
+                  </p>
+                </div>
+              </button>
             </div>
 
             {/* Quick Interactive Guide Pill Footer */}
